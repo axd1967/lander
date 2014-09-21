@@ -8,7 +8,7 @@ STATUS: PROTOTYPE, INCOMPLETE, not fully tested yet. Be patient.
 Aim
 ===
 
-2D variant of the classic lander calculator app.
+2D variant of the classic - 1D - lander calculator app.
 
 Simple formulas used, don't expect stable orbits etc.
 
@@ -18,11 +18,11 @@ Enter following data:
 
    - STO 1: throttle %
    - STO 2: burn time
-   - STO 3: angle above horizon
+   - STO 3: angle above horizon (TODO)
 
 Press 'A' to run the burn time. Calculator will run in predefined time segments (r14) until burn time has been consumed.
 
-Display:
+Display: (TODO)
    - '0' means target reached
    - flashing means crash/overshoot
 
@@ -40,26 +40,24 @@ TODO
 Labels
 ======
 
- Note: 'x' -> not implemented yet
- 
  A burn
- B x init lander descent (from 45000 ft). Try to land in one piece.
- C x init lander ascent (from surface). Try to reach 40000 ft circular orbit at 200km downrange
+ B (TODO) init lander descent (from 45000 ft). Try to land in one piece.
+ C (TODO) init lander ascent (from surface). Try to reach 40000 ft circular orbit at 200km downrange
  D init 200km Earth orbit
- E
+ E -
 
- 0
- 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9 x init moon params
-10
-11
+ 0 -
+ 1 -
+ 2 -
+ 3 -
+ 4 -
+ 5 -
+ 6 -
+ 7 -
+ 8 -
+ 9 (TODO) init moon params
+10 -
+11 -
 12 general init
 13 setup orbit
 14 init earth params
@@ -97,7 +95,7 @@ Registers
 
 (I)
 20 max fuel flow (kg/s)
-21 
+21 -
 22 vehicle mass, dry (kg)
 23 initial fuel mass (kg)
 24 thrust per fuel unit (N/kg)
@@ -105,11 +103,11 @@ Registers
 Flags
 =====
  1 fuel empty
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9 x landed/crashed?
+ 2 -
+ 3 -
+ 4 -
+ 5 -
+ 6 -
+ 7 -
+ 8 -
+ 9 (TODO) landed/crashed?
