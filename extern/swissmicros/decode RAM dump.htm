@@ -1065,6 +1065,7 @@
       while(addr > last_addr || offs <= last_offs) {
         sz = 2;
         log("fetching: " + get2hex(addr) + " offset:" + offs);
+        if (addr<0) break; // HACK
         code = RAM[addr][offs];
         log("addr:"+get2hex(addr)+" code:"+get2hex(code));
         if (is_double_byte_code(code)) {
@@ -1082,9 +1083,9 @@
         instr = (inst_ix<0)?"???":codes[inst_ix][1];
         inst_keys = (inst_ix<0)?"???":codes[inst_ix][2];
 
-        mnemonic+=cnt + " " + instr;
+        mnemonic+= /*cnt + " " + */instr;
         codedump+=cnt.toString(10).padL(3,'0')+"  "+instr.padR(12,' ')+" | "+inst_keys+"\n";
-      log(mnemonic);
+      //log(mnemonic);
       }
       if (mnemonic.substring(0,1) == '\n')
         mnemonic = mnemonic.substring(1);
