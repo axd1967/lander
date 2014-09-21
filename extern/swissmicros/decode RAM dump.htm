@@ -125,6 +125,20 @@
 		['6C','STO g C',	'44,43,13'],
 		['6D','STO g D',	'44,43,14'],
 		['6E','STO g E',	'44,43,15'],
+
+      // prioritize "TEST X (COND)" for decoding, but accept "TEXT X" for encoding too
+      // FIXME: give user feedback if error, eg: "TEST 0 (X=Y)" should err somehow (" **** ") rather than produce "GSB E ..."
+		['70','TEST 0 (x<>0)',		'43,30, 0'],
+		['71','TEST 1 (x>0)',		'43,30, 1'],
+		['72','TEST 2 (x<0)',		'43,30, 2'],
+		['73','TEST 3 (x>=0)',		'43,30, 3'],
+		['74','TEST 4 (x<=0)',		'43,30, 4'],
+		['75','TEST 5 (x=y)',		'43,30, 5'],
+		['76','TEST 6 (x<>y)',		'43,30, 6'],
+		['77','TEST 7 (x>y)',		'43,30, 7'],
+		['78','TEST 8 (x<y)',		'43,30, 8'],
+		['79','TEST 9 (x>=y)',		'43,30, 9'],
+
 		['70','TEST 0',		'43,30, 0'],
 		['71','TEST 1',		'43,30, 1'],
 		['72','TEST 2',		'43,30, 2'],
@@ -135,6 +149,7 @@
 		['77','TEST 7',		'43,30, 7'],
 		['78','TEST 8',		'43,30, 8'],
 		['79','TEST 9',		'43,30, 9'],
+
 		['A6','STO RESULT',	'  44  26'],
 		['D7','RCL RESULT',	'  45  26'],
 
@@ -157,11 +172,11 @@
 		['7B','RCL MATRIX B',	'45,16,12'],
 		['7C','RCL MATRIX C',	'45,16,13'],
 		['7D','RCL MATRIX D',	'45,16,14'],
-		['7E','RCL MATRIX E','	45,16,15'],
+		['7E','RCL MATRIX E',   '45,16,15'],
 		
-		['80','x<> 0' ,		'42, 4, 0'],
+		['80','x<> 0' ,	'42, 4, 0'],
 		['81','x<> (i)',	'42, 4,24'],
-		['82','DSE 0' ,		'42, 5, 0'],
+		['82','DSE 0' ,	'42, 5, 0'],
 		['83','DSE (i)',	'42, 5,24'],
 		['84','ISG 0',		'42, 6, 0'],
 		['85','ISG (i)',	'42, 5,24'],
@@ -232,12 +247,12 @@
 		['B2','RTN',		'  43  32'],
 		['B3','ABS',		'  43  16'],
 		['B4','R_up',		'  43  33'],
-		['B4','ROLLUP',		'  43  33'],
+		['B4','ROLLUP',	'  43  33'],
 		['B5','RND',		'  43  34'],
 		['B6','PI',			'  43  26'],
-		['B7','SIN^-1',		'  43  23'],
-		['B8','COS^-1',		'  43  24'],
-		['B9','TAN^-1',		'  43  25'],
+		['B7','SIN^-1',	'  43  23'],
+		['B8','COS^-1',	'  43  24'],
+		['B9','TAN^-1',	'  43  25'],
 		['BA','x^2',		'  43  11'],
 		['BB','LN',			'  43  12'],
 		['BC','LOG',		'  43  13'],
@@ -257,7 +272,7 @@
 		['C1','ENTER',		'      36'],
 		['C2','R/S',		'      31'],
 		['C3','CHS',		'      16'],
-		['C4','R_down',		'      33'],
+		['C4','R_down',	'      33'],
 		['C4','ROLLDOWN',	'      33'],
 		['C4','Rv',			'      33'],
 		['C5','x<>y',		'      34'],
@@ -272,14 +287,14 @@
 		['CE','1/x',		'      15'],
 		['D0','x!',			'    42 0'],
 		['D1','->R',		'    42 1'],
-		['D2','->H.MS',		'    42 2'],
+		['D2','->H.MS',	'    42 2'],
 		['D3','->RAD',		'    42 3'],
 		['D4','HYP SIN',	'42,22,23'],
 		['D5','HYP COS',	'42,22,24'],
 		['D6','HYP TAN',	'42,22,25'],
 		['D8','RCL RAN#',	'  45  36'],
 		['DA','Py,x',		'  42  40'],
-		['DB','Re<>Im',		'  42  30'],
+		['DB','Re<>Im',	'  42  30'],
 		['DC','PSE',		'  42  31'],
 		['DD','CLR_Sum',	'  42  32'],
 		['DE','L.R.',		'  42  49'],
@@ -1038,7 +1053,7 @@
 			for (i=0;i<codes.length;i++)
 				if (mnemonic.substring(j,j+1)==codes[i][1]) result += codes[i][0];
 		if (result != "") return result; //return, even if some garbage could be in mnemonic!
-		return "??";  //somrthing's wrong
+		return "??";  //something's wrong
 	}
 	
 	function decode() {
@@ -1077,7 +1092,7 @@
         inst_keys = (inst_ix<0)?"???":codes[inst_ix][2];
 
         mnemonic+=instr;
-        codedump+=cnt.toString(10).padL(3,'0')+"  "+instr.padR(12,' ')+" | "+inst_keys+"\n";
+        codedump+=cnt.toString(10).padL(3,'0')+"  "+instr.padR(14,' ')+" | "+inst_keys+"\n";
       }
       if (mnemonic.substring(0,1) == '\n')
         mnemonic = mnemonic.substring(1);
@@ -1273,6 +1288,7 @@ M: 00000000000000  N: 00000000000000  G: 04
     </div>
     <div aria-hidden="true" aria-expanded="false" style="display: none;" role="tabpanel" class="ui-tabs-panel ui-widget-content ui-corner-bottom" aria-labelledby="ui-id-4" id="version">
     	<ul>
+    		<li>22-OCT-2014&nbsp;&nbsp;Add 'TEST X (cond)' decoding</li>
     		<li>22-JAN-2013&nbsp;&nbsp;Firmware V11 released - HTML script requires at least V11</li>
     		<li>21-JAN-2013&nbsp;&nbsp;fixed op-code: STO I</li>
     		<li>20-JAN-2013&nbsp;&nbsp;added missing op-codes: uRCL &amp; uSTO</li>
