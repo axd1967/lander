@@ -1,0 +1,52 @@
+Key Combinations
+Keys	Function	Description
+[ON]+[B]	benchmark	evaluate benchmark compared with orig. calc              
+[ON]+[C]	serial console	switch to serial console (see below)
+[ON]+[E]	show information	firmware version & battery voltage
+[ON]+[CHS]	LCD settings	change LCD contrast
+[ON]+[7]	change font	cycle through three fonts
+[ON]+[9]	change speed	toggle from 12MHz to 48MHz and back again
+[ON]+[÷]	key test	same as on the original calculator
+[ON]+[×]	self test	same as on the original calculator
+[ON]+[-]	power reset	same as on the original calculator
+[ON]+[+]		same as on the original calculator
+[ON]+[.]	toggle . and ,	same as on the original calculator
+
+
+Note:
+Key Combination locations are the same for all models 	     	
+
+Serial Console
+
+  * set calculator in serial console mode by [ON]+[C]
+  * connect miniUSB cable to computer. drivers for many platforms
+    including Win, MacOSX, Linux can be found here
+    <http://www.silabs.com/products/mcu/Pages/USBtoUARTBridgeVCPDrivers.aspx>
+  * open terminal program; on windows putty (or hyperterm if you are
+    brave enough), minicom under linux
+  * set terminal program to 38400,8n1 (no flow control)
+  * en- and decode utility (html with jscript) <nut_decoder.html> for
+    RAM save and restore function
+  * *NEW:* a great HP-15C Simulator for Windows, Linux and Mac OS X
+    <http://hp-15c.homepage.t-online.de/index.htm> supports data
+    exchange with the DM-15
+
+Battery replacement
+
+  * turn calculator off; the content remains for about 30 seconds
+    without battery
+  * unscrew all four screws
+  * remove calculator from case
+  * replace battery
+  * put it back together, don't tighten the screws too much
+
+Change LCD contrast
+
+  * [ON]+[CHS] starts the LCD mode setting
+  * use [+], [-], [SUM+] and [3] to change the contrast
+
+Change font All models include three font types: slim, bold and block
+The combination [ON]+[7] cycles through all three font types
+
+
+

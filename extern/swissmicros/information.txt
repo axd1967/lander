@@ -1,0 +1,114 @@
+Silver Edition - what's new?
+
+  * solid Grade 1 Titanium housing
+  * new Keypad design
+  * slim LCD font added; fonts are user selectable
+  * silver leather pouch & black leather flip-open pouch
+
+Calculator versions
+			
+HP-10C	basic scientific calculator		$80	1982-84
+HP-11C	mid-range scientific calculator		$135	1981-89
+HP-12C	business/financial calculator		$150	1981-present
+HP-15C	advanced scientific calculator		$135	1982-89 ($100-$180 in 2011)
+HP-16C	computer programmer's calculator	$150	1982-89
+
+
+Reference: Wikipedia <http://en.wikipedia.org/wiki/HP-10C_series>
+
+News
+	
+13-February-2014	Firmware Version 16.0 released
+26-Nov-2012	new Silver Edition is available
+26-Nov-2012	new website www.SwissMicros.com goes live
+19-Nov-2012	/Silver Edition/ calculators to be released 26-Nov-2012
+14-Sep-2012	currency converter added to the order page
+27-Aug-2012	We're on wikipedia <http://en.wikipedia.org/wiki/HP-10C_series>
+
+Anodizing Titanium information
+	
+http://en.wikipedia.org/wiki/Anodizing	general anodizing information
+http://www.valhallaarms.com/wyvern/titanium/anodizing.htm	
+http://aluminium.matter.org.uk/
+<http://aluminium.matter.org.uk/content/html/eng/default.asp?catid=105&pageid=2144416143>
+this is about aluminium, but a good illustraion of colour interferences
+	
+
+
+The colors produced by anodizing titanium are formed by the refraction
+of light off of and through the thin titanium oxide layer that is
+produced. These colors are called interference colors. There are no
+pigments or dyes involved. In this process, the clear micronic oxide
+layer (TiO2) that normally envelopes titanium (leaving the metal a gray
+color) is electrically thickened by a very small amount. This clear
+oxide filters out light waves, producing brilliant colors. creating
+different refractive effects which the human eye perceives as different
+colors. By controlling the application of electric currents and voltages
+in different intensities and duration bring about the different
+resulting colors, across the rainbow spectrum.
+
+When the oxide is of a thickness to generate interference colors, its
+depth is measured in angstroms (1?=10^-10 m). This layer can vary in
+thickness from 500? to 1,000?+ depending on the color. It is not the
+oxide itself that is perceived by the viewer, but its effect on light
+waves.
+
+Because colors are optically created you can see subtle differences in
+the amount and/or shade of color from morning to twilight hours of the
+day. The angle of viewing, and type of light source will also influence
+color. The colors also change if the surface is wet or greasy.
+
+Differences to the original
+
+  * this calculator is NOT by HP
+    <http://nonpareil.brouhaha.com/microcode_copyright_status/>!
+  * it does not have all the bugs found in the HP-15C LE, see that bug
+    list
+    <http://www.hpmuseum.org/cgi-sys/cgiwrap/hpmuseum/articles.cgi?read=1089>!
+  * runs on a battery saving LPC1115 ARM processor emulating the NUT
+    processor
+  * uses one CR2032 battery (220mAh) which should last for many years in
+    OFF-mode (~1.8uA), or several weeks with the display turned on
+    (~120uA), or up to 50 hours continuously RUNNING at 12MHZ(~4mA) or
+    about four times shorter at 48MHz
+    in a real test with an endless loop the LCD faded and got dull after
+    ~36h, the CPU still continued.
+    the battery seems to recover after some minutes
+  * runs up to 35 times faster (at 48MHZ) than the original calculator
+    introduced back in 1982
+  * matrix display 132*16 pixels
+  * miniUSB-RS232 features a command line interface for saving and
+    restoring complete calculator state.
+  * en- and decode utility (html with jscript) <nut_decoder.html> to
+    save and restore programs
+  * reprogrammable through the miniUSB connection using FlashMagic
+    <http://www.flashmagictool.com/> (runs also under Linux/Wine) or for
+    Linux use the tool lpc21isp
+    <http://sourceforge.net/projects/lpc21isp/> which we use too!
+  * LCD operating temp. -10°C to +50°C (The response time will be slow
+    below -20°, and the background will become darker at high
+    temperature operating.)
+
+Videos
+youtube 	
+
+proof of concept
+July 2011
+
+<http://youtu.be/S6mDSIDlse8>
+
+	
+
+first prototype
+September 2011
+
+<http://youtu.be/G6NNtjnvD24>
+
+	
+
+production sample
+December 2011
+
+<http://youtu.be/b4QJAfETMSs>
+
+

@@ -1,0 +1,88 @@
+Download
+*These are the latest firmware versions available:*	*Links*
+DM-10 firmware	DM10_V16.hex <firmware/DM10_V16.hex>
+DM-11 firmware	DM11_V16.hex <firmware/DM11_V16.hex>
+DM-12 firmware	DM12_V16.hex <firmware/DM12_V16.hex>
+DM-15 firmware	DM15_V16.hex <firmware/DM15_V16.hex>
+DM-15 firmware 'M80' with extended memory 	DM15_M80_V16.hex
+<firmware/DM15_M80_V16.hex>
+DM-15 firmware 'M1B' with even more memory	DM15_M1B_V16.hex
+<firmware/DM15_M1B_V16.hex>
+DM-16 firmware	DM16_V16.hex <firmware/DM16_V16.hex>
+
+
+To download, right click on the link of your choice, then left click on
+the "Save as..." option.
+
+Early models of the DM calculators (pre Sept 2012) have an LPC1114 CPU
+with only 32k flash memory.
+The firmware versions since V16 for the model DM15 no longer fit into
+32k. These are the last 32k versions for the DM15:
+DM15_V16_32k.hex <http://www.swissmicros.com/firmware/DM15_V16_32k.hex>,
+DM15_M80_V16_32k.hex
+<http://www.swissmicros.com/firmware/DM15_M80_V16_32k.hex>,
+DM15_M1B_V16_32k.hex
+<http://www.swissmicros.com/firmware/DM15_M1B_V16_32k.hex>
+
+firmware history <firmware/history.txt>
+see all files <firmware/?C=M;O=D>
+
+Explanation of extended Memory versions There are three versions of
+firmware for DM-15:
+
+  * DM-15 firmware
+  * DM-15 firmware 'M80' with extended memory
+  * DM-15 firmware 'M1B' with even more memory
+
+
+The first one is the same as original HP-15C, so it has exactly the same
+amount of memory.
+M80 and M1B firmware versions contain modified ROMs to enable bigger
+amount of registers.
+The hex number after MEM actually means the memory location where the
+usable area for registers starts (memory location of NUT CPU).
+The memory location of the original HP-15C ROM is at 0xC0; M1B and M80
+use 0x1B or 0x80 respectively.
+
+The difference can be seen on calc using [g] [MEM].
+Note that recent M80 and M1B firmware versions have special display for
+memory configuration including sizes of matrices.
+Initial configurations should be:
+
+DM15	19 	46 	0-0
+DM15_M80	19 	110 	0-0
+DM15_M1B	19 	211 	0-0
+
+
+This also gives an idea about number of available memory.
+If you accidentally don't know what this means, please, look into HP-15C
+manual Appendix C - Memory allocation.
+
+Firmware upgrade don't worry, it is not possible to break or brick the
+calculator with this or any other upgrade procedure.
+
+  * get FlashMagic <http://www.flashmagictool.com/>
+  * install CP2102 driver under Windows, get it from here
+    <http://www.silabs.com/Support%20Documents/Software/CP210x_VCP_Windows.zip>
+    or here
+    <http://www.silabs.com/Support%20Documents/Software/CP210x_VCP_Win_XP_S2K3_Vista_7.exe>
+  * select device LPC1115/303 (or LPC1114/301 for calculators sold
+    before June 2012)
+  * choose correct COM port
+  * set baud rate to 115200 or lower
+  * select interface: none (ISP)
+  * Oscillator (MHz): 12
+  * check 'Erase all Flash+Code Rd Prot'
+  * in the menu bar at the top of the FlashMagic screen, under
+    "Options->Advanced Options->Hardware Config" check the box in front
+    of "Use DTR and RTS to control RST and ISP pin"
+  * connect the calculator with a standard miniUSB cable, preferably a
+    shielded one. The calculator may be turned on or off before flashing
+  * push and hold the PGM button through the right-hand pinhole on the
+    backside with a needle and press Start to flash the firmware. the
+    PGM button may be released after flashing has started
+  * after flashing is done, push the RESET button through the left-hand
+    pinhole on the backside
+
+
+
