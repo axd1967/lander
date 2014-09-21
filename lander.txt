@@ -5,7 +5,7 @@ LBL .5
 RCL .4
 STO .7
 RCL .9
-TEST 9
+TEST 9 (x>=y)
 GTO .9
 RCL .9
 STO .7
@@ -40,7 +40,7 @@ RCL .7
 *
 STO .8
 RCL 0
-TEST 9
+TEST 9 (x>=y)
 GTO .8
 RCL 0
 STO .8
@@ -117,7 +117,7 @@ RCL .7
 STO-.9
 RCL .9
 PSE
-TEST 1
+TEST 1 (x>0)
 GTO .5
 LBL .6
 RTN
@@ -157,7 +157,7 @@ RTN
 LBL .2
 CF 1
 10
-STO .4
+GTO .4
 RTN
 LBL .3
 RCL .6
