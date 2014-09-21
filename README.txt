@@ -28,17 +28,6 @@ Display: (TODO)
    - '0' means target reached
    - flashing means crash/overshoot
 
-TODO
-====
-
-- add crash detection
-- review units
-- add output display
-- get rid of feet
-- review criteria
-- optimizations
-   - quicken when out of fuel
-
 MEM reports
 ===========
 
@@ -52,7 +41,7 @@ Labels
  A burn
  B (TODO) init lander descent (from 45000 ft). Try to land in one piece.
  C (TODO) init lander ascent (from surface). Try to reach 40000 ft circular orbit at 200km downrange
- D init 200km Earth orbit
+ D (BUSY) init 200km Earth orbit
  E -
 
  0 -
@@ -69,7 +58,7 @@ Labels
 11 -
 12 general init
 13 setup orbit
-14 init earth params
+14 (BUSY) init earth params
 15 calc loop
 16 stop
 17 calc
@@ -79,7 +68,7 @@ Labels
 Registers
 =========
 
-'>' are the ones you may fiddle with.
+'>' are the ones you may fiddle with...
 
  0 fuel left (kg)
  1 > throttle (%)
@@ -121,6 +110,26 @@ Flags
  8 -
  9 (TODO) landed/crashed?
  
- NOTES
- =====
- - BST in run mode should backstep repeatedly when held
+NOTES
+=====
+- BST in run mode should backstep repeatedly when held
+
+DONE
+====
+v0.1 (2014-09-21)
+- test version for SwissMicro issue
+
+BUSY
+====
+
+TODO
+====
+
+- add crash detection
+- review units
+- add output display, convert local speed angle
+- add input checks
+- get rid of feet
+- review criteria
+- add some screenshots of the logic
+- optimizations
