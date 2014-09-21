@@ -1,37 +1,50 @@
-Lander (HP 15C)
------------------
+2D lander (HP 15C)
+==================
 
 (Implemented on a Swiss Micros DM-15)
 
-STATUS: PROTOTYPE, not tested yet.
+STATUS: PROTOTYPE, INCOMPLETE, not fully tested yet. Be patient.
 
 Aim
 ===
+
 2D variant of the classic lander calculator app.
 
-Select a scenario (B,C,D, see below).
+Simple formulas used, don't expect stable orbits etc.
+
+Select a scenario (B,C,D, see below) to initialise data, then 'A' to define burn time segments.
 
 Enter following data:
-   - throttle % (STO 1)
-   - burn time (STO 2)
-   - angle above horizon (STO 3)
 
-Press 'A' to run the burn time.
+   - STO 1: throttle %
+   - STO 2: burn time
+   - STO 3: angle above horizon
 
+Press 'A' to run the burn time. Calculator will run in predefined time segments (r14) until burn time has been consumed.
+
+Display:
+   - '0' means target reached
+   - flashing means crash/overshoot
 
 TODO
 ====
+
 - add crash detection
+- review units
 - add output display
+- get rid of feet
+- review criteria
 - optimizations
+   - quicken when out of fuel
 
 Labels
 ======
+
  Note: 'x' -> not implemented yet
  
  A burn
- B x init lander descent (from 45000 ft)
- C x init lander ascent (from surface)
+ B x init lander descent (from 45000 ft). Try to land in one piece.
+ C x init lander ascent (from surface). Try to reach 40000 ft circular orbit at 200km downrange
  D init 200km Earth orbit
  E
 
@@ -58,29 +71,45 @@ Labels
 
 Registers
 =========
+
+'>' are the ones you may fiddle with.
+
  0 fuel left (kg)
- 1 throttle (%)
- 2 burn time (s)
- 3 burn angle (from local horizontal, +=up) (deg)
+ 1 > throttle (%)
+ 2 > burn time (s)
+ 3 > burn angle (from local horizontal, +=up) (deg)
  4 height (m)
  5 range (km)
  6 velocity (km/h)
- 7 angle above horizon
- 8 px
- 9 py
-10 vx
-11 vy
-12 ax
-13 ay
-14 delta t preset
-15 gravity, surface
-16 central body radius
-17 delta t
-18 fuel used for burn
-19 remaining time in calculation loop
+ 7 angle above horizon (deg)
+ 8 px (m)
+ 9 py (m)
+10 vx (m/s)
+11 vy (m/s)
+12 ax (m/s2)
+13 ay (m/s2)
+14 delta t preset (s)
+15 gravity, surface (m/s2)
+16 central body radius (m)
+17 delta t (s)
+18 fuel used for burn (kg)
+19 remaining time in calculation loop (s)
 
+(I)
 20 max fuel flow (kg/s)
 21 
-22 vehicle mass, dry
-23 initial fuel mass
+22 vehicle mass, dry (kg)
+23 initial fuel mass (kg)
 24 thrust per fuel unit (N/kg)
+
+Flags
+=====
+ 1 fuel empty
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9 x landed/crashed?
