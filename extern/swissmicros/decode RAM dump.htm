@@ -1179,14 +1179,14 @@
 
 </head>
 <body>
-	<div id="tabs">
-		<ul>
-			<li><a href="#decoder">en-/decoder</a></li>
-			<li><a href="#help">help</a></li>
-			<li><a href="#about">about</a></li>
-			<li><a href="#version">version history</a></li>
+	<div class="ui-tabs ui-widget ui-widget-content ui-corner-all" id="tabs">
+		<ul role="tablist" class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+			<li aria-selected="true" aria-labelledby="ui-id-1" aria-controls="decoder" tabindex="0" role="tab" class="ui-state-default ui-corner-top ui-tabs-active ui-state-active"><a id="ui-id-1" tabindex="-1" role="presentation" class="ui-tabs-anchor" href="#decoder">en-/decoder</a></li>
+			<li aria-selected="false" aria-labelledby="ui-id-2" aria-controls="help" tabindex="-1" role="tab" class="ui-state-default ui-corner-top"><a id="ui-id-2" tabindex="-1" role="presentation" class="ui-tabs-anchor" href="#help">help</a></li>
+			<li aria-selected="false" aria-labelledby="ui-id-3" aria-controls="about" tabindex="-1" role="tab" class="ui-state-default ui-corner-top"><a id="ui-id-3" tabindex="-1" role="presentation" class="ui-tabs-anchor" href="#about">about</a></li>
+			<li aria-selected="false" aria-labelledby="ui-id-4" aria-controls="version" tabindex="-1" role="tab" class="ui-state-default ui-corner-top"><a id="ui-id-4" tabindex="-1" role="presentation" class="ui-tabs-anchor" href="#version">version history</a></li>
 		</ul>
-    <div id="decoder">
+    <div aria-hidden="false" aria-expanded="true" role="tabpanel" class="ui-tabs-panel ui-widget-content ui-corner-bottom" aria-labelledby="ui-id-1" id="decoder">
 			Select calculator:
 			<select id="selected_calc" onchange="update_model()">
 				<option value="DM10" disabled="disabled">DM10</option>
@@ -1197,11 +1197,18 @@
 				<option value="DM15_M1B">DM15 M1B</option>
 				<option value="DM16" disabled="disabled">DM16</option>
 			</select>
-			<p id="errlog" style="color: red">zzz</p>
+			<p id="errlog" style="color: red"></p>
 			<table>
 				<tbody><tr><td>Dump from calc</td><td></td><td>Mnemonic</td><td></td><td>Code dump</td></tr>
 				<tr>
-					<td><textarea id="dump_from_calc" cols="65" rows="25" style="font-family:monospace"></textarea></td>
+					<td><textarea id="dump_from_calc" cols="65" rows="25" style="font-family:monospace">DM15
+04  000000fffff000  00000000000008  0000000000000c  00000000000eae
+08  00000000000000  2faf8befbe2280  00000000000000  00000000000000
+14  00000000000000  c0d2d2d2d2d2d2  00000000000000  00000000000000
+18  00000000000000  0000000000007f  00000000a00000  00000000000000
+A: 000000fffff000  B: 000000fffffeae  C: 00000000000eae
+M: 00000000000000  N: 00000000000000  G: 04
+</textarea></td>
 					<td style="width:140px"><center>
 						<button id="decode">--- Decode --&gt;</button><br>
 						<button id="encode">&lt;-- Encode ---</button><br>
@@ -1228,7 +1235,7 @@
 				</tr>
 			</tbody></table>
     </div>
-    <div id="help">
+    <div aria-hidden="true" aria-expanded="false" style="display: none;" role="tabpanel" class="ui-tabs-panel ui-widget-content ui-corner-bottom" aria-labelledby="ui-id-2" id="help">
     <br>
 		<b>Please update the firmware version to at least V11!</b>
     <br>
@@ -1260,11 +1267,11 @@
 			</font>
 		</div>
     </div>
-    <div id="about">
+    <div aria-hidden="true" aria-expanded="false" style="display: none;" role="tabpanel" class="ui-tabs-panel ui-widget-content ui-corner-bottom" aria-labelledby="ui-id-3" id="about">
     	this is what it is all about ...<br>
     	
     </div>
-    <div id="version">
+    <div aria-hidden="true" aria-expanded="false" style="display: none;" role="tabpanel" class="ui-tabs-panel ui-widget-content ui-corner-bottom" aria-labelledby="ui-id-4" id="version">
     	<ul>
     		<li>22-JAN-2013&nbsp;&nbsp;Firmware V11 released - HTML script requires at least V11</li>
     		<li>21-JAN-2013&nbsp;&nbsp;fixed op-code: STO I</li>
