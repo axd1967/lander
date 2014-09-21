@@ -1,0 +1,1285 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1252">
+	<title>decode RAM dump</title>
+	<script type="text/javascript" src="decode%20RAM%20dump_files/jquery-1.js"></script>
+	<script type="text/javascript" src="decode%20RAM%20dump_files/jquery-ui.js"></script>
+	<link rel="SHORTCUT ICON" href="http://www.swissmicros.com/images/dm.ico" type="image/x-icon">
+	
+	<link rel="stylesheet" type="text/css" href="decode%20RAM%20dump_files/jquery-ui.css">
+	<link rel="stylesheet" type="text/css" href="decode%20RAM%20dump_files/jquery.css" media="screen">
+	
+  <script>
+  var RAM = []; // Contents of memory 256*7 bytes
+  var regA = [];
+  var regB = [];
+  var regC = [];
+  var regM = [];
+  var regN = [];
+  var regG = 0;
+
+  var def_dump = [
+   ["DM15_M1B",
+    "DM15_M1B\n04  000000fffff000  00000000000008  0000000000000c  00000000000eae\n08  00000000000000  2faf8befbe2280  00000000000000  00000000000000\n14  00000000000000  1b2d2d2d2d2d2d  00000000000000  00000000000000\n18  00000000000000  0000000000007f  00000000a00000  00000000000000\nA: 000000fffff000  B: 000000fffffeae  C: 00000000000eae\nM: 00000000000000  N: 00000000000000  G: 04\n"],
+   ["DM15_M80", 
+    "DM15_M80\n04  000000fffff000  00000000000008  0000000000000c  00000000000eae\n08  00000000000000  2faf8befbe2280  00000000000000  00000000000000\n14  00000000000000  80929292929292  00000000000000  00000000000000\n18  00000000000000  0000000000007f  00000000a00000  00000000000000\nA: 000000fffff000  B: 000000fffffeae  C: 00000000000eae\nM: 00000000000000  N: 00000000000000  G: 04\n"],
+   ["DM15", 
+    "DM15\n04  000000fffff000  00000000000008  0000000000000c  00000000000eae\n08  00000000000000  2faf8befbe2280  00000000000000  00000000000000\n14  00000000000000  c0d2d2d2d2d2d2  00000000000000  00000000000000\n18  00000000000000  0000000000007f  00000000a00000  00000000000000\nA: 000000fffff000  B: 000000fffffeae  C: 00000000000eae\nM: 00000000000000  N: 00000000000000  G: 04\n"],
+  ];
+
+	var testdump ="DM15\n04  f010bf43f10000  00000000000008  0000000000000c  00000000000eae\n08  00000000000000  2f800422bc2000  be230000e83680  00000000000000\n14  00000000000010  c0d2d2d2d2d2d2  000000000002fc  000000000003fe\n18  00000000000000  0000000000007f  00000000a00000  00000000000000\nfc  00000000f6f5f4  f3f2c0f1c1f5f4  f3f2c0f1ede9e8  e7b3bebdbc99ff\nA: f010bf43f10000  B: f010bf43f10eae  C: 00000000000eae\nM: 0000000000e0fe  N: 00000000000000  G: 04\n";
+	var helloppc = "";
+	var pi306 = "LBL 0\n53\nDIM (i)\nFIX 0\nCLR REG\n1017\nSTO 1\nLBL 1\n2\nSTO I\n0\nLBL 2\nEEX\n6\nx\nRCL (i)\nRCL 1\nx\n+\nENTER\nENTER\nENTER\nRCL 1\n2\nx\n1\n+\n/\nLST x\nX<>Y\nINT\nSTO (i)\nx\n-\n1\nSTO+I\nRv\nRCL I\n54\n-\nX=0?\nGTO 3\nRv\nGTO 2\nLBL 3\n2\nSTO 2\nRCL 1\n1\n-\nSTO 1\nX>0?\nGTO 1\n53\nSTO I\n0\nLBL 4\nSTO+(i)\nRCL (i)\nEEX\n6\n/\nINT\nSTO 1\nEEX\n6\nx\nSTO-(i)\nRCL 1\nDSE I\nGTO 4\nRCL 2\nRTN\n";
+	var testpgm = "LBL 0";
+	var codes = [
+		['00','LBL 0',		'42,21, 0'],
+		['01','LBL 1',		'42,21, 1'],
+		['02','LBL 2',		'42,21, 2'],
+		['03','LBL 3',		'42,21, 3'],
+		['04','LBL 4',		'42,21, 4'],
+		['05','LBL 5',		'42,21, 5'],
+		['06','LBL 6',		'42,21, 6'],
+		['07','LBL 7',		'42,21, 7'],
+		['08','LBL 8',		'42,21, 8'],
+		['09','LBL 9',		'42,21, 9'],
+		['10','GTO 0',		'   22  0'],
+		['11','GTO 1',		'   22  1'],
+		['12','GTO 2',		'   22  2'],
+		['13','GTO 3',		'   22  3'],
+		['14','GTO 4',		'   22  4'],
+		['15','GTO 5',		'   22  5'],
+		['16','GTO 6',		'   22  6'],
+		['17','GTO 7',		'   22  7'],
+		['18','GTO 8',		'   22  8'],
+		['19','GTO 9',		'   22  9'],
+		['20','GSB 0',		'   32  0'],
+		['21','GSB 1',		'   32  1'],
+		['22','GSB 2',		'   32  2'],
+		['23','GSB 3',		'   32  3'],
+		['24','GSB 4',		'   32  4'],
+		['25','GSB 5',		'   32  5'],
+		['26','GSB 6',		'   32  6'],
+		['27','GSB 7',		'   32  7'],
+		['28','GSB 8',		'   32  8'],
+		['29','GSB 9',		'   32  9'],
+		['30','RCL 0',		'   45  0'],
+		['31','RCL 1',		'   45  1'],
+		['32','RCL 2',		'   45  2'],
+		['33','RCL 3',		'   45  3'],
+		['34','RCL 4',		'   45  4'],
+		['35','RCL 5',		'   45  5'],
+		['36','RCL 6',		'   45  6'],
+		['37','RCL 7',		'   45  7'],
+		['38','RCL 8',		'   45  8'],
+		['39','RCL 9',		'   45  9'],
+		['3A','RCL A',		'  45  11'],
+		['3B','RCL B',		'  45  12'],
+		['3C','RCL C',		'  45  13'],
+		['3D','RCL D',		'  45  14'],
+		['3E','RCL E',		'  45  15'],
+		['40','STO 0',		'   44  0'],
+		['41','STO 1',		'   44  1'],
+		['42','STO 2',		'   44  2'],
+		['43','STO 3',		'   44  3'],
+		['44','STO 4',		'   44  4'],
+		['45','STO 5',		'   44  5'],
+		['46','STO 6',		'   44  6'],
+		['47','STO 7',		'   44  7'],
+		['48','STO 8',		'   44  8'],
+		['49','STO 9',		'   44  9'],
+		['4A','STO A',		'  44  11'],
+		['4B','STO B',		'  44  12'],
+		['4C','STO C',		'  44  13'],
+		['4D','STO D',		'  44  14'],
+		['4E','STO E',		'  44  15'],
+		['50','RCL .0',		'   45 .0'],
+		['51','RCL .1',		'   45 .1'],
+		['52','RCL .2',		'   45 .2'],
+		['53','RCL .3',		'   45 .3'],
+		['54','RCL .4',		'   45 .4'],
+		['55','RCL .5',		'   45 .5'],
+		['56','RCL .6',		'   45 .6'],
+		['57','RCL .7',		'   45 .7'],
+		['58','RCL .8',		'   45 .8'],
+		['59','RCL .9',		'   45 .9'],
+		['5A','RCL g A',	'45,43,11'],
+		['5B','RCL g B',	'45,43,12'],
+		['5C','RCL g C',	'45,43,13'],
+		['5D','RCL g D',	'45,43,14'],
+		['5E','RCL g E',	'45,43,15'],
+		['AF5D','RCL g (i)',	'45,43,24'],
+		['AF6D','STO g (i)',	'44,43,24'],
+		
+		['60','STO .0',		'   44 .0'],
+		['61','STO .1',		'   44 .1'],
+		['62','STO .2',		'   44 .2'],
+		['63','STO .3',		'   44 .3'],
+		['64','STO .4',		'   44 .4'],
+		['65','STO .5',		'   44 .5'],
+		['66','STO .6',		'   44 .6'],
+		['67','STO .7',		'   44 .7'],
+		['68','STO .8',		'   44 .8'],
+		['69','STO .9',		'   44 .9'],
+		['6A','STO g A',	'44,43,11'],
+		['6B','STO g B',	'44,43,12'],
+		['6C','STO g C',	'44,43,13'],
+		['6D','STO g D',	'44,43,14'],
+		['6E','STO g E',	'44,43,15'],
+		['70','TEST 0',		'43,30, 0'],
+		['71','TEST 1',		'43,30, 1'],
+		['72','TEST 2',		'43,30, 2'],
+		['73','TEST 3',		'43,30, 3'],
+		['74','TEST 4',		'43,30, 4'],
+		['75','TEST 5',		'43,30, 5'],
+		['76','TEST 6',		'43,30, 6'],
+		['77','TEST 7',		'43,30, 7'],
+		['78','TEST 8',		'43,30, 8'],
+		['79','TEST 9',		'43,30, 9'],
+		['A6','STO RESULT',	'  44  26'],
+		['D7','RCL RESULT',	'  45  26'],
+
+		['BF96','uSTO (i)',	'u 44  24'],
+		['BF86','uRCL (i)',	'u 45  24'],
+
+		['EF5A','x<> A',	'42, 4,11'],
+		['EF5B','x<> B',	'42, 4,12'],
+		['EF5C','x<> C',	'42, 4,13'],
+		['EF5D','x<> D',	'42, 4,14'],
+		['EF5E','x<> E',	'42, 4,15'],
+
+		['FFAA','STO MATRIX A',	'44,16,11'],
+		['FFAB','STO MATRIX B',	'44,16,12'],
+		['FFAC','STO MATRIX C',	'44,16,13'],
+		['FFAD','STO MATRIX D',	'44,16,14'],
+		['FFAE','STO MATRIX E',	'44,16,15'],
+		
+		['7A','RCL MATRIX A',	'45,16,11'],
+		['7B','RCL MATRIX B',	'45,16,12'],
+		['7C','RCL MATRIX C',	'45,16,13'],
+		['7D','RCL MATRIX D',	'45,16,14'],
+		['7E','RCL MATRIX E','	45,16,15'],
+		
+		['80','x<> 0' ,		'42, 4, 0'],
+		['81','x<> (i)',	'42, 4,24'],
+		['82','DSE 0' ,		'42, 5, 0'],
+		['83','DSE (i)',	'42, 5,24'],
+		['84','ISG 0',		'42, 6, 0'],
+		['85','ISG (i)',	'42, 5,24'],
+		['86','RCL (i)',	'  45  24'],
+		['87','RCL I',		'  45  25'],
+		['88','GTO I',		'  22  25'],
+		['89','GSB I',		'  32  25'],
+		['90','x<> 1',		'42, 4, 1'],
+		['91','x<> I',		'42, 4,25'],
+		['92','DSE 1',		'42, 5, 1'],
+		['93','DSE I',		'42, 5,25'],
+		['94','ISG 1',		'42, 6, 1'],
+		['95','ISG I',		'42, 6,25'],
+		['96','STO (i)',	'  44  24'],
+		['97','STO I',		'  44  25'],
+		['D9','STO RAN#',	'  44  36'],
+		['98','DIM (i)',	'42,23,24'],
+		['99','DIM I',		'42,23,25'],
+		['0A','LBL A',		'42,21,11'],
+		['0B','LBL B',		'42,21,12'],
+		['0C','LBL C',		'42,21,13'],
+		['0D','LBL D',		'42,21,14'],
+		['0E','LBL E',		'42,21,15'],
+		['1A','GTO A',		'  22  11'],
+		['1B','GTO B',		'  22  12'],
+		['1C','GTO C',		'  22  13'],
+		['1D','GTO D',		'  22  14'],
+		['1E','GTO E',		'  22  15'],
+		['2A','GSB A',		'  32  11'],
+		['2B','GSB B',		'  32  12'],
+		['2C','GSB C',		'  32  13'],
+		['2D','GSB D',		'  32  14'],
+		['2E','GSB E',		'  32  15'],
+		['2A','A',			'  32  11'],	//redundant
+		['2B','B',			'  32  12'],	//redundant
+		['2C','C',			'  32  13'],	//redundant
+		['2D','D',			'  32  14'],	//redundant
+		['2E','E',			'  32  15'],	//redundant
+		['8A','RESULT A',	'42,21,15'],
+		['8B','RESULT B',	'42,21,15'],
+		['8C','RESULT C',	'42,21,15'],
+		['8D','RESULT D',	'42,21,15'],
+		['8E','RESULT E',	'42,21,15'],
+		['9A','DIM A',		'42,23,11'],
+		['9B','DIM B',		'42,23,12'],
+		['9C','DIM C',		'42,23,13'],
+		['9D','DIM D',		'42,23,14'],
+		['9E','DIM E',		'42,23,15'],
+		['A0','y,r',		'  42  48'],
+		['A1','RAN#',		'  42  36'],
+		['A2','CLx',		'  43  35'],
+		['A3','FRAC',		'  42  44'],
+		['A4','I',			'  42  25'],
+		['A5','CLR_REG',	'  42  34'],
+		['A5','CLEAR REG',	'  42  34'],
+		['A7','RCL SUM',	'  45  49'],
+		['A8','RCL DIM (i)','45,23,24'],
+		['A9','RCL DIM I',	'45,23,25'],
+
+		['AA','RCL DIM A',	'45,23,11'],
+		['AB','RCL DIM B',	'45,23,12'],
+		['AC','RCL DIM C',	'45,23,13'],
+		['AD','RCL DIM D',	'45,23,14'],
+		['AE','RCL DIM E',	'45,23,15'],
+
+		['B0','S',			'  43  48'],
+		['B1','LSTx',		'  43  36'],
+		['B2','RTN',		'  43  32'],
+		['B3','ABS',		'  43  16'],
+		['B4','R_up',		'  43  33'],
+		['B4','ROLLUP',		'  43  33'],
+		['B5','RND',		'  43  34'],
+		['B6','PI',			'  43  26'],
+		['B7','SIN^-1',		'  43  23'],
+		['B8','COS^-1',		'  43  24'],
+		['B9','TAN^-1',		'  43  25'],
+		['BA','x^2',		'  43  11'],
+		['BB','LN',			'  43  12'],
+		['BC','LOG',		'  43  13'],
+		['BD','%',			'  43  14'],
+		['BE','d%',			'  43  15'],
+		['BF3A','uRCL A',		'u 45  11'],
+		['BF3B','uRCL B',		'u 45  12'],
+		['BF3C','uRCL C',		'u 45  13'],
+		['BF3D','uRCL D',		'u 45  14'],
+		['BF3E','uRCL E',		'u 45  15'],
+		['BF4A','uSTO A',		'u 44  11'],
+		['BF4B','uSTO B',		'u 44  12'],
+		['BF4C','uSTO C',		'u 44  13'],
+		['BF4D','uSTO D',		'u 44  14'],
+		['BF4E','uSTO E',		'u 44  15'],
+		['C0','.',			'      48'],
+		['C1','ENTER',		'      36'],
+		['C2','R/S',		'      31'],
+		['C3','CHS',		'      16'],
+		['C4','R_down',		'      33'],
+		['C4','ROLLDOWN',	'      33'],
+		['C4','Rv',			'      33'],
+		['C5','x<>y',		'      34'],
+		['C6','EEX',		'      26'],
+		['C7','SIN',		'      23'],
+		['C8','COS',		'      24'],
+		['C9','TAN',		'      25'],
+		['CA','sqrt',		'      11'],
+		['CB','e^x',		'      12'],
+		['CC','10^x',		'      13'],
+		['CD','y^x',		'      14'],
+		['CE','1/x',		'      15'],
+		['D0','x!',			'    42 0'],
+		['D1','->R',		'    42 1'],
+		['D2','->H.MS',		'    42 2'],
+		['D3','->RAD',		'    42 3'],
+		['D4','HYP SIN',	'42,22,23'],
+		['D5','HYP COS',	'42,22,24'],
+		['D6','HYP TAN',	'42,22,25'],
+		['D8','RCL RAN#',	'  45  36'],
+		['DA','Py,x',		'  42  40'],
+		['DB','Re<>Im',		'  42  30'],
+		['DC','PSE',		'  42  31'],
+		['DD','CLR_Sum',	'  42  32'],
+		['DE','L.R.',		'  42  49'],
+		['E0','E(x)',		'    43 0'],
+		['E1','->P',		'    43 1'],
+		['E2','->H',		'    43 2'],
+		['E3','->DEG',		'    43 3'],
+		['E4','HYP^-1 SIN',	'43,22,23'],
+		['E5','HYP^-1 COS',	'43,22,24'],
+		['E6','HYP^-1 TAN',	'43,22,25'],
+		['E7','DEG',		'    43 7'],
+		['E8','RAD',		'    43 8'],
+		['E9','GRD',		'    43 9'],
+		['EA','Cy,x',		'  43  40'],
+		['EB','INT',		'  43  44'],
+		['EC','x=0',		'  43  20'],
+		['ED','x<=y',		'  43  10'],
+		['EE','SUM-',		'  43  49'],
+		['EF10','SOLVE 0',	'42,10, 0'],
+		['EF11','SOLVE 1',	'42,10, 1'],
+		['EF12','SOLVE 2',	'42,10, 2'],
+		['EF13','SOLVE 3',	'42,10, 3'],
+		['EF14','SOLVE 4',	'42,10, 4'],
+		['EF15','SOLVE 5',	'42,10, 5'],
+		['EF16','SOLVE 6',	'42,10, 6'],
+		['EF17','SOLVE 7',	'42,10, 7'],
+		['EF18','SOLVE 8',	'42,10, 8'],
+		['EF19','SOLVE 9',	'42,10, 9'],
+		['EF1A','SOLVE A',	'42,10,11'],
+		['EF1B','SOLVE B',	'42,10,12'],
+		['EF1C','SOLVE C',	'42,10,13'],
+		['EF1D','SOLVE D',	'42,10,14'],
+		['EF1E','SOLVE E',	'42,10,15'],
+		['EF20','SOLVE .0',	'42,10,.0'],
+		['EF21','SOLVE .1',	'42,10,.1'],
+		['EF22','SOLVE .2',	'42,10,.2'],
+		['EF23','SOLVE .3',	'42,10,.3'],
+		['EF24','SOLVE .4',	'42,10,.4'],
+		['EF25','SOLVE .5',	'42,10,.5'],
+		['EF26','SOLVE .6',	'42,10,.6'],
+		['EF27','SOLVE .7',	'42,10,.7'],
+		['EF28','SOLVE .8',	'42,10,.8'],
+		['EF29','SOLVE .9',	'42,10,.9'],
+		['EF30','int(xy) 0','42,20, 0'],
+		['EF31','int(xy) 1','42,20, 1'],
+		['EF32','int(xy) 2','42,20, 2'],
+		['EF33','int(xy) 3','42,20, 3'],
+		['EF34','int(xy) 4','42,20, 4'],
+		['EF35','int(xy) 5','42,20, 5'],
+		['EF36','int(xy) 6','42,20, 6'],
+		['EF37','int(xy) 7','42,20, 7'],
+		['EF38','int(xy) 8','42,20, 8'],
+		['EF39','int(xy) 9','42,20, 9'],
+		['EF3A','int(xy) A','42,20,11'],
+		['EF3B','int(xy) B','42,20,12'],
+		['EF3C','int(xy) C','42,20,13'],
+		['EF3D','int(xy) D','42,20,14'],
+		['EF3E','int(xy) E','42,20,15'],
+		['EF40','int(xy) .0','42,20,.0'],
+		['EF41','int(xy) .1','42,20,.1'],
+		['EF42','int(xy) .2','42,20,.2'],
+		['EF43','int(xy) .3','42,20,.3'],
+		['EF44','int(xy) .4','42,20,.4'],
+		['EF45','int(xy) .5','42,20,.5'],
+		['EF46','int(xy) .6','42,20,.6'],
+		['EF47','int(xy) .7','42,20,.7'],
+		['EF48','int(xy) .8','42,20,.8'],
+		['EF49','int(xy) .9','42,20,.9'],
+		['EF52','x<> 2',	'42, 4, 2'],
+		['EF53','x<> 3',	'42, 4, 3'],
+		['EF54','x<> 4',	'42, 4, 4'],
+		['EF55','x<> 5',	'42, 4, 5'],
+		['EF56','x<> 6',	'42, 4, 6'],
+		['EF57','x<> 7',	'42, 4, 7'],
+		['EF58','x<> 8',	'42, 4, 8'],
+		['EF59','x<> 9',	'42, 4, 9'],
+		['EF60','x<> .0',	'42, 4,.0'],
+		['EF61','x<> .1',	'42, 4,.1'],
+		['EF62','x<> .2',	'42, 4,.2'],
+		['EF63','x<> .3',	'42, 4,.3'],
+		['EF64','x<> .4',	'42, 4,.4'],
+		['EF65','x<> .5',	'42, 4,.5'],
+		['EF66','x<> .6',	'42, 4,.6'],
+		['EF67','x<> .7',	'42, 4,.7'],
+		['EF68','x<> .8',	'42, 4,.8'],
+		['EF69','x<> .9',	'42, 4,.9'],
+		['EF72','DSE 2',	'42, 5, 2'],
+		['EF73','DSE 3',	'42, 5, 3'],
+		['EF74','DSE 4',	'42, 5, 4'],
+		['EF75','DSE 5',	'42, 5, 5'],
+		['EF76','DSE 6',	'42, 5, 6'],
+		['EF77','DSE 7',	'42, 5, 7'],
+		['EF78','DSE 8',	'42, 5, 8'],
+		['EF79','DSE 9',	'42, 5, 9'],
+		['EF7A','DSE A',	'42, 5,11'],
+		['EF7B','DSE B',	'42, 5,12'],
+		['EF7C','DSE C',	'42, 5,13'],
+		['EF7D','DSE D',	'42, 5,14'],
+		['EF7E','DSE E',	'42, 5,15'],
+		['EF80','DSE .0',	'42, 5,.0'],
+		['EF81','DSE .1',	'42, 5,.1'],
+		['EF82','DSE .2',	'42, 5,.2'],
+		['EF83','DSE .3',	'42, 5,.3'],
+		['EF84','DSE .4',	'42, 5,.4'],
+		['EF85','DSE .5',	'42, 5,.5'],
+		['EF86','DSE .6',	'42, 5,.6'],
+		['EF87','DSE .7',	'42, 5,.7'],
+		['EF88','DSE .8',	'42, 5,.8'],
+		['EF89','DSE .9',	'42, 5,.9'],
+		['EF92','ISG 2',	'42, 6, 2'],
+		['EF93','ISG 3',	'42, 6, 3'],
+		['EF94','ISG 4',	'42, 6, 4'],
+		['EF95','ISG 5',	'42, 6, 5'],
+		['EF96','ISG 6',	'42, 6, 6'],
+		['EF97','ISG 7',	'42, 6, 7'],
+		['EF98','ISG 8',	'42, 6, 8'],
+		['EF99','ISG 9',	'42, 6, 9'],
+		['EF9A','ISG A',	'42, 6,11'],
+		['EF9B','ISG B',	'42, 6,12'],
+		['EF9C','ISG C',	'42, 6,13'],
+		['EF9D','ISG D',	'42, 6,14'],
+		['EF9E','ISG E',	'42, 6,15'],
+		['EFA0','ISG .0',	'42, 6,.0'],
+		['EFA1','ISG .1',	'42, 6,.1'],
+		['EFA2','ISG .2',	'42, 6,.2'],
+		['EFA3','ISG .3',	'42, 6,.3'],
+		['EFA4','ISG .4',	'42, 6,.4'],
+		['EFA5','ISG .5',	'42, 6,.5'],
+		['EFA6','ISG .6',	'42, 6,.6'],
+		['EFA7','ISG .7',	'42, 6,.7'],
+		['EFA8','ISG .8',	'42, 6,.8'],
+		['EFA9','ISG .9',	'42, 6,.9'],
+		['F0','0',			'       0'],
+		['F1','1',			'       1'],
+		['F2','2',			'       2'],
+		['F3','3',			'       3'],
+		['F4','4',			'       4'],
+		['F5','5',			'       5'],
+		['F6','6',			'       6'],
+		['F7','7',			'       7'],
+		['F8','8',			'       8'],
+		['F9','9',			'       9'],
+		['FA','+',			'      40'],	//check again
+		['FB','-',			'      30'],	//check again
+		['FC','*',			'      20'],	//check again
+		['FC','x',			'      20'],	//check again
+		['FD','/',			'      10'],	//check again
+		['FE','SUM+',		'      49'],
+		['FF00','LBL .0',	'42,21,.0'],
+		['FF01','LBL .1',	'42,21,.1'],
+		['FF02','LBL .2',	'42,21,.2'],
+		['FF03','LBL .3',	'42,21,.3'],
+		['FF04','LBL .4',	'42,21,.4'],
+		['FF05','LBL .5',	'42,21,.5'],
+		['FF06','LBL .6',	'42,21,.6'],
+		['FF07','LBL .7',	'42,21,.7'],
+		['FF08','LBL .8',	'42,21,.8'],
+		['FF09','LBL .9',	'42,21,.9'],
+		['FF10','GTO .0',	'   22 .0'],
+		['FF11','GTO .1',	'   22 .1'],
+		['FF12','GTO .2',	'   22 .2'],
+		['FF13','GTO .3',	'   22 .3'],
+		['FF14','GTO .4',	'   22 .4'],
+		['FF15','GTO .5',	'   22 .5'],
+		['FF16','GTO .6',	'   22 .6'],
+		['FF17','GTO .7',	'   22 .7'],
+		['FF18','GTO .8',	'   22 .8'],
+		['FF19','GTO .9',	'   22 .9'],
+		['FF20','GSB .0',	'   32 .0'],
+		['FF21','GSB .1',	'   32 .1'],
+		['FF22','GSB .2',	'   32 .2'],
+		['FF23','GSB .3',	'   32 .3'],
+		['FF24','GSB .4',	'   32 .4'],
+		['FF25','GSB .5',	'   32 .5'],
+		['FF26','GSB .6',	'   32 .6'],
+		['FF27','GSB .7',	'   32 .7'],
+		['FF28','GSB .8',	'   32 .8'],
+		['FF29','GSB .9',	'   32 .9'],
+		['FF30','SF 0',		'43, 4, 0'],
+		['FF31','SF 1',		'43, 4, 1'],
+		['FF32','SF 2',		'43, 4, 2'],
+		['FF33','SF 3',		'43, 4, 3'],
+		['FF34','SF 4',		'43, 4, 4'],
+		['FF35','SF 5',		'43, 4, 5'],
+		['FF36','SF 6',		'43, 4, 6'],
+		['FF37','SF 7',		'43, 4, 7'],
+		['FF38','SF 8',		'43, 4, 8'],
+		['FF39','SF 9',		'43, 4, 9'],
+		['FF3E','SF I',		'43, 4,25'],
+		['FF40','CF 0',		'43, 5, 0'],
+		['FF41','CF 1',		'43, 5, 1'],
+		['FF42','CF 2',		'43, 5, 2'],
+		['FF43','CF 3',		'43, 5, 3'],
+		['FF44','CF 4',		'43, 5, 4'],
+		['FF45','CF 5',		'43, 5, 5'],
+		['FF46','CF 6',		'43, 5, 6'],
+		['FF47','CF 7',		'43, 5, 7'],
+		['FF48','CF 8',		'43, 5, 8'],
+		['FF49','CF 9',		'43, 5, 9'],
+		['FF4E','CF I',		'43, 5,25'],
+		['FF50','F? 0',		'43, 6, 0'],
+		['FF51','F? 1',		'43, 6, 1'],
+		['FF52','F? 2',		'43, 6, 2'],
+		['FF53','F? 3',		'43, 6, 3'],
+		['FF54','F? 4',		'43, 6, 4'],
+		['FF55','F? 5',		'43, 6, 5'],
+		['FF56','F? 6',		'43, 6, 6'],
+		['FF57','F? 7',		'43, 6, 7'],
+		['FF58','F? 8',		'43, 6, 8'],
+		['FF59','F? 9',		'43, 6, 9'],
+		['FF5E','F? I',		'43, 6,25'],
+		['FF60','FIX 0',	'42, 7, 0'],
+		['FF61','FIX 1',	'42, 7, 1'],
+		['FF62','FIX 2',	'42, 7, 2'],
+		['FF63','FIX 3',	'42, 7, 3'],
+		['FF64','FIX 4',	'42, 7, 4'],
+		['FF65','FIX 5',	'42, 7, 5'],
+		['FF66','FIX 6',	'42, 7, 6'],
+		['FF67','FIX 7',	'42, 7, 7'],
+		['FF68','FIX 8',	'42, 7, 8'],
+		['FF69','FIX 9',	'42, 7, 9'],
+		['FF6E','FIX I',	'42, 7,25'],
+		['FF70','SCI 0',	'42, 8, 0'],
+		['FF71','SCI 1',	'42, 8, 1'],
+		['FF72','SCI 2',	'42, 8, 2'],
+		['FF73','SCI 3',	'42, 8, 3'],
+		['FF74','SCI 4',	'42, 8, 4'],
+		['FF75','SCI 5',	'42, 8, 5'],
+		['FF76','SCI 6',	'42, 8, 6'],
+		['FF77','SCI 7',	'42, 8, 7'],
+		['FF78','SCI 8',	'42, 8, 8'],
+		['FF79','SCI 9',	'42, 8, 9'],
+		['FF7E','SCI I',	'42, 8,25'],
+		['FF80','ENG 0',	'42, 9, 0'],
+		['FF81','ENG 1',	'42, 9, 1'],
+		['FF82','ENG 2',	'42, 9, 2'],
+		['FF83','ENG 3',	'42, 9, 3'],
+		['FF84','ENG 4',	'42, 9, 4'],
+		['FF85','ENG 5',	'42, 9, 5'],
+		['FF86','ENG 6',	'42, 9, 6'],
+		['FF87','ENG 7',	'42, 9, 7'],
+		['FF88','ENG 8',	'42, 9, 8'],
+		['FF89','ENG 9',	'42, 9, 9'],
+		['FF8E','ENG I',	'42, 9,25'],
+		['FF90','MATRIX 0',	'42,16, 0'],
+		['FF91','MATRIX 1',	'42,16, 1'],
+		['FF92','MATRIX 2',	'42,16, 2'],
+		['FF93','MATRIX 3',	'42,16, 3'],
+		['FF94','MATRIX 4',	'42,16, 4'],
+		['FF95','MATRIX 5',	'42,16, 5'],
+		['FF96','MATRIX 6',	'42,16, 6'],
+		['FF97','MATRIX 7',	'42,16, 7'],
+		['FF98','MATRIX 8',	'42,16, 8'],
+		['FF99','MATRIX 9',	'42,16, 9'],
+
+		['DF80','STO+0',	'44,40, 0'],
+		['DF81','STO+1',	'44,40, 1'],
+		['DF82','STO+2',	'44,40, 2'],
+		['DF83','STO+3',	'44,40, 3'],
+		['DF84','STO+4',	'44,40, 4'],
+		['DF85','STO+5',	'44,40, 5'],
+		['DF86','STO+6',	'44,40, 6'],
+		['DF87','STO+7',	'44,40, 7'],
+		['DF88','STO+8',	'44,40, 8'],
+		['DF89','STO+9',	'44,40, 9'],
+		['DF9E','STO+I',	'44,40,25'],
+		['DF9D','STO+(i)',	'44,40,24'],
+		['DF90','STO+.0',	'44,40,.0'],
+		['DF91','STO+.1',	'44,40,.1'],
+		['DF92','STO+.2',	'44,40,.2'],
+		['DF93','STO+.3',	'44,40,.3'],
+		['DF94','STO+.4',	'44,40,.4'],
+		['DF95','STO+.5',	'44,40,.5'],
+		['DF96','STO+.6',	'44,40,.6'],
+		['DF97','STO+.7',	'44,40,.7'],
+		['DF98','STO+.8',	'44,40,.8'],
+		['DF99','STO+.9',	'44,40,.9'],
+		['CF80','RCL+0',	'45,40, 0'],
+		['CF81','RCL+1',	'45,40, 1'],
+		['CF82','RCL+2',	'45,40, 2'],
+		['CF83','RCL+3',	'45,40, 3'],
+		['CF84','RCL+4',	'45,40, 4'],
+		['CF85','RCL+5',	'45,40, 5'],
+		['CF86','RCL+6',	'45,40, 6'],
+		['CF87','RCL+7',	'45,40, 7'],
+		['CF88','RCL+8',	'45,40, 8'],
+		['CF89','RCL+9',	'45,40, 9'],
+		['CF9E','RCL+I',	'45,40,25'],
+		['CF9D','RCL+(i)',	'45,40,24'],
+		['CF90','RCL+.0',	'45,40,.0'],
+		['CF91','RCL+.1',	'45,40,.1'],
+		['CF92','RCL+.2',	'45,40,.2'],
+		['CF93','RCL+.3',	'45,40,.3'],
+		['CF94','RCL+.4',	'45,40,.4'],
+		['CF95','RCL+.5',	'45,40,.5'],
+		['CF96','RCL+.6',	'45,40,.6'],
+		['CF97','RCL+.7',	'45,40,.7'],
+		['CF98','RCL+.8',	'45,40,.8'],
+		['CF99','RCL+.9',	'45,40,.9'],
+		['DFA0','STO-0',	'44,30, 0'],
+		['DFA1','STO-1',	'44,30, 1'],
+		['DFA2','STO-2',	'44,30, 2'],
+		['DFA3','STO-3',	'44,30, 3'],
+		['DFA4','STO-4',	'44,30, 4'],
+		['DFA5','STO-5',	'44,30, 5'],
+		['DFA6','STO-6',	'44,30, 6'],
+		['DFA7','STO-7',	'44,30, 7'],
+		['DFA8','STO-8',	'44,30, 8'],
+		['DFA9','STO-9',	'44,30, 9'],
+		['DFBE','STO-I',	'44,30,25'],
+		['DFBD','STO-(i)',	'44,30,24'],
+		['DFB0','STO-.0',	'44,30,.0'],
+		['DFB1','STO-.1',	'44,30,.1'],
+		['DFB2','STO-.2',	'44,30,.2'],
+		['DFB3','STO-.3',	'44,30,.3'],
+		['DFB4','STO-.4',	'44,30,.4'],
+		['DFB5','STO-.5',	'44,30,.5'],
+		['DFB6','STO-.6',	'44,30,.6'],
+		['DFB7','STO-.7',	'44,30,.7'],
+		['DFB8','STO-.8',	'44,30,.8'],
+		['DFB9','STO-.9',	'44,30,.9'],
+		['CFA0','RCL-0',	'45,30, 0'],
+		['CFA1','RCL-1',	'45,30, 1'],
+		['CFA2','RCL-2',	'45,30, 2'],
+		['CFA3','RCL-3',	'45,30, 3'],
+		['CFA4','RCL-4',	'45,30, 4'],
+		['CFA5','RCL-5',	'45,30, 5'],
+		['CFA6','RCL-6',	'45,30, 6'],
+		['CFA7','RCL-7',	'45,30, 7'],
+		['CFA8','RCL-8',	'45,30, 8'],
+		['CFA9','RCL-9',	'45,30, 9'],
+		['CFBE','RCL-I',	'45,30,25'],
+		['CFBD','RCL-(i)',	'45,30,24'],
+		['CFB0','RCL-.0',	'45,30,.0'],
+		['CFB1','RCL-.1',	'45,30,.1'],
+		['CFB2','RCL-.2',	'45,30,.2'],
+		['CFB3','RCL-.3',	'45,30,.3'],
+		['CFB4','RCL-.4',	'45,30,.4'],
+		['CFB5','RCL-.5',	'45,30,.5'],
+		['CFB6','RCL-.6',	'45,30,.6'],
+		['CFB7','RCL-.7',	'45,30,.7'],
+		['CFB8','RCL-.8',	'45,30,.8'],
+		['CFB9','RCL-.9',	'45,30,.9'],
+		['DFC0','STO*0',	'44,20, 0'],
+		['DFC1','STO*1',	'44,20, 1'],
+		['DFC2','STO*2',	'44,20, 2'],
+		['DFC3','STO*3',	'44,20, 3'],
+		['DFC4','STO*4',	'44,20, 4'],
+		['DFC5','STO*5',	'44,20, 5'],
+		['DFC6','STO*6',	'44,20, 6'],
+		['DFC7','STO*7',	'44,20, 7'],
+		['DFC8','STO*8',	'44,20, 8'],
+		['DFC9','STO*9',	'44,20, 9'],
+		['DFDE','STO*I',	'44,20,25'],
+		['DFDD','STO*(i)',	'44,20,24'],
+		['DFD0','STO*.0',	'44,20,.0'],
+		['DFD1','STO*.1',	'44,20,.1'],
+		['DFD2','STO*.2',	'44,20,.2'],
+		['DFD3','STO*.3',	'44,20,.3'],
+		['DFD4','STO*.4',	'44,20,.4'],
+		['DFD5','STO*.5',	'44,20,.5'],
+		['DFD6','STO*.6',	'44,20,.6'],
+		['DFD7','STO*.7',	'44,20,.7'],
+		['DFD8','STO*.8',	'44,20,.8'],
+		['DFD9','STO*.9',	'44,20,.9'],
+		['CFC0','RCL*0',	'45,20, 0'],
+		['CFC1','RCL*1',	'45,20, 1'],
+		['CFC2','RCL*2',	'45,20, 2'],
+		['CFC3','RCL*3',	'45,20, 3'],
+		['CFC4','RCL*4',	'45,20, 4'],
+		['CFC5','RCL*5',	'45,20, 5'],
+		['CFC6','RCL*6',	'45,20, 6'],
+		['CFC7','RCL*7',	'45,20, 7'],
+		['CFC8','RCL*8',	'45,20, 8'],
+		['CFC9','RCL*9',	'45,20, 9'],
+		['CFDE','RCL*I',	'45,20,25'],
+		['CFDD','RCL*(i)',	'45,20,24'],
+		['CFD0','RCL*.0',	'45,20,.0'],
+		['CFD1','RCL*.1',	'45,20,.1'],
+		['CFD2','RCL*.2',	'45,20,.2'],
+		['CFD3','RCL*.3',	'45,20,.3'],
+		['CFD4','RCL*.4',	'45,20,.4'],
+		['CFD5','RCL*.5',	'45,20,.5'],
+		['CFD6','RCL*.6',	'45,20,.6'],
+		['CFD7','RCL*.7',	'45,20,.7'],
+		['CFD8','RCL*.8',	'45,20,.8'],
+		['CFD9','RCL*.9',	'45,20,.9'],
+		['DFC0','STOx0',	'44,20, 0'],
+		['DFC1','STOx1',	'44,20, 1'],
+		['DFC2','STOx2',	'44,20, 2'],
+		['CFC3','STOx3',	'44,20, 3'],
+		['CFC4','STOx4',	'44,20, 4'],
+		['CFC5','STOx5',	'44,20, 5'],
+		['CFC6','STOx6',	'44,20, 6'],
+		['CFC7','STOx7',	'44,20, 7'],
+		['CFC8','STOx8',	'44,20, 8'],
+		['CFC9','STOx9',	'44,20, 9'],
+		['DFDE','STOxI',	'44,20,25'],
+		['DFDD','STOx(i)',	'44,20,24'],
+		['DFD0','STOx.0',	'44,20,.0'],
+		['DFD1','STOx.1',	'44,20,.1'],
+		['DFD2','STOx.2',	'44,20,.2'],
+		['DFD3','STOx.3',	'44,20,.3'],
+		['DFD4','STOx.4',	'44,20,.4'],
+		['DFD5','STOx.5',	'44,20,.5'],
+		['DFD6','STOx.6',	'44,20,.6'],
+		['DFD7','STOx.7',	'44,20,.7'],
+		['DFD8','STOx.8',	'44,20,.8'],
+		['DFD9','STOx.9',	'44,20,.9'],
+		['CFC0','RCLx0',	'45,20, 0'],
+		['CFC1','RCLx1',	'45,20, 1'],
+		['CFC2','RCLx2',	'45,20, 2'],
+		['CFC3','RCLx3',	'45,20, 3'],
+		['CFC4','RCLx4',	'45,20, 4'],
+		['CFC5','RCLx5',	'45,20, 5'],
+		['CFC6','RCLx6',	'45,20, 6'],
+		['CFC7','RCLx7',	'45,20, 7'],
+		['CFC8','RCLx8',	'45,20, 8'],
+		['CFC9','RCLx9',	'45,20, 9'],
+		['CFDE','RCLxI',	'45,20,25'],
+		['CFDD','RCLx(i)',	'45,20,24'],
+		['CFD0','RCLx.0',	'45,20, 0'],
+		['CFD1','RCLx.1',	'45,20, 1'],
+		['CFD2','RCLx.2',	'45,20, 2'],
+		['CFD3','RCLx.3',	'45,20, 3'],
+		['CFD4','RCLx.4',	'45,20, 4'],
+		['CFD5','RCLx.5',	'45,20, 5'],
+		['CFD6','RCLx.6',	'45,20, 6'],
+		['CFD7','RCLx.7',	'45,20, 7'],
+		['CFD8','RCLx.8',	'45,20, 8'],
+		['CFD9','RCLx.9',	'45,20, 9'],
+		['DFE0','STO/0',	'44,10, 0'],
+		['DFE1','STO/1',	'44,10, 1'],
+		['DFE2','STO/2',	'44,10, 2'],
+		['DFE3','STO/3',	'44,10, 3'],
+		['DFE4','STO/4',	'44,10, 4'],
+		['DFE5','STO/5',	'44,10, 5'],
+		['DFE6','STO/6',	'44,10, 6'],
+		['DFE7','STO/7',	'44,10, 7'],
+		['DFE8','STO/8',	'44,10, 8'],
+		['DFE9','STO/9',	'44,10, 9'],
+		['DFFE','STO/I',	'44,10,25'],
+		['DFFD','STO/(i)',	'44,10,24'],
+		['DFF0','STO/.0',	'44,10,.0'],
+		['DFF1','STO/.1',	'44,10,.1'],
+		['DFF2','STO/.2',	'44,10,.2'],
+		['DFF3','STO/.3',	'44,10,.3'],
+		['DFF4','STO/.4',	'44,10,.4'],
+		['DFF5','STO/.5',	'44,10,.5'],
+		['DFF6','STO/.6',	'44,10,.6'],
+		['DFF7','STO/.7',	'44,10,.7'],
+		['DFF8','STO/.8',	'44,10,.8'],
+		['DFF9','STO/.9',	'44,10,.9'],
+		['CFE0','RCL/0',	'45,10, 0'],
+		['CFE1','RCL/1',	'45,10, 1'],
+		['CFE2','RCL/2',	'45,10, 2'],
+		['CFE3','RCL/3',	'45,10, 3'],
+		['CFE4','RCL/4',	'45,10, 4'],
+		['CFE5','RCL/5',	'45,10, 5'],
+		['CFE6','RCL/6',	'45,10, 6'],
+		['CFE7','RCL/7',	'45,10, 7'],
+		['CFE8','RCL/8',	'45,10, 8'],
+		['CFE9','RCL/9',	'45,10, 9'],
+		['CFFE','RCL/I',	'45,10,25'],
+		['CFFD','RCL/(i)',	'45,10,24'],
+		['CFF0','RCL/.0',	'45,10,.0'],
+		['CFF1','RCL/.1',	'45,10,.1'],
+		['CFF2','RCL/.2',	'45,10,.2'],
+		['CFF3','RCL/.3',	'45,10,.3'],
+		['CFF4','RCL/.4',	'45,10,.4'],
+		['CFF5','RCL/.5',	'45,10,.5'],
+		['CFF6','RCL/.6',	'45,10,.6'],
+		['CFF7','RCL/.7',	'45,10,.7'],
+		['CFF8','RCL/.8',	'45,10,.8'],
+		['CFF9','RCL/.9',	'45,10,.9'],
+		['CF8A','RCL+A',	'45,40,11'],
+		['CF8B','RCL+B',	'45,40,12'],
+		['CF8C','RCL+C',	'45,40,13'],
+		['CF8D','RCL+D',	'45,40,14'],
+		['CF8E','RCL+E',	'45,40,15'],
+		['DF8A','STO+A',	'44,40,11'],
+		['DF8B','STO+B',	'44,40,12'],
+		['DF8C','STO+C',	'44,40,13'],
+		['DF8D','STO+D',	'44,40,14'],
+		['DF8E','STO+E',	'44,40,15'],
+		['CFAA','RCL-A',	'45,30,11'],
+		['CFAB','RCL-B',	'45,30,12'],
+		['CFAC','RCL-C',	'45,30,13'],
+		['CFAD','RCL-D',	'45,30,14'],
+		['CFAE','RCL-E',	'45,30,15'],
+		['DFAA','STO-A',	'44,30,11'],
+		['DFAB','STO-B',	'44,30,12'],
+		['DFAC','STO-C',	'44,30,13'],
+		['DFAD','STO-D',	'44,30,14'],
+		['DFAE','STO-E',	'44,30,15'],
+		['CFCA','RCL*A',	'45,20,11'],
+		['CFCB','RCL*B',	'45,20,12'],
+		['CFCC','RCL*C',	'45,20,13'],
+		['CFCD','RCL*D',	'45,20,14'],
+		['CFCE','RCL*E',	'45,20,15'],
+		['DFCA','STO*A',	'44,20,11'],
+		['DFCB','STO*B',	'44,20,12'],
+		['DFCC','STO*C',	'44,20,13'],
+		['DFCD','STO*D',	'44,20,14'],
+		['DFCE','STO*E',	'44,20,15'],
+		['CFCA','RCLxA',	'45,20,11'],
+		['CFCB','RCLxB',	'45,20,12'],
+		['CFCC','RCLxC',	'45,20,13'],
+		['CFCD','RCLxD',	'45,20,14'],
+		['CFCE','RCLxE',	'45,20,15'],
+		['DFCA','STOxA',	'44,20,11'],
+		['DFCB','STOxB',	'44,20,12'],
+		['DFCC','STOxC',	'44,20,13'],
+		['DFCD','STOxD',	'44,20,14'],
+		['DFCE','STOxE',	'44,20,15'],
+		['CFEA','RCL/A',	'45,10,11'],
+		['CFEB','RCL/B',	'45,10,12'],
+		['CFEC','RCL/C',	'45,10,13'],
+		['CFED','RCL/D',	'45,10,14'],
+		['CFEE','RCL/E',	'45,10,15'],
+		['DFEA','STO/A',	'44,10,11'],
+		['DFEB','STO/B',	'44,10,12'],
+		['DFEC','STO/C',	'44,10,13'],
+		['DFED','STO/D',	'44,10,14'],
+		['DFEE','STO/E',	'44,10,15']
+
+		
+	];
+
+	function is_double_byte_code(code){
+	  switch(code) {
+	  case 0xBF:
+	  case 0xCF:
+		case 0xDF:
+		case 0xEF:
+	  case 0xFF:
+		  return true;
+		}
+		return false;
+	}
+
+  function get_def_dump(id) {
+    //for(a in def_dump) {
+		for (var i=0; i< def_dump.length;i++) {
+      if(def_dump[i][0] == id)
+        return def_dump[i][1];
+    }
+    return "";
+  }
+	
+	function decode(token){
+		token=token.toUpperCase();
+		for (var i=0; i< codes.length;i++)
+			if (codes[i][0]==token) return codes[i][1];
+		return "??";
+	}
+
+  // Return instruction index instead of the instruction name
+	function decode_ix(token){
+		token=token.toUpperCase();
+		for (var i=0; i< codes.length;i++)
+			if (codes[i][0]==token) return i;
+		return -1;
+	}
+
+  // ============================
+  //  Some util functions
+  // ============================
+
+  // Debug log 	
+	function log(msg) {
+    setTimeout(function() {
+        throw new Error(msg);
+    }, 0);
+  }
+
+  String.prototype.padL = function(len, what) {
+    var s = this;
+    while (s.length < len)
+      s = what + s;
+    return s;
+  }
+
+  String.prototype.padR = function(len, what) {
+    var s = this;
+    while (s.length < len)
+      s += what;
+    return s;
+  }
+  
+  if (!String.prototype.trim) {
+    String.prototype.trim = function() {
+      return this.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+    };
+  }
+
+  // ============================
+	
+	function clearRAM(base) {
+	  for(var i = base; i<256; i++) {
+	    RAM[i] = [];
+	    for(var j = 0; j<7; j++)
+	      RAM[i][j]=0;
+	  }
+	}
+
+	function getNhex(a, n) {
+	  return a.toString(16).padL(n,'0');
+	}
+	
+	function get2hex(a) {
+	  return a.toString(16).padL(2,'0');
+	}
+	
+	
+	// Convert 7 byte array into long hex string
+	function reg2str(ar) {
+	  var x="";
+	  for(var i = 0; i < ar.length; i++) 
+	    x=get2hex(ar[i])+x;
+	  return x
+	}
+
+  // Parse register string (14hex digits) into 7 byte array
+  function parseReg(str, ar) {
+    for(var k = 0; k<7; k++) {
+      ar[6-k]=parseInt(str.substring(k*2,k*2+2),16);
+      // log("  reg["+(6-k)+"]="+get2hex(ar[6-k]));
+    }
+  }
+  
+  function get_model() {
+    return $('#selected_calc').val();
+  }
+
+  function update_model() {
+    $('#errlog').text('');
+    $('#dump_from_calc').val(get_def_dump(get_model()));
+  }
+	
+	function check_model() {
+		var lines = $("#dump_from_calc").val().split('\n');
+		var mod = lines[0].trim();
+		// log("mod='"+mod+"'");
+		$('#errlog').text('');
+		if (get_def_dump(mod) == "") {
+		  // Bad model id 
+		  $('#errlog').html("Bad calculator model '"+mod+"'<br>First line of the dump has to be calculator model");
+		  return false;
+		}
+		
+		// Model OK - set selector
+		$('#selected_calc option[value="'+mod+'"]').prop('selected', true);
+		return true;
+	}
+	
+	// Parses contents of memory into RAM array
+	function parseRAM() {
+	  clearRAM(0); // Clear complete RAM
+		var lines = $("#dump_from_calc").val().split('\n');
+		for (var i = lines.length-1; i > 0 ; --i) {
+      var vals = lines[i].split("  ");
+      if (vals[0][1]==':') {
+        for(var k = 0; k < vals.length; k++) {
+          // log("REG .. "+vals[k]);
+          var reg = [];
+          var isreg = true;
+          switch (vals[k][0]) {
+            case 'A': reg = regA; break;
+            case 'B': reg = regB; break;
+            case 'C': reg = regC; break;
+            case 'M': reg = regM; break;
+            case 'N': reg = regN; break;
+            case 'G': 
+              regG = parseInt(vals[k].substring(3), 16);
+              // log(" regG = "+get2hex(regG));
+            default: isreg = false; break;
+          }
+          if (isreg) {
+            parseReg(vals[k].substring(3), reg);
+            // log("  reg"+vals[k][0]+"="+reg2str(reg));
+          }
+        }
+        continue;
+      }
+      if (vals[0].length!=2 || vals[0][1]==' ') continue;
+      //log("v0="+vals[0]);
+      var addr = parseInt(vals[0],16)
+      if (addr < 0 || addr > 255) continue;
+      for(var j = 1; j<vals.length; j++) {
+        //log("ram["+(addr+j-1)+"]='"+vals[j]+"'");
+        parseReg(vals[j], RAM[addr+j-1]);
+        //log("ram[x]="+reg2str(RAM[addr]));
+      }
+		}
+	}
+	
+	function isZeroReg(reg) {
+	  for(var i = 0; i < reg.length; i++) 
+	    if (reg[i] != 0) return false;
+	  return true;
+	}
+	
+	function ram2str() {
+	  var s = get_model() + "\n";
+	  for(addr = 0; addr < 256; addr+=4) {
+	    if (isZeroReg(RAM[addr]) && isZeroReg(RAM[addr+1]) && isZeroReg(RAM[addr+2]) && isZeroReg(RAM[addr+3]))
+	      continue;
+	    var ln = get2hex(addr);
+	    for(var k=0; k<4; k++) {
+	      ln+="  "+reg2str(RAM[addr+k]);
+	    }
+	    //log("ln="+ln+"|");
+	    s+=ln+"\n";
+	  }
+	  // Add registers
+	  s += "A: "+reg2str(regA)+"  B: "+reg2str(regB)+"  C: "+reg2str(regC)+"\n"+
+	       "M: "+reg2str(regM)+"  N: "+reg2str(regN)+"  G: "+get2hex(regG)+"\n";
+	  return s;
+	}
+
+	
+	function stayonsameline(token){
+	  switch(token) {
+	  case 0xF0:	//0
+		case 0xF1:	//1
+	  case 0xF2:	//2
+		case 0xF3:	//3
+		case 0xF4:	//4
+		case 0xF5:	//5
+		case 0xF6:	//6
+		case 0xF7:	//7
+		case 0xF8:	//8
+		case 0xF9:	//9
+		case 0xC0:  //.
+		  return true;
+		}
+		return false;
+	}
+	
+	function lookup(mnemonic){
+		var i,j;
+		var result = "";
+		//delete all whitespaces, '?', '_' with regex
+		//mnemonic=mnemonic.replace(/^\s*|\s*$/g,'').toUpperCase();
+		//mnemonic=mnemonic.replace(/[ \t\r/?/_]/g,'').toUpperCase();
+		mnemonic=mnemonic.replace(/[ \t\r_]/g,'').toUpperCase();
+		for (i=0;i<codes.length;i++){
+			//if (mnemonic==codes[i][1].replace(/^\s*|\s*$/g,'').toUpperCase())	
+			//if (mnemonic==codes[i][1].replace(/[ \t\r/?/_]/g,'').toUpperCase())	
+			if (mnemonic==codes[i][1].replace(/[ \t\r_]/g,'').toUpperCase())	
+				return codes[i][0];
+		}
+		//if we get this far, check if it is a multi digit number on one line:
+		for (j=0;j<mnemonic.length;j++)
+			for (i=0;i<codes.length;i++)
+				if (mnemonic.substring(j,j+1)==codes[i][1]) result += codes[i][0];
+		if (result != "") return result; //return, even if some garbage could be in mnemonic!
+		return "??";  //somrthing's wrong
+	}
+	
+	function decode() {
+	  if (!check_model()) return;
+	  parseRAM();
+    var last_addr = RAM[0x16][0];
+    var last_offs = (RAM[0x16][1] & 0xf)-1;
+    var addr = 0xff; var offs = 0; // Address of the first opcode
+    var code, sz;
+    var mnemonic = "";
+    var codedump = "";
+    var nl = false, newnl = false;
+    var cnt = 0;
+    var instr;
+    var inst_keys;
+    var inst_ix;
+    
+    if (last_addr > 0) {
+      // log("Program ends at " + get2hex(last_addr) + ":" + last_offs);
+      while(addr > last_addr || offs <= last_offs) {
+        sz = 2;
+        code = RAM[addr][offs];
+        if (is_double_byte_code(code)) {
+          offs++; if(offs==7) { offs=0; addr--; } // Increment address
+          code = (code<<8) | RAM[addr][offs]; sz=4;
+        }
+        offs++; if(offs==7) { offs=0; addr--; } // Increment address
+        cnt++; // Increment program pointer
+
+        newnl = !stayonsameline(code);
+        if (nl || newnl) mnemonic+="\n";
+        nl = newnl;
+        //log(" dec:" + getNhex(code,sz).toUpperCase());
+        inst_ix = decode_ix(getNhex(code,sz).toUpperCase());
+        instr = (inst_ix<0)?"???":codes[inst_ix][1];
+        inst_keys = (inst_ix<0)?"???":codes[inst_ix][2];
+
+        mnemonic+=instr;
+        codedump+=cnt.toString(10).padL(3,'0')+"  "+instr.padR(12,' ')+" | "+inst_keys+"\n";
+      }
+      if (mnemonic.substring(0,1) == '\n')
+        mnemonic = mnemonic.substring(1);
+    }
+    
+		$('#mnemonic').val(mnemonic);
+		$('#codedump').val(codedump);
+	}
+
+  function encode() {
+	  if (!check_model()) return;
+	  parseRAM();
+	  if(RAM[0x16][0]>0)
+      clearRAM(RAM[0x16][0]); // Clear program
+    var addr = 0x100, offs = 6;
+
+    var pgmcodes = "";
+		mnemonic_arr = $('#mnemonic').val().split("\n");
+		for (i=0;i<mnemonic_arr.length;i++)
+			if (mnemonic_arr[i]!="" && mnemonic_arr[i]!="\n")
+				pgmcodes+=lookup(mnemonic_arr[i]);
+    // log("pgm='"+pgmcodes+"'");
+    
+		for (i=0; i<pgmcodes.length; i+=2) {
+			var code = parseInt(pgmcodes.substring(i,i+2),16);
+      offs++; if(offs==7) { offs=0; addr--; } // Increment address
+			RAM[addr][offs] = code;
+		}
+    
+    // Update the end of program
+		if (addr == 0x100) {
+		  // No programm
+      RAM[0x16][0] = RAM[0x16][1] = 0;
+    } else {
+		  RAM[0x16][0] = addr;
+		  RAM[0x16][1] = (offs+1) | (RAM[0x16][1] & 0xf0);
+		}
+		
+		// Place the program pointer at the beginning
+		RAM[0x14][0] = RAM[0x14][1] = 0;
+		RAM[0x17][0] = RAM[0x17][1] = 0;
+
+    //$('#load_for_calc').val(ram2str());
+    $('#dump_from_calc').val(ram2str());
+  }
+
+	
+	$(document).ready(function(){
+    $("#tabs").tabs();
+	$('.linked').scroll(function(){
+		$('.linked').scrollTop($(this).scrollTop());    
+	});
+    $("#decode").click(function(event){ decode(); });
+		$("#encode").click(function(event){ encode(); });
+   
+    $("#testdump").click(function(event){
+			$('#dump_from_calc').val(testdump);				
+			switch ($("#stored_dumps").val()){
+				case 'testdump':
+					$('#dump_from_calc').val(testdump);				
+					break;
+				case 'helloppc':
+					$('#dump_from_calc').val(helloppc);				
+					break;
+				default:
+					alert("'" + $("#stored_dumps").val() + "' not implemented");
+			}
+			parseRAM();
+      //$('#load_for_calc').val(ram2str());
+		});
+		
+		$("#testpgm").click(function(event){
+			switch ($("#stored_pgms").val()){
+				case 'pi306':
+					$('#mnemonic').val(pi306);				
+					break;
+				case 'testpgm':
+					$('#mnemonic').val(testpgm);				
+					break;
+				default:
+					alert("'" + $("#stored_pgms").val() + "' not implemented");
+			}
+			parseRAM();
+      //$('#load_for_calc').val(ram2str());
+		});
+
+    $('#selected_calc').click(function() {
+      //update_model();
+    });
+    
+    update_model();
+		decode();
+  });
+    </script>
+
+		<style type="text/css">
+			body { font-family: Verdana,Tahoma,Arial,Sans-Serif; font-size: 12px; }
+		</style>
+
+</head>
+<body>
+	<div class="ui-tabs ui-widget ui-widget-content ui-corner-all" id="tabs">
+		<ul role="tablist" class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+			<li aria-selected="true" aria-labelledby="ui-id-1" aria-controls="decoder" tabindex="0" role="tab" class="ui-state-default ui-corner-top ui-tabs-active ui-state-active"><a id="ui-id-1" tabindex="-1" role="presentation" class="ui-tabs-anchor" href="#decoder">en-/decoder</a></li>
+			<li aria-selected="false" aria-labelledby="ui-id-2" aria-controls="help" tabindex="-1" role="tab" class="ui-state-default ui-corner-top"><a id="ui-id-2" tabindex="-1" role="presentation" class="ui-tabs-anchor" href="#help">help</a></li>
+			<li aria-selected="false" aria-labelledby="ui-id-3" aria-controls="about" tabindex="-1" role="tab" class="ui-state-default ui-corner-top"><a id="ui-id-3" tabindex="-1" role="presentation" class="ui-tabs-anchor" href="#about">about</a></li>
+			<li aria-selected="false" aria-labelledby="ui-id-4" aria-controls="version" tabindex="-1" role="tab" class="ui-state-default ui-corner-top"><a id="ui-id-4" tabindex="-1" role="presentation" class="ui-tabs-anchor" href="#version">version history</a></li>
+		</ul>
+    <div aria-hidden="false" aria-expanded="true" role="tabpanel" class="ui-tabs-panel ui-widget-content ui-corner-bottom" aria-labelledby="ui-id-1" id="decoder">
+			Select calculator:
+			<select id="selected_calc" onchange="update_model()">
+				<option value="DM10" disabled="disabled">DM10</option>
+				<option value="DM11" disabled="disabled">DM11</option>
+				<option value="DM12" disabled="disabled">DM12</option>
+				<option value="DM15" selected="selected">DM15</option>
+				<option value="DM15_M80">DM15 M80</option>
+				<option value="DM15_M1B">DM15 M1B</option>
+				<option value="DM16" disabled="disabled">DM16</option>
+			</select>
+			<p id="errlog" style="color: red"></p>
+			<table>
+				<tbody><tr><td>Dump from calc</td><td></td><td>Mnemonic</td><td></td><td>Code dump</td></tr>
+				<tr>
+					<td><textarea id="dump_from_calc" cols="65" rows="25" style="font-family:monospace">DM15
+04  000000fffff000  00000000000008  0000000000000c  00000000000eae
+08  00000000000000  2faf8befbe2280  00000000000000  00000000000000
+14  00000000000000  c0d2d2d2d2d2d2  00000000000000  00000000000000
+18  00000000000000  0000000000007f  00000000a00000  00000000000000
+A: 000000fffff000  B: 000000fffffeae  C: 00000000000eae
+M: 00000000000000  N: 00000000000000  G: 04
+</textarea></td>
+					<td style="width:140px"><center>
+						<button id="decode">--- Decode --&gt;</button><br>
+						<button id="encode">&lt;-- Encode ---</button><br>
+					</center></td>
+					<td><textarea id="mnemonic" cols="30" rows="25" style="font-family:monospace" class="linked"></textarea></td>
+					<td>
+						<!-- some other buttons? ... -->
+					</td>
+					<td><textarea id="codedump" cols="30" rows="25" style="font-family:monospace" class="linked"></textarea></td>
+				</tr>
+				<tr><td>
+					<select id="stored_dumps">
+						<option selected="selected" value="testdump">Test dump</option>
+						<option value="helloppc">Hello PPC</option>
+					</select>
+				<button id="testdump">Insert test dump</button></td>
+				<td></td>
+				<td>
+					<select id="stored_pgms">
+						<option selected="selected" value="testpgm">Test pgm</option>
+						<option value="pi306">PI 306 digits</option>
+					</select>
+				<button id="testpgm">Insert test programm</button></td>
+				</tr>
+			</tbody></table>
+    </div>
+    <div aria-hidden="true" aria-expanded="false" style="display: none;" role="tabpanel" class="ui-tabs-panel ui-widget-content ui-corner-bottom" aria-labelledby="ui-id-2" id="help">
+    <br>
+		<b>Please update the firmware version to at least V11!</b>
+    <br>
+		<br>
+		This is a sample console output of a memory dump by pressing 's':<br><br>
+		<div style="color:white; background-color:black;">
+			<font face="Courier New">
+				DM15_M1B turned on<br>
+				DM15_M1B ready<br>
+				?<br>
+				Firmware DM15_M1B_V10<br><br>
+				?          Help<br>
+				p          Key press<br>
+				s          Dump memory<br>
+				l          Load memory<br>
+				t          Toggle display output to console<br>
+				b          Read battery voltage<br><br>
+				Type '&lt;command&gt; ?' for params<br>
+				Uptime 556s<br>
+				VOYAGER &gt;&gt; s<br>
+				DM15_M1B<br>
+				04  000000fffff000  00000000000008  0000000000000c  00000000000eae<br>
+				08  00000000000000  2faf8befbe2280  00000000000000  00000000000000<br>
+				14  00000000000000  1b2d2d2d2d2d2d  00000000000000  00000000000000<br>
+				18  00000000000000  0000000000007f  00000000a00000  00000000000000<br>
+				A: 000000fffff000  B: 000000fffffeae  C: 00000000000eae<br>
+				M: 00000000000000  N: 00000000000000  G: 04<br>
+				VOYAGER &gt;&gt; <blink>_</blink><br><br>
+			</font>
+		</div>
+    </div>
+    <div aria-hidden="true" aria-expanded="false" style="display: none;" role="tabpanel" class="ui-tabs-panel ui-widget-content ui-corner-bottom" aria-labelledby="ui-id-3" id="about">
+    	this is what it is all about ...<br>
+    	
+    </div>
+    <div aria-hidden="true" aria-expanded="false" style="display: none;" role="tabpanel" class="ui-tabs-panel ui-widget-content ui-corner-bottom" aria-labelledby="ui-id-4" id="version">
+    	<ul>
+    		<li>22-JAN-2013&nbsp;&nbsp;Firmware V11 released - HTML script requires at least V11</li>
+    		<li>21-JAN-2013&nbsp;&nbsp;fixed op-code: STO I</li>
+    		<li>20-JAN-2013&nbsp;&nbsp;added missing op-codes: uRCL &amp; uSTO</li>
+    	</ul>
+    </div>
+  </div>
+
+
+
+</body></html>
