@@ -1,7 +1,9 @@
 2D lander (HP 15C)
 ==================
 
-(Implemented on a Swiss Micros DM-15)
+Implemented on a Swiss Micros DM15_M1B (max memory variant).
+
+TO CONFIRM: should run fine on a HP-15C (check the register/step requirements).
 
 STATUS: PROTOTYPE, INCOMPLETE, not fully tested yet. Be patient.
 
@@ -36,6 +38,13 @@ TODO
 - review criteria
 - optimizations
    - quicken when out of fuel
+
+MEM reports
+===========
+
+DM15     : ?
+DM15_M80 : ?
+DM15_M1B : 30 168 32-1
 
 Labels
 ======
@@ -111,3 +120,7 @@ Flags
  7 -
  8 -
  9 (TODO) landed/crashed?
+ 
+ NOTES
+ =====
+ - BST in run mode should backstep repeatedly when held
