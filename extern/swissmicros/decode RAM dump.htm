@@ -938,6 +938,7 @@
 	
 	// Parses contents of memory into RAM array
 	function parseRAM() {
+      log("parseRAM");
 	  clearRAM(0); // Clear complete RAM
 		var lines = $("#dump_from_calc").val().split('\n');
 		for (var i = lines.length-1; i > 0 ; --i) {
@@ -975,6 +976,7 @@
         //log("ram[x]="+reg2str(RAM[addr]));
       }
 		}
+      log("done parseRAM");
 	}
 	
 	function isZeroReg(reg) {
@@ -1042,6 +1044,7 @@
 	}
 	
 	function decode() {
+   log("decode");
 	  if (!check_model()) return;
 	  parseRAM();
     var last_addr = RAM[0x16][0];
@@ -1056,11 +1059,15 @@
     var inst_keys;
     var inst_ix;
     
+      log("Program ends at " + get2hex(last_addr) + ":" + last_offs);
+
     if (last_addr > 0) {
-      // log("Program ends at " + get2hex(last_addr) + ":" + last_offs);
       while(addr > last_addr || offs <= last_offs) {
         sz = 2;
+        log("fetching: " + get2hex(addr) + " offset:" + offs);
+        if (addr<0) break; // HACK
         code = RAM[addr][offs];
+        log("addr:"+get2hex(addr)+" code:"+get2hex(code));
         if (is_double_byte_code(code)) {
           offs++; if(offs==7) { offs=0; addr--; } // Increment address
           code = (code<<8) | RAM[addr][offs]; sz=4;
@@ -1076,8 +1083,9 @@
         instr = (inst_ix<0)?"???":codes[inst_ix][1];
         inst_keys = (inst_ix<0)?"???":codes[inst_ix][2];
 
-        mnemonic+=instr;
+        mnemonic+= /*cnt + " " + */instr;
         codedump+=cnt.toString(10).padL(3,'0')+"  "+instr.padR(12,' ')+" | "+inst_keys+"\n";
+      //log(mnemonic);
       }
       if (mnemonic.substring(0,1) == '\n')
         mnemonic = mnemonic.substring(1);
@@ -1085,6 +1093,7 @@
     
 		$('#mnemonic').val(mnemonic);
 		$('#codedump').val(codedump);
+
 	}
 
   function encode() {
