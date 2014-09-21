@@ -157,7 +157,7 @@ RTN
 LBL .2
 CF 1
 10
-GTO .4
+STO .4
 RTN
 LBL .3
 RCL .6
