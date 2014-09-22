@@ -72,33 +72,33 @@ Registers
 
 '>' are the ones you may fiddle with...
 
- 0 fuel left (kg)
- 1 > throttle (%)
- 2 > burn time (s)
- 3 > burn angle (from local horizontal, +=up) (deg)
- 4 height (m)
- 5 range (km)
- 6 velocity (km/h)
- 7 angle above horizon (deg)
+ 0 mf - fuel left (kg)
+ 1 > th - throttle (%)
+ 2 > t - burn time (s)
+ 3 > b - burn angle (from local horizontal, +=up) (deg)
+ 4 h - height (m)
+ 5 d - range (km)
+ 6 v - velocity (km/h)
+ 7 a - angle above horizon (deg)
  8 px (m)
  9 py (m)
 10 vx (m/s)
 11 vy (m/s)
 12 ax (m/s2)
 13 ay (m/s2)
-14 delta t preset (s)
-15 gravity, surface (m/s2)
-16 central body radius (m)
-17 delta t (s)
-18 fuel used for burn (kg)
-19 remaining time in calculation loop (s)
+14 dt0 - delta t preset (s)
+15 g0 - gravity, surface (m/s2)
+16 r0 - central body radius (m)
+17 dt - delta t (s)
+18 fu - fuel used for burn (kg)
+19 T - remaining time in calculation loop (s)
 
 (I)
-20 max fuel flow (kg/s)
+20 f - max fuel flow (kg/s)
 21 -
-22 vehicle mass, dry (kg)
-23 initial fuel mass (kg)
-24 thrust per fuel unit (N/kg)
+22 m0 - vehicle mass, dry (kg)
+23 mf0 - initial fuel mass (kg)
+24 I - thrust per fuel unit (N/kg)
 
 Flags
 =====
@@ -134,4 +134,6 @@ TODO
 - get rid of feet
 - review criteria
 - add some screenshots of the logic
+- abort option!
 - optimizations
+   - precomputed factors?
