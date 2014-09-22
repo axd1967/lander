@@ -33,9 +33,9 @@ Display: (TODO)
 About the files
 ===============
 Most files have been generated with the SwissMicro encoding/decoding scripts (see /extern/swissmicros/decode RAM dump.htm)
-- DM15_M1B.txt: the file that can be uploaded via the serial link (see also firmware.txt and instructions.php.txt)
+- DM15_M1B.txt: can be uploaded via the serial link (see also firmware.txt and instructions.php.txt)
 - code_dump.txt: decoded program, line per line
-- mnemonic.txt: equivalent program in mnemonic form. note that this fiel /might/ be more recent than the DM file.
+- mnemonic.txt: equivalent program in mnemonic form. note that this file /might/ be more recent than the DM file.
 - HP.xml: simple NotePad++ syntax highlighter
 
 MEM reports
