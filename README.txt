@@ -14,7 +14,8 @@ Aim
 
 Simple formulas used, don't expect stable orbits etc.
 
-Select a scenario (B,C,D, see below) to initialise data, then 'A' to define burn time segments.
+Select a scenario (B,C,D, see below) to initialise data, 
+then repeat 'A' to define burn time segments until reaching target (or crash).
 
 Enter following data:
 
@@ -22,7 +23,8 @@ Enter following data:
    - STO 2: burn time
    - STO 3: angle above horizon (TODO)
 
-Press 'A' to run the burn time. Calculator will run in predefined time segments (r14) until burn time has been consumed.
+Press 'A' to run the burn time. Calculator will run in predefined time segments (r14) 
+until burn time has been consumed.
 
 Display: (TODO)
    - '0' means target reached
