@@ -1034,7 +1034,12 @@
 		}
 		return false;
 	}
-	
+
+    // http://stackoverflow.com/questions/18082/validate-decimal-numbers-in-javascript-isnumeric
+   function isNumber(n) {
+      return !isNaN(parseFloat(n)) && isFinite(n);
+   }
+   
 	function lookup(mnemonic){
 		var i,j;
 		var result = "";
@@ -1046,13 +1051,25 @@
 			//if (mnemonic==codes[i][1].replace(/^\s*|\s*$/g,'').toUpperCase())	
 			//if (mnemonic==codes[i][1].replace(/[ \t\r/?/_]/g,'').toUpperCase())	
 			if (mnemonic==codes[i][1].replace(/[ \t\r_]/g,'').toUpperCase())	
+         { 
+            //log("found "+ codes[i][0]);
 				return codes[i][0];
+         }
 		}
 		//if we get this far, check if it is a multi digit number on one line:
+      // FIXME deal with invalid instructions, such as 'TEST 0 (x=x)'
+      if (!isNumber(mnemonic)) return "???";
+      
+      FIXME incomplete solution -> induce syntax error here
+      
 		for (j=0;j<mnemonic.length;j++)
 			for (i=0;i<codes.length;i++)
-				if (mnemonic.substring(j,j+1)==codes[i][1]) result += codes[i][0];
-		if (result != "") return result; //return, even if some garbage could be in mnemonic!
+				if (mnemonic.substring(j,j+1)==codes[i][1] && codes[i][1].length==1) result += codes[i][0];
+		if (result != "") {
+         //log("found something: "+result);
+         return result; //return, even if some garbage could be in mnemonic!
+      }
+      //log("found nothing???");
 		return "??";  //something's wrong
 	}
 	
