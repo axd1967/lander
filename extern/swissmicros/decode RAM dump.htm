@@ -1074,11 +1074,12 @@
     
       //log("Program ends at " + get2hex(last_addr) + ":" + last_offs);
 
+    var last_code = last_addr*7 - last_offs;
+    
     if (last_addr > 0) {
-      while(addr > last_addr || offs <= last_offs) {
+      while(addr*7 - offs >= last_code) {
         sz = 2;
         //log("fetching: " + get2hex(addr) + " offset:" + offs);
-        if (addr<0) break; // HACK
         code = RAM[addr][offs];
         //log("addr:"+get2hex(addr)+" code:"+get2hex(code));
         if (is_double_byte_code(code)) {
