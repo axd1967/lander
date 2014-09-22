@@ -125,6 +125,9 @@
 		['6C','STO g C',	'44,43,13'],
 		['6D','STO g D',	'44,43,14'],
 		['6E','STO g E',	'44,43,15'],
+
+      // prioritize "TEST X (COND)" for decoding, but accept "TEXT X" for encoding too
+      // FIXME: give user feedback if error, eg: "TEST 0 (X=Y)" should err somehow (" **** ") rather than produce "GSB E ..."
 		['70','TEST 0 (x<>0)',		'43,30, 0'],
 		['71','TEST 1 (x>0)',		'43,30, 1'],
 		['72','TEST 2 (x<0)',		'43,30, 2'],
@@ -135,6 +138,18 @@
 		['77','TEST 7 (x>y)',		'43,30, 7'],
 		['78','TEST 8 (x<y)',		'43,30, 8'],
 		['79','TEST 9 (x>=y)',		'43,30, 9'],
+
+		['70','TEST 0',		'43,30, 0'],
+		['71','TEST 1',		'43,30, 1'],
+		['72','TEST 2',		'43,30, 2'],
+		['73','TEST 3',		'43,30, 3'],
+		['74','TEST 4',		'43,30, 4'],
+		['75','TEST 5',		'43,30, 5'],
+		['76','TEST 6',		'43,30, 6'],
+		['77','TEST 7',		'43,30, 7'],
+		['78','TEST 8',		'43,30, 8'],
+		['79','TEST 9',		'43,30, 9'],
+
 		['A6','STO RESULT',	'  44  26'],
 		['D7','RCL RESULT',	'  45  26'],
 
@@ -938,7 +953,6 @@
 	
 	// Parses contents of memory into RAM array
 	function parseRAM() {
-      //log("parseRAM");
 	  clearRAM(0); // Clear complete RAM
 		var lines = $("#dump_from_calc").val().split('\n');
 		for (var i = lines.length-1; i > 0 ; --i) {
@@ -1040,11 +1054,10 @@
 			for (i=0;i<codes.length;i++)
 				if (mnemonic.substring(j,j+1)==codes[i][1]) result += codes[i][0];
 		if (result != "") return result; //return, even if some garbage could be in mnemonic!
-		return "??";  //somrthing's wrong
+		return "??";  //something's wrong
 	}
 	
 	function decode() {
-   //log("decode");
 	  if (!check_model()) return;
 	  parseRAM();
     var last_addr = RAM[0x16][0];
@@ -1083,9 +1096,8 @@
         instr = (inst_ix<0)?"???":codes[inst_ix][1];
         inst_keys = (inst_ix<0)?"???":codes[inst_ix][2];
 
-        mnemonic+= /*cnt + " " + */instr;
+        mnemonic+=instr;
         codedump+=cnt.toString(10).padL(3,'0')+"  "+instr.padR(14,' ')+" | "+inst_keys+"\n";
-      //log(mnemonic);
       }
       if (mnemonic.substring(0,1) == '\n')
         mnemonic = mnemonic.substring(1);
@@ -1282,6 +1294,7 @@ M: 00000000000000  N: 00000000000000  G: 04
     </div>
     <div aria-hidden="true" aria-expanded="false" style="display: none;" role="tabpanel" class="ui-tabs-panel ui-widget-content ui-corner-bottom" aria-labelledby="ui-id-4" id="version">
     	<ul>
+    		<li>22-OCT-2014&nbsp;&nbsp;Add 'TEST X (cond)' decoding</li>
     		<li>22-JAN-2013&nbsp;&nbsp;Firmware V11 released - HTML script requires at least V11</li>
     		<li>21-JAN-2013&nbsp;&nbsp;fixed op-code: STO I</li>
     		<li>20-JAN-2013&nbsp;&nbsp;added missing op-codes: uRCL &amp; uSTO</li>
