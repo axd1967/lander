@@ -29,13 +29,23 @@ until burn time has been consumed.
 Display: (TODO)
    - '0' means target reached
    - flashing means crash/overshoot
+   
+About the files
+===============
+Most files have been generated with the SwissMicro encoding/decoding scripts (see /extern/swissmicros/decode RAM dump.htm)
+- DM15_M1B.txt: the file that can be uploaded via the serial link (see also firmware.txt and instructions.php.txt)
+- code_dump.txt: decoded program, line per line
+- mnemonic.txt: equivalent program in mnemonic form. note that this fiel /might/ be more recent than the DM file.
+- HP.xml: simple NotePad++ syntax highlighter
 
 MEM reports
 ===========
 
 DM15     : ?
 DM15_M80 : ?
-DM15_M1B : 30 168 32-1
+DM15_M1B : 30 166 34-6
+
+Note: these values might not have been updated with every latest commit.
 
 Labels
 ======
@@ -123,6 +133,7 @@ v0.1 (2014-09-21)
 
 BUSY
 ====
+- check routines in Earth orbit
 
 TODO
 ====
