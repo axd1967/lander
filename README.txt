@@ -1,10 +1,6 @@
 2D lander (HP 15C)
 ==================
 
-Implemented on a Swiss Micros DM15_M1B (max memory variant).
-
-TO CONFIRM: should run fine on a HP-15C (check the register/step requirements).
-
 STATUS: PROTOTYPE, INCOMPLETE, not fully tested yet. Be patient.
 
 Aim
@@ -30,6 +26,10 @@ Display: (TODO)
    - '0' means target reached
    - flashing means crash/overshoot
    
+This app is implemented on a Swiss Micros DM15_M1B (max memory variant).
+
+TO CONFIRM: should run fine on a HP-15C (check the register/step requirements).
+
 About the files
 ===============
 Most files have been generated with the SwissMicro encoding/decoding scripts (see /extern/swissmicros/decode RAM dump.htm)
