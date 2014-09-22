@@ -110,7 +110,10 @@ STO+.1
 RCL 9
 RCL 8
 ->P
+RCL .6
+-
 STO 4
+PSE
 x<>y
 STO 5
 RCL .7
@@ -147,6 +150,8 @@ GSB .3
 RTN
 LBL .4
 GSB .2
+60
+STO .7
 6372
 EEX
 3
@@ -157,7 +162,10 @@ RTN
 LBL .2
 CF 1
 10
-GTO .4
+STO .4
+STO 2
+0
+STO 1
 RTN
 LBL .3
 RCL .6
