@@ -1062,6 +1062,7 @@
 	  parseRAM();
     var last_addr = RAM[0x16][0];
     var last_offs = (RAM[0x16][1] & 0xf)-1;
+    var last_code = last_addr*7 - last_offs;
     var addr = 0xff; var offs = 0; // Address of the first opcode
     var code, sz;
     var mnemonic = "";
@@ -1071,10 +1072,6 @@
     var instr;
     var inst_keys;
     var inst_ix;
-    
-      //log("Program ends at " + get2hex(last_addr) + ":" + last_offs);
-
-    var last_code = last_addr*7 - last_offs;
     
     if (last_addr > 0) {
       while(addr*7 - offs >= last_code) {
@@ -1198,6 +1195,8 @@
 		<style type="text/css">
 			body { font-family: Verdana,Tahoma,Arial,Sans-Serif; font-size: 12px; }
 		</style>
+
+<!-- base href="http://www.swissmicros.com/nut_decoder.html" --> <!-- ?? -->
 
 </head>
 <body>
