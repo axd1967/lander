@@ -43,7 +43,7 @@ MEM reports
 
 DM15     : ?
 DM15_M80 : ?
-DM15_M1B : 30 166 34-6
+DM15_M1B : 30 164 36-5
 
 Note: these values might not have been updated with every latest commit.
 
@@ -66,16 +66,16 @@ Labels
  7 -
  8 -
  9 (TODO) init moon params
-10 -
-11 -
-12 general init
-13 setup orbit
-14 (BUSY) init earth params
-15 calc loop
-16 stop
-17 calc
-18 calc burn
-19 burn loop
+.0 -
+.1 -
+.2 sub: general init
+.3 sub: setup circular orbit
+.4 sub: init Earth params
+.5 section: calc loop
+.6 section: stop
+.7 section: calc new pos, speed
+.8 section: calc gravity acc, burn acc
+.9 section: burn
 
 Registers
 =========
@@ -86,22 +86,22 @@ Registers
  1 > th - throttle (%)
  2 > t - burn time (s)
  3 > b - burn angle (from local horizontal, +=up) (deg)
- 4 h - height (m)
- 5 d - range (km)
+ 4 h - height (m) (also: R)
+ 5 d - range (km) (also: delta)
  6 v - velocity (km/h)
  7 a - angle above horizon (deg)
  8 px (m)
  9 py (m)
-10 vx (m/s)
-11 vy (m/s)
-12 ax (m/s2)
-13 ay (m/s2)
-14 dt0 - delta t preset (s)
-15 g0 - gravity, surface (m/s2)
-16 r0 - central body radius (m)
-17 dt - delta t (s)
-18 fu - fuel used for burn (kg)
-19 T - remaining time in calculation loop (s)
+.0 vx (m/s)
+.1 vy (m/s)
+.2 ax (m/s2)
+.3 ay (m/s2)
+.4 dt0 - delta t preset (s)
+.5 g0 - gravity, surface (m/s2)
+.6 r0 - central body radius (m)
+.7 dt - delta t (s)
+.8 fu - fuel used for burn (kg)
+.9 T - remaining time in calculation loop (s)
 
 (I)
 20 f - max fuel flow (kg/s)
@@ -125,6 +125,7 @@ Flags
 NOTES
 =====
 - BST in run mode should backstep repeatedly when held
+- RCL (i) should have a variant RCL (x); both should consume X (but I'm RPL minded... see also http://www.hpmuseum.org/cgi-sys/cgiwrap/hpmuseum/archv017.cgi?read=116747)
 
 DONE
 ====
@@ -147,4 +148,6 @@ TODO
 - add some screenshots of the logic
 - abort option!
 - optimizations
+   - better use of LST X
    - precomputed factors?
+   - better approximations

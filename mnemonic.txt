@@ -10,7 +10,6 @@ GTO .9
 RCL .9
 STO .7
 LBL .9
-R/S
 RCL 9
 STO .3
 RCL 8
@@ -56,10 +55,12 @@ STO-0
 RCL .8
 24
 STO I
+R_down
 RCL (i)
 *
 22
 STO I
+R_down
 RCL (i)
 RCL 0
 +
@@ -96,7 +97,7 @@ ENTER
 RCL .2
 *
 STO+8
-x<>y
+R_down
 RCL .3
 *
 STO+9
@@ -116,7 +117,18 @@ RCL .6
 STO 4
 PSE
 x<>y
+180
+/
+PI
+*
+RCL .6
+*
+1
+EEX
+3
+/
 STO 5
+PSE
 RCL .7
 STO-.9
 RCL .9
