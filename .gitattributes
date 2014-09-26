@@ -1,2 +1,2 @@
-DM15_M1B.txt -diff
-code_dump.txt -diff
+DM15_M1B.txt merge=ours
+code_dump.txt merge=ours

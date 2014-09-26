@@ -1,0 +1,3 @@
+# merge this into your .git/config file
+[merge "ours"]
+   driver = true
