@@ -88,18 +88,6 @@ RCL .1
 RCL .7
 *
 STO+9
-RCL .7
-x^2
-2
-/
-ENTER
-RCL .2
-*
-STO+8
-R_down
-RCL .3
-*
-STO+9
 RCL .2
 RCL .7
 *
