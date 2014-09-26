@@ -26,13 +26,13 @@ Display: (TODO)
    - '0' means target reached
    - flashing means crash/overshoot
    
-This app is implemented on a Swiss Micros DM15_M1B (max memory variant).
+This app was implemented on a Swiss Micros DM15_M1B (max memory variant).
 
 TO CONFIRM: should run fine on a HP-15C (check the register/step requirements).
 
 About the files
 ===============
-Most files have been generated with the SwissMicro encoding/decoding scripts (see /extern/swissmicros/decode RAM dump.htm)
+The dumps have been generated with SwissMicro encoding/decoding scripts (see /extern/swissmicros/decode RAM dump.htm)
 - DM15_M1B.txt: can be uploaded via the serial link (see also firmware.txt and instructions.php.txt)
 - code_dump.txt: decoded program, line per line
 - mnemonic.txt: equivalent program in mnemonic form. note that this file /might/ be more recent than the DM file.
@@ -53,7 +53,7 @@ Labels
  A burn
  B (TODO) init lander descent (from 45000 ft). Try to land in one piece.
  C (TODO) init lander ascent (from surface). Try to reach 40000 ft circular orbit at 200km downrange
- D (BUSY) init 200km Earth orbit
+ D (BUSY) init 420km Earth orbit
  E -
 
  0 -
@@ -150,4 +150,4 @@ TODO
 - optimizations
    - better use of LST X
    - precomputed factors?
-   - better approximations (symplectic Euler)
+   - better approximations (symplectic Euler?)
