@@ -80,7 +80,6 @@ CHS
 *
 STO+.2
 LBL .7
-R/S
 RCL .0
 RCL .7
 *
@@ -155,7 +154,7 @@ STO I
 0
 STO (i)
 GSB .4
-200
+420
 EEX
 3
 STO 4

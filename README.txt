@@ -8,7 +8,7 @@ Aim
 
 2D variant of the classic - 1D - lander calculator app.
 
-Simple formulas used, don't expect stable orbits etc.
+Simple formulas used ("Euler"), don't expect stable orbits.
 
 Select a scenario (B,C,D, see below) to initialise data, 
 then repeat 'A' to define burn time segments until reaching target (or crash).
@@ -150,4 +150,4 @@ TODO
 - optimizations
    - better use of LST X
    - precomputed factors?
-   - better approximations
+   - better approximations (symplectic Euler)
