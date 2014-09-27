@@ -6,9 +6,9 @@ STATUS: PROTOTYPE, INCOMPLETE, not fully tested yet. Be patient.
 Aim
 ===
 
-2D variant of the classic - 1D - lander calculator app.
+2D variant of the classic (1D) lander calculator app.
 
-Simple formulas used ("Euler"), don't expect stable orbits.
+Simple formulas used ("Euler symplectic"), don't expect stable orbits.
 
 Select a scenario (B,C,D, see below) to initialise data, 
 then repeat 'A' to define burn time segments until reaching target (or crash).
@@ -17,7 +17,7 @@ Enter following data:
 
    - STO 1: throttle %
    - STO 2: burn time
-   - STO 3: angle above horizon (TODO)
+   - STO 3: burn angle above horizon (BUSY)
 
 Press 'A' to run the burn time. Calculator will run in predefined time segments (r14) 
 until burn time has been consumed.
@@ -30,20 +30,12 @@ This app was implemented on a Swiss Micros DM15_M1B (max memory variant).
 
 TO CONFIRM: should run fine on a HP-15C (check the register/step requirements).
 
-About the files
-===============
-The dumps have been generated with SwissMicro encoding/decoding scripts (see /extern/swissmicros/decode RAM dump.htm)
-- DM15_M1B.txt: can be uploaded via the serial link (see also firmware.txt and instructions.php.txt)
-- code_dump.txt: decoded program, line per line
-- mnemonic.txt: equivalent program in mnemonic form. note that this file /might/ be more recent than the DM file.
-- HP.xml: simple NotePad++ syntax highlighter
-
 MEM reports
 ===========
 
 DM15     : ?
 DM15_M80 : ?
-DM15_M1B : 30 164 36-5
+DM15_M1B : 30 149 51-4
 
 Note: these values might not have been updated with every latest commit.
 
@@ -51,8 +43,8 @@ Labels
 ======
 
  A burn
- B (TODO) init lander descent (from 45000 ft). Try to land in one piece.
- C (TODO) init lander ascent (from surface). Try to reach 40000 ft circular orbit at 200km downrange
+ B (BUSY) init lander descent (from 45000 ft). Try to land in one piece.
+ C (BUSY) init lander ascent (from surface). Try to reach 40000 ft circular orbit at 200km downrange
  D (BUSY) init 420km Earth orbit
  E -
 
@@ -65,7 +57,7 @@ Labels
  6 -
  7 -
  8 -
- 9 (TODO) init moon params
+ 9 (BUSY) sub: init moon params
 .0 -
 .1 -
 .2 sub: general init
@@ -105,10 +97,9 @@ Registers
 
 (I)
 20 f - max fuel flow (kg/s)
-21 -
+21 F - max thrust (N)
 22 m0 - vehicle mass, dry (kg)
 23 mf0 - initial fuel mass (kg)
-24 I - thrust per fuel unit (N/kg)
 
 Flags
 =====
@@ -122,28 +113,39 @@ Flags
  8 -
  9 (TODO) landed/crashed?
  
+About the files
+===============
+The dumps have been generated with SwissMicro encoding/decoding scripts (see /extern/swissmicros/decode RAM dump.htm)
+- DM15_M1B.txt: can be uploaded via the serial link (see also firmware.txt and instructions.php.txt)
+- code_dump.txt: decoded program, line per line
+- mnemonic.txt: equivalent program in mnemonic form. note that this file /might/ be more recent than the DM file.
+- HP.xml: simple NotePad++ syntax highlighter
+
 NOTES
 =====
 - BST in run mode should backstep repeatedly when held
 - RCL (i) should have a variant RCL (x); both should consume X (but I'm RPL minded... see also http://www.hpmuseum.org/cgi-sys/cgiwrap/hpmuseum/archv017.cgi?read=116747)
 
-DONE
-====
+RELEASE HISTORY
+===============
 v0.1 (2014-09-21)
 - test version for SwissMicro issue
 
-BUSY
+DONE
 ====
 - check routines in Earth orbit
+
+BUSY
+====
+- lander
 
 TODO
 ====
 
 - add crash detection
 - review units
-- add output display, convert local speed angle
+- add output display, convert local speed angle, fuel left,  ...
 - add input checks
-- get rid of feet
 - review criteria
 - add some screenshots of the logic
 - abort option!
@@ -151,3 +153,4 @@ TODO
    - better use of LST X
    - precomputed factors?
    - better approximations (symplectic Euler?)
+   - renumber variables

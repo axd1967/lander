@@ -50,10 +50,11 @@ RCL 1
 STO .7
 SF 1
 LBL .8
+R/S
 RCL .8
 STO-0
 RCL .8
-24
+21
 STO I
 R_down
 RCL (i)
@@ -123,6 +124,15 @@ PSE
 TEST 1 (x>0)
 GTO .5
 LBL .6
+RCL .1
+RCL .0
+->P
+3.6
+*
+STO 6
+x<>y
+STO 7
+x<>y
 RTN
 LBL D
 20
@@ -137,7 +147,7 @@ STO (i)
 STO I
 0
 STO (i)
-24
+21
 STO I
 0
 STO (i)
@@ -148,10 +158,18 @@ EEX
 STO 4
 GSB .3
 RTN
+LBL 9
+GSB .2
+1.622
+CHS
+STO .5
+1736
+EEX
+3
+STO .6
+RTN
 LBL .4
 GSB .2
-60
-STO .4
 6372
 EEX
 3
@@ -160,9 +178,51 @@ STO .6
 CHS
 STO .5
 RTN
+LBL B
+GSB 9
+22
+STO I
+2763
+uSTO (i)
+23
+STO I
+8833
+uSTO (i)
+STO 0
+21
+STO I
+43988
+uSTO (i)
+20
+STO I
+9.7066
+uSTO (i)
+13716
+STO 4
+GSB .3
+RTN
+LBL C
+GSB 9
+22
+STO I
+2129
+uSTO (i)
+23
+STO I
+2356
+uSTO (i)
+21
+STO I
+15553
+uSTO (i)
+20
+STO I
+4.6283
+uSTO (i)
+RTN
 LBL .2
 CF 1
-RCL .7
+50
 STO 2
 0
 STO 1
