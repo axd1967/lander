@@ -35,7 +35,7 @@ MEM reports
 
 DM15     : ?
 DM15_M80 : ?
-DM15_M1B : 30 149 51-4
+DM15_M1B : 30 145 55-2
 
 Note: these values might not have been updated with every latest commit.
 
@@ -128,6 +128,10 @@ NOTES
 
 RELEASE HISTORY
 ===============
+
+v0.2 (2014-09-27)
+- bug in firmware?
+
 v0.1 (2014-09-21)
 - test version for SwissMicro issue
 
