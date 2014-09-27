@@ -46,7 +46,7 @@ Labels
  B (BUSY) init lander descent (from 13km/45000 ft). Try to land in one piece at 470km downrange (approx 12min).
  C (BUSY) init lander ascent (from surface). Try to reach 40000 ft circular orbit at 200km downrange
  D (BUSY) init 420km Earth orbit
- E -
+ E - (TEST init B + 100%/90deg/10s. after second R/S, 97.x indicates BUG, X should contain 3.8x)
 
  0 -
  1 -

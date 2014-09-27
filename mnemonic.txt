@@ -73,7 +73,9 @@ RCL 3
 COS
 *
 STO+.3
+R/S
 R_down
+R/S
 RCL 5
 RCL 3
 -
@@ -256,4 +258,14 @@ sqrt
 RCL .6
 *
 STO .1
+RTN
+LBL E
+GSB B
+1
+STO 1
+10
+STO 2
+90
+STO 3
+GSB A
 RTN
