@@ -50,10 +50,9 @@ RCL 1
 STO .7
 SF 1
 LBL .8
-R/S
 RCL .8
 STO-0
-RCL .8
+RCL 1
 21
 STO I
 R_down
@@ -66,16 +65,18 @@ RCL (i)
 RCL 0
 +
 /
+R/S
 ENTER
-RCL 3
 RCL 5
-+
+RCL 3
+-
 COS
 *
 STO+.3
-RCL 3
+R_down
 RCL 5
-+
+RCL 3
+-
 SIN
 CHS
 *
@@ -105,6 +106,7 @@ RCL .6
 STO 4
 PSE
 x<>y
+STO 5
 180
 /
 PI
@@ -115,7 +117,6 @@ RCL .6
 EEX
 3
 /
-STO 5
 PSE
 RCL .7
 STO-.9
@@ -124,6 +125,16 @@ PSE
 TEST 1 (x>0)
 GTO .5
 LBL .6
+PI
+180
+/
+RCL .6
+*
+1
+EEX
+3
+/
+STO*5
 RCL .1
 RCL .0
 ->P
@@ -131,6 +142,8 @@ RCL .0
 *
 STO 6
 x<>y
+RCL 5
+-
 STO 7
 x<>y
 RTN
@@ -197,7 +210,7 @@ uSTO (i)
 STO I
 9.7066
 uSTO (i)
-13716
+14878
 STO 4
 GSB .3
 RTN

@@ -43,7 +43,7 @@ Labels
 ======
 
  A burn
- B (BUSY) init lander descent (from 45000 ft). Try to land in one piece.
+ B (BUSY) init lander descent (from 13km/45000 ft). Try to land in one piece at 470km downrange (approx 12min).
  C (BUSY) init lander ascent (from surface). Try to reach 40000 ft circular orbit at 200km downrange
  D (BUSY) init 420km Earth orbit
  E -
@@ -144,11 +144,12 @@ TODO
 
 - add crash detection
 - review units
-- add output display, convert local speed angle, fuel left,  ...
+- add output display, fuel left,  ... -> copy to stack
 - add input checks
 - review criteria
 - add some screenshots of the logic
 - abort option!
+- output: option for ft/nm units
 - optimizations
    - better use of LST X
    - precomputed factors?
