@@ -130,7 +130,7 @@ RELEASE HISTORY
 ===============
 
 v0.2 (2014-09-27)
-- bug in firmware?
+- "bug in firmware" appears to be a bug in my head (ENTER/RCL issue, see UM P36)
 
 v0.1 (2014-09-21)
 - test version for SwissMicro issue
