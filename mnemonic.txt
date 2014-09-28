@@ -149,6 +149,30 @@ EEX
 /
 STO*5
 RTN
+LBL .2
+CF 1
+50
+STO 2
+0
+STO 1
+RTN
+LBL .3
+RCL .6
+RCL 4
++
+STO 8
+0
+STO 9
+STO .0
+RCL .5
+CHS
+RCL 8
+/
+sqrt
+RCL .6
+*
+STO .1
+RTN
 LBL 9
 GSB .2
 1.622
@@ -178,7 +202,7 @@ uSTO (i)
 STO I
 9.7066
 uSTO (i)
-14878
+15240
 STO 4
 GSB .3
 RTN
@@ -200,28 +224,4 @@ uSTO (i)
 STO I
 4.6283
 uSTO (i)
-RTN
-LBL .2
-CF 1
-50
-STO 2
-0
-STO 1
-RTN
-LBL .3
-RCL .6
-RCL 4
-+
-STO 8
-0
-STO 9
-STO .0
-RCL .5
-CHS
-RCL 8
-/
-sqrt
-RCL .6
-*
-STO .1
 RTN
