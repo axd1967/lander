@@ -149,30 +149,6 @@ EEX
 /
 STO*5
 RTN
-LBL D
-20
-STO I
-0
-STO (i)
-22
-STO I
-1
-STO (i)
-23
-STO I
-0
-STO (i)
-21
-STO I
-0
-STO (i)
-GSB .4
-420
-EEX
-3
-STO 4
-GSB .3
-RTN
 LBL 9
 GSB .2
 1.622
@@ -182,16 +158,6 @@ STO .5
 EEX
 3
 STO .6
-RTN
-LBL .4
-GSB .2
-6372
-EEX
-3
-STO .6
-9.81
-CHS
-STO .5
 RTN
 LBL B
 GSB 9
