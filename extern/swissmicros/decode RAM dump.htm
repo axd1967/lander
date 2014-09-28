@@ -1177,7 +1177,7 @@
 			body { font-family: Verdana,Tahoma,Arial,Sans-Serif; font-size: 12px; }
 		</style>
 
-<!-- base href="http://www.swissmicros.com/nut_decoder.html" --></head>
+</head>
 <body>
 	<div class="ui-tabs ui-widget ui-widget-content ui-corner-all" id="tabs">
 		<ul role="tablist" class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
@@ -1192,20 +1192,32 @@
 				<option value="DM10" disabled="disabled">DM10</option>
 				<option value="DM11" disabled="disabled">DM11</option>
 				<option value="DM12" disabled="disabled">DM12</option>
-				<option value="DM15" selected="selected">DM15</option>
+				<option value="DM15">DM15</option>
 				<option value="DM15_M80">DM15 M80</option>
-				<option value="DM15_M1B">DM15 M1B</option>
+				<option selected="selected" value="DM15_M1B">DM15 M1B</option>
 				<option value="DM16" disabled="disabled">DM16</option>
 			</select>
 			<p id="errlog" style="color: red"></p>
 			<table>
 				<tbody><tr><td>Dump from calc</td><td></td><td>Mnemonic</td><td></td><td>Code dump</td></tr>
 				<tr>
-					<td><textarea id="dump_from_calc" cols="65" rows="25" style="font-family:monospace">DM15
+					<td><textarea id="dump_from_calc" cols="65" rows="25" style="font-family:monospace">DM15_M1B
 04  000000fffff000  00000000000008  0000000000000c  00000000000eae
 08  00000000000000  2faf8befbe2280  00000000000000  00000000000000
-14  00000000000000  c0d2d2d2d2d2d2  00000000000000  00000000000000
+14  00000000000000  1b2d2d2d2d2d2d  000000000007d1  00000000000000
 18  00000000000000  0000000000007f  00000000a00000  00000000000000
+d0  00000000000000  b296bff3f8f2f6  c0f497f0f296bf  f3f5f5f5f197f1
+d4  f296bff6f5f3f2  97f3f296bff9f2  f1f297f2f2290c  b223ff44f0f4f2
+d8  f5f196bff6f6f0  f7c0f997f0f296  bff8f8f9f3f497  f1f24096bff3f3
+dc  f8f897f3f296bf  f3f6f7f297f2f2  290bb266f3c6f6  f3f7f165c3f2f2
+e0  f6c0f122ff09b2  61fc56cafd38c3  556049f048fa34  5603ffb241f042
+e4  f0f541ff02ffb2  c5dffdf3c6f1fc  56fdf0f8f1b647  fbc5fa35f0f9c5
+e8  46fcf6c0f3e150  5106ff15fff0f1  b02edc59b9df57  dcfdf3c6f1fc56
+ec  fcb6fdf0f8f145  c5dc44fb56e138  3991dffc575390  dffc575289dffc
+f0  575188dffc5750  07ff92dffcc3c7  fb3335c493dffc  c8fb3335c1c1fd
+f4  fa3086c497f2f2  fc86c497f1f231  a0df5808ff31ff  67fd31fd866830
+f8  18fff9b02e3068  fc57fc318697f0  f217ff51ffd3df  d2dffd34fcbafd
+fc  34565545c544e1  6238633909ff67  5919fff9b02e59  675405ff69320a
 A: 000000fffff000  B: 000000fffffeae  C: 00000000000eae
 M: 00000000000000  N: 00000000000000  G: 04
 </textarea></td>
@@ -1213,7 +1225,233 @@ M: 00000000000000  N: 00000000000000  G: 04
 						<button id="decode">--- Decode --&gt;</button><br>
 						<button id="encode">&lt;-- Encode ---</button><br>
 					</center></td>
-					<td><textarea id="mnemonic" cols="30" rows="25" style="font-family:monospace" class="linked"></textarea></td>
+					<td><textarea id="mnemonic" cols="30" rows="25" style="font-family:monospace" class="linked">LBL A
+RCL 2
+STO .9
+LBL .5
+RCL .4
+STO .7
+RCL .9
+TEST 9 (x&gt;=y)
+GTO .9
+RCL .9
+STO .7
+LBL .9
+RCL 9
+STO .3
+RCL 8
+STO .2
+-&gt;P
+STO 4
+x&lt;&gt;y
+STO 5
+RCL .5
+RCL .6
+RCL 4
+/
+x^2
+*
+RCL 4
+/
+STO*.2
+STO*.3
+F? 1
+GTO .7
+20
+STO I
+RCL (i)
+RCL 1
+*
+RCL .7
+*
+STO .8
+RCL 0
+TEST 9 (x&gt;=y)
+GTO .8
+RCL 0
+STO .8
+RCL (i)
+/
+RCL 1
+/
+STO .7
+SF 1
+LBL .8
+RCL .8
+STO-0
+RCL 1
+21
+STO I
+R_down
+RCL (i)
+*
+22
+STO I
+R_down
+RCL (i)
+RCL 0
++
+/
+ENTER
+ENTER
+RCL 5
+RCL 3
+-
+COS
+*
+STO+.3
+R_down
+RCL 5
+RCL 3
+-
+SIN
+CHS
+*
+STO+.2
+LBL .7
+RCL .0
+RCL .7
+*
+STO+8
+RCL .1
+RCL .7
+*
+STO+9
+RCL .2
+RCL .7
+*
+STO+.0
+RCL .3
+RCL .7
+*
+STO+.1
+RCL 9
+RCL 8
+-&gt;P
+RCL .6
+-
+STO 4
+PSE
+x&lt;&gt;y
+STO 5
+180
+/
+PI
+*
+RCL .6
+*
+1
+EEX
+3
+/
+PSE
+RCL .7
+STO-.9
+RCL .9
+PSE
+TEST 1 (x&gt;0)
+GTO .5
+LBL .6
+RCL .1
+RCL .0
+-&gt;P
+3.6
+*
+STO 6
+x&lt;&gt;y
+90
+RCL 5
++
+x&lt;&gt;y
+-
+STO 7
+PI
+180
+/
+RCL .6
+*
+1
+EEX
+3
+/
+STO*5
+RTN
+LBL .2
+CF 1
+50
+STO 2
+0
+STO 1
+RTN
+LBL .3
+RCL .6
+RCL 4
++
+STO 8
+0
+STO 9
+STO .0
+RCL .5
+CHS
+RCL 8
+/
+sqrt
+RCL .6
+*
+STO .1
+RTN
+LBL 9
+GSB .2
+1.622
+CHS
+STO .5
+1736
+EEX
+3
+STO .6
+RTN
+LBL B
+GSB 9
+22
+STO I
+2763
+uSTO (i)
+23
+STO I
+8833
+uSTO (i)
+STO 0
+21
+STO I
+43988
+uSTO (i)
+20
+STO I
+9.7066
+uSTO (i)
+15240
+STO 4
+GSB .3
+RTN
+LBL C
+GSB 9
+22
+STO I
+2129
+uSTO (i)
+23
+STO I
+2356
+uSTO (i)
+21
+STO I
+15553
+uSTO (i)
+20
+STO I
+4.6283
+uSTO (i)
+RTN</textarea></td>
 					<td>
 						<!-- some other buttons? ... -->
 					</td>
