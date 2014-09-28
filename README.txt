@@ -138,6 +138,7 @@ v0.1 (2014-09-21)
 DONE
 ====
 - check routines in Earth orbit
+- range bug/velocity convert
 
 BUSY
 ====
@@ -147,15 +148,17 @@ TODO
 ====
 
 - add crash detection
-- review units
-- add output display, fuel left,  ... -> copy to stack
+- add output display, fuel left,  ... -> copy to stack?
+- interrupt flag
 - add input checks
 - review criteria
+- abort option
+- review units
+   - output: option for ft/nm units
 - add some screenshots of the logic
-- abort option!
-- output: option for ft/nm units
 - optimizations
    - better use of LST X
    - precomputed factors?
    - better approximations (symplectic Euler?)
-   - renumber variables
+   - renumber variables according to keyboard layout
+   - get rid of Earth routines
