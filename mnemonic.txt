@@ -107,16 +107,6 @@ RCL .6
 STO 4
 x<>y
 STO 5
-180
-/
-PI
-*
-RCL .6
-*
-1
-EEX
-3
-/
 RCL .7
 STO-.9
 RCL .9
@@ -167,7 +157,7 @@ RCL 4
 RTN
 LBL .2
 CF 1
-50
+30
 STO 2
 0
 STO 1
