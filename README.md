@@ -133,20 +133,21 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
 
 # RELEASE HISTORY
 
-## v0.2 (2014-09-27)
-- "bug in firmware" appears to be a bug in my head (ENTER/RCL issue, see UM P36)
-
-## v0.1 (2014-09-21)
-- test version for SwissMicro issue
-
-## DONE
-
+## v0.3 (2014-10-08)
 - check routines in Earth orbit
 - range bug/velocity convert
 - remove Earth stuff
 - add Apollo profile
-- lander
-- change speed output system
+- lander routines
+- change speed output system (from v/elev to vert/hor)
+
+## v0.2 (2014-09-27)
+- "bug in firmware" appears to be a bug in my head (ENTER/RCL issue, see UM P36)
+
+## v0.1 (2014-09-21)
+- test version for SwissMicro HTML decoder issue
+
+## DONE
 
 ## BUSY
 - markdown
