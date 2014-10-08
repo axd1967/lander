@@ -39,6 +39,7 @@ RCL .7
 *
 STO .8
 RCL 0
+PSE
 TEST 9 (x>=y)
 GTO .8
 RCL 0
@@ -104,7 +105,6 @@ RCL 8
 RCL .6
 -
 STO 4
-PSE
 x<>y
 STO 5
 180
@@ -117,7 +117,6 @@ RCL .6
 EEX
 3
 /
-PSE
 RCL .7
 STO-.9
 RCL .9
@@ -125,19 +124,6 @@ PSE
 TEST 1 (x>0)
 GTO .5
 LBL .6
-RCL .1
-RCL .0
-->P
-3.6
-*
-STO 6
-x<>y
-90
-RCL 5
-+
-x<>y
--
-STO 7
 PI
 180
 /
@@ -148,6 +134,36 @@ EEX
 3
 /
 STO*5
+RCL .0
+RCL 8
+*
+RCL .1
+RCL 9
+*
++
+3.6
+*
+STO 6
+RCL .0
+RCL 9
+*
+RCL .1
+RCL 8
+*
+-
+CHS
+3.6
+*
+STO 7
+RCL 9
+RCL 8
+->P
+STO/6
+STO/7
+RCL 7
+RCL 6
+RCL 5
+RCL 4
 RTN
 LBL .2
 CF 1
