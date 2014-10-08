@@ -11,8 +11,8 @@ Simple formulas used ("Euler symplectic"), don't expect stable orbits.
 ## Run
 1. Select a scenario (B, see 'Labels' below) to initialise data.
 1. Enter following data:
-   - STO 1: throttle (0..1)
-   - STO 2: burn time (s)
+   - STO 1: throttle (0.0 ... 1.0)
+   - STO 2: total burn time (s)
    - STO 3: burn elevation (angle above horizon, deg)
 1. Press 'A' to run the burn time. Calculator will run in predefined time segments (r14) 
 until burn time has been consumed.
@@ -43,6 +43,7 @@ Output:
 ## Tips
 * due to inaccuracies in the algorithm, you need a firm (200deg) deorbit burn elevation
 * remember that weight changes over time, which means that acceleration due to thrust will increase
+* if not enough fuel left, burn time is reduced to match remaining fuel
       
 ## MEM reports
 
@@ -84,29 +85,31 @@ Note: these values might not have been updated with every latest commit.
     .9 section: calc fuel used, burn acc
 
 ## Registers
+Notes:
+* '>' Lander registers user can manipulate
+* '\' statistics registers (may lose content when using stat functions)
 
-'>' Lander registers user can manipulate
-'\' statistics registers (may lose content when using stat functions)
+List:
 
-    0  mf - fuel left (kg)
-    1  > th - throttle (%)
-    2\ > t - burn time (s)
-    3\ > b - burn angle (elevation, +=up) (deg)
-    4\ h - height (m) (int: R)
-    5\ d - range (km) (int: delta)
-    6\ v - velocity/vertical (km/h)
-    7\ a - velocity/horiz (km/h)
-    8  px (m)
-    9  py (m)
+    0   mf - fuel left (kg)
+    1 > th - throttle (%)
+    2\> t - burn time (s)
+    3\> b - burn angle (elevation, +=up) (deg)
+    4\  h - height (m) (int: R)
+    5\  d - range (km) (int: delta)
+    6\  v - velocity/vertical (km/h)
+    7\  a - velocity/horiz (km/h)
+    8   px (m)
+    9   py (m)
     .0  vx (m/s)
     .1  vy (m/s)
     .2  ax (m/s2)
     .3  ay (m/s2)
-    .4  dt0 - delta t preset (s)
+    .4  dt0 - delta t internal step (s)
     .5  g0 - gravity, surface (m/s2)
     .6  r0 - central body radius (m)
-    .7  dt - delta t (s)
-    .8  fu - fuel used for burn (kg)
+    .7  dt - user delta t (s)
+    .8  fu - fuel used for current burn segment (kg)
     .9  T - remaining time in calculation loop (s)
       
     (indirect:)
@@ -163,6 +166,7 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
 - add input checks
 - abort option
 - review units? (use US system)
+- confirm thrust data
 - add some screenshots of the logic
 - add total time counter
 - compute output after init
