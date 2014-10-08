@@ -1,12 +1,19 @@
 2D lander (HP 15C)
 
-STATUS: PROTOTYPE, INCOMPLETE, not fully tested yet. Be patient.
+**Note**
+
+* PROTOTYPE
+* INCOMPLETE
+* not fully tested yet
+* might fit in a 15C (to confirm)
+
+Be patient.
 
 # Aim
 
 2D variant of the classic (1D) lander calculator app.
 
-Simple formulas used ("Euler symplectic"), don't expect stable orbits.
+Simple formulas used ("[Euler symplectic](https://en.wikipedia.org/wiki/Semi-implicit_Euler_method)"), don't expect stable orbits.
 
 ## Run
 1. Select a scenario (B, see 'Labels' below) to initialise data.
@@ -49,9 +56,9 @@ Output:
 
 This app was implemented on a Swiss Micros DM15_M1B_V16 (max memory variant=230 reg).
 
-* DM15     : (19  46 00-0)
-* DM15_M80 : (19 110 00-0)
-* DM15_M1B :  23 160 47-0 -> currently can't fit in a classic 15C
+    DM15     : (19  46 00-0)
+    DM15_M80 : (19 110 00-0)
+    DM15_M1B :  23 160 47-0
 
 Note: these values might not have been updated with every latest commit.
 
@@ -141,6 +148,7 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
 # RELEASE HISTORY
 
 ## v0.3 (2014-10-08)
+- should fit in HP15C
 - check routines in Earth orbit
 - range bug/velocity convert
 - remove Earth stuff
@@ -170,12 +178,19 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
 - add some screenshots of the logic
 - add total time counter
 - compute output after init
-- optimizations
-   - better use of LST X
-   - fit into 15C memory (19 46 0-0)
-   - precomputed factors?
-   - better approximations (RK4?)
-   - renumber variables according to keyboard layout
+- optimizations 
+   - 15C memory (19 46 0-0 = 322 steps; 23 44 0-0 = 308 steps)
+      - better use of LST X
+      - reduce regs
+         - use stack for input
+      - if needed, release in variant branch?
+   - speed
+      - precomputed factors? (needs regs, but can reduce code)
+   - accuracy
+      - [Verlet](https://en.wikipedia.org/wiki/Verlet_integration)
+      - RK4?
+   - handling
+      - renumber variables according to keyboard layout
 
 # NOTES
 1. BST in run mode should backstep repeatedly when held
@@ -188,3 +203,9 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
    - [x^2] [ENT] [RCL] <r> 
       - expect:  T:3 Z:16 Y:16 X:[r] 
       - get:     T:2 Z:3  Y:16 X:[r] (Owner's Hb, Ed 2.4, p.36)
+
+# Links
+
+1. https://delicious.com/axd/moonlanding,HP15C
+1. https://www.physicsforums.com/threads/improving-the-accuracy-of-a-java-simulation-of-n-orbital-bodies.380098/
+1. http://stackoverflow.com/questions/4038554/2d-orbital-physics
