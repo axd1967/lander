@@ -13,7 +13,7 @@ Simple formulas used ("Euler symplectic"), don't expect stable orbits.
 1. Enter following data:
    - STO 1: throttle (0..1)
    - STO 2: burn time (s)
-   - STO 3: burn angle above horizon (deg)
+   - STO 3: burn elevation (angle above horizon, deg)
 1. Press 'A' to run the burn time. Calculator will run in predefined time segments (r14) 
 until burn time has been consumed.
 1. Intermediate (PSE) output:
@@ -27,7 +27,7 @@ Output:
     Y: range (km)
     X: altitude (m)
 
-## Apollo profile
+## <a name="A11">Apollo profile</a>
 
 ### Descent 
 * From: 50kft (15.24km)
@@ -39,6 +39,10 @@ Output:
 ### Ascent
 * Target: alt: 60kft (18.24km) (~level) @range: 167NM (309km) (~7')
 * roughly circular, the real orbit was slightly elliptic
+
+## Tips
+* due to inaccuracies in the algorithm, you need a firm (200deg) deorbit burn elevation
+* remember that weight changes over time, which means that acceleration due to thrust will increase
       
 ## MEM reports
 
@@ -52,11 +56,11 @@ Note: these values might not have been updated with every latest commit.
 
 ## Labels
 
-    A main routine
-    B init lander descent (See A11 profile for details)
-    C (TODO) init lander ascent (from surface)
-    D -
-    E -
+     A main routine
+     B init lander descent (see A11 profile for details)
+     C (TODO) init lander ascent (from surface)
+     D -
+     E -
      
      0 -
      1 -
@@ -157,10 +161,8 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
 - add crash detection
 - interrupt flag
 - add input checks
-- review criteria
 - abort option
-- review units
-   - output: option for ft/nm units
+- review units? (use US system)
 - add some screenshots of the logic
 - add total time counter
 - compute output after init
