@@ -1,6 +1,6 @@
-2D lander (HP 15C)
+2D lander is a simulation of the "classic" lander app for the HP-15C, but extended to 2 dimensions.
 
-**Note**
+**Notes**
 
 * PROTOTYPE
 * INCOMPLETE
@@ -11,30 +11,29 @@ Be patient.
 
 # Aim
 
-2D variant of the classic (1D) lander calculator app.
-
-Simple formulas used ("[Euler symplectic](https://en.wikipedia.org/wiki/Semi-implicit_Euler_method)"), don't expect stable orbits.
+Deorbit from near-circular orbit, steer the lander so that it touches down smoothly (negative altitude and both velocity vectors < 8 m/s ~28.8km/h).
 
 ## Run
 1. Select a scenario (B, see 'Labels' below) to initialise data.
-1. Enter following data:
-   - STO 1: throttle (0.0 ... 1.0)
+1. Throttle inputs:
+   - STO 1: throttle value (0.0 ... 1.0)
    - STO 2: total burn time (s)
    - STO 3: burn elevation (angle above horizon, deg)
 1. Press 'A' to run the burn time. Calculator will run in predefined time segments (r14) 
-until burn time has been consumed.
+until burn time or remaining fuel has been consumed.
 1. Intermediate (PSE) output:
-   - remaining fuel (kg)
-   - remaining time (s)
+   - remaining fuel
+   - altitude
+   - remaining time
 
 Output:
 
     T: hor speed (km/h)
-    Z: vertical spd (km/h)
+    Z: vertical speed (km/h)
     Y: range (km)
     X: altitude (m)
 
-## <a name="A11">Apollo profile</a>
+## <a name="A11"></a>Apollo profile
 
 ### Descent 
 * From: 50kft (15.24km)
@@ -51,6 +50,10 @@ Output:
 * due to inaccuracies in the algorithm, you need a firm (200deg) deorbit burn elevation
 * remember that weight changes over time, which means that acceleration due to thrust will increase
 * if not enough fuel left, burn time is reduced to match remaining fuel
+
+## Notes
+
+Simple formulas used ("[Euler symplectic](https://en.wikipedia.org/wiki/Semi-implicit_Euler_method)"), don't expect stable orbits: as as simple example, just run idle in the initial orbit and watch the decay.
       
 ## MEM reports
 
@@ -66,7 +69,7 @@ Note: these values might not have been updated with every latest commit.
 
      A main routine
      B init lander descent (see A11 profile for details)
-     C (TODO) init lander ascent (from surface)
+     C - (RESERVED - ascent)
      D -
      E -
      
@@ -84,7 +87,7 @@ Note: these values might not have been updated with every latest commit.
     .1 -
     .2 sub: general init
     .3 sub: setup circular orbit for given h (r4)
-    .4 -
+    .4 sub: crash analysis
     .5 section: main calc loop
     .6 section: stop
     .7 section: calc new pos, speed
@@ -128,14 +131,14 @@ List:
 ## Flags
 
     1 fuel empty
-    2 - (TODO - interrupt)
+    2 - (RESERVED - interrupt)
     3 -
     4 -
     5 -
     6 -
     7 -
     8 -
-    9 (TODO) landed/crashed?
+    9 crashed
  
 ## About the files
 
@@ -147,8 +150,14 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
 
 # RELEASE HISTORY
 
+## v0.4 (2014-10-09)
+**Won't fit in 15C (+2 steps)**
+- add crash detection
+- show intermediate altitude
+- markdown (doc)
+
 ## v0.3 (2014-10-08)
-- should fit in HP15C
+**Should fit in HP15C**
 - check routines in Earth orbit
 - range bug/velocity convert
 - remove Earth stuff
@@ -165,25 +174,28 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
 ## DONE
 
 ## BUSY
-- markdown
 
 ## TODO
 
-- add crash detection
 - interrupt flag
 - add input checks
 - abort option
+- ascent phase
 - review units? (use US system)
 - confirm thrust data
 - add some screenshots of the logic
 - add total time counter
+- add criteria
+   - within X km of planned touchdown
 - compute output after init
+- skip burn calcs on zero throttle
 - optimizations 
    - 15C memory (19 46 0-0 = 322 steps; 23 44 0-0 = 308 steps)
       - better use of LST X
       - reduce regs
          - use stack for input
-      - if needed, release in variant branch?
+      - variant branch?
+         - remove ascent code
    - speed
       - precomputed factors? (needs regs, but can reduce code)
    - accuracy
@@ -192,7 +204,7 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
    - handling
       - renumber variables according to keyboard layout
 
-# NOTES
+# RPN notes
 1. BST in run mode should backstep repeatedly when held
 1. RCL (i) should have a variant RCL (x); both should *consume* X (but I'm RPL minded... see also http://www.hpmuseum.org/cgi-sys/cgiwrap/hpmuseum/archv017.cgi?read=116747)
 1. some sequences that bit me as an RPL user (and I wonder how novices dealt with it):
@@ -209,3 +221,5 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
 1. https://delicious.com/axd/moonlanding,HP15C
 1. https://www.physicsforums.com/threads/improving-the-accuracy-of-a-java-simulation-of-n-orbital-bodies.380098/
 1. http://stackoverflow.com/questions/4038554/2d-orbital-physics
+1. https://en.wikipedia.org/wiki/Apollo_Lunar_Module
+1. http://www.klabs.org/history/apollo_11_alarms/eyles_2004/eyles_2004.htm

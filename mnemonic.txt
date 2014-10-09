@@ -105,6 +105,9 @@ RCL 8
 RCL .6
 -
 STO 4
+PSE
+TEST 2 (x<0)
+GTO .6
 x<>y
 STO 5
 RCL .7
@@ -145,6 +148,9 @@ CHS
 3.6
 *
 STO 7
+RCL 4
+TEST 2 (x<0)
+GSB .4
 RCL 9
 RCL 8
 ->P
@@ -155,8 +161,21 @@ RCL 6
 RCL 5
 RCL 4
 RTN
+LBL .4
+RCL 6
+ABS
+8
+TEST 8 (x<y)
+SF 9
+RCL 6
+ABS
+8
+TEST 8 (x<y)
+SF 9
+RTN
 LBL .2
 CF 1
+CF 9
 30
 STO 2
 0
