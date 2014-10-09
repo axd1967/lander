@@ -5,7 +5,7 @@
 * PROTOTYPE
 * INCOMPLETE
 * not fully tested yet
-* might fit in a 15C (to confirm)
+* might fit in a 15C (to confirm, check the [release history](#releases))
 
 Be patient.
 
@@ -14,7 +14,7 @@ Be patient.
 Deorbit from near-circular orbit, steer the lander so that it touches down smoothly (negative altitude and both velocity vectors < 8 m/s ~28.8km/h).
 
 ## Run
-1. Select a scenario (B, see 'Labels' below) to initialise data.
+1. Select scenario B (see '[Labels](#labels)' below) to initialise data.
 1. Throttle inputs:
    - STO 1: throttle value (0.0 ... 1.0)
    - STO 2: total burn time (s)
@@ -33,7 +33,7 @@ Output:
     Y: range (km)
     X: altitude (m)
 
-## <a name="A11"></a>Apollo profile
+## Apollo profile <a name="A11"></a>
 
 ### Descent 
 * From: 50kft (15.24km)
@@ -53,7 +53,7 @@ Output:
 
 ## Notes
 
-Simple formulas used ("[Euler symplectic](https://en.wikipedia.org/wiki/Semi-implicit_Euler_method)"), don't expect stable orbits: as as simple example, just run idle in the initial orbit and watch the decay.
+Simple formulas used ("[Euler symplectic](https://en.wikipedia.org/wiki/Semi-implicit_Euler_method)"), don't expect stable orbits: as as simple example, just run idle in the initial orbit and observe the decay.
       
 ## MEM reports
 
@@ -63,9 +63,9 @@ This app was implemented on a Swiss Micros DM15_M1B_V16 (max memory variant=230 
     DM15_M80 : (19 110 00-0)
     DM15_M1B :  23 160 47-0
 
-Note: these values might not have been updated with every latest commit.
+Note: these values might not have been updated with every commit or release. Check [code_dump.txt](code_dump.txt) if needed.
 
-## Labels
+## Labels <a name="labels"></a>
 
      A main routine
      B init lander descent (see A11 profile for details)
@@ -148,7 +148,7 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
 - [mnemonic.txt](mnemonic.txt): equivalent program in mnemonic form. note that this file /might/ be more recent than the DM file.
 - [HP.xml](HP.xml): simple Notepad++ syntax highlighter
 
-# RELEASE HISTORY
+# RELEASE HISTORY <a name="releases"></a>
 
 ## v0.4 (2014-10-09)
 **Won't fit in 15C (+3 steps)**
@@ -191,11 +191,11 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
 - skip burn calcs on zero throttle
 - optimizations 
    - 15C memory (19 46 0-0 = 322 steps; 23 44 0-0 = 308 steps)
-      - better use of LST X
-      - reduce regs
+      - better use of LST X?
+      - reduce regs?
          - use stack for input
       - variant branch?
-         - remove ascent code
+         - remove ascent feature?
    - speed
       - precomputed factors? (needs regs, but can reduce code)
    - accuracy
@@ -204,7 +204,7 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
    - handling
       - renumber variables according to keyboard layout
 
-# RPN notes
+## RPN notes
 1. BST in run mode should backstep repeatedly when held
 1. RCL (i) should have a variant RCL (x); both should *consume* X (but I'm RPL minded... see also http://www.hpmuseum.org/cgi-sys/cgiwrap/hpmuseum/archv017.cgi?read=116747)
 1. some sequences that bit me as an RPL user (and I wonder how novices dealt with it):
