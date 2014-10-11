@@ -1,15 +1,36 @@
-Lander is a simulation similar to the "classic" lander app for the HP-15C, but extended to 2 dimensions.
+Lander is a simulation similar to the "classic" lander app for the HP-15C, but extended to 2 dimensions. The code might/might not fit in a 15C (23 regs + 42x7=294 steps?, to confirm, check the [release history](#rh).)
 
-The aim is to deorbit (from near-circular orbit), and steer the lander so that it touches down smoothly (negative altitude and both velocity vectors < 25km/h).
+# Phases
 
-The code might/might not fit in a 15C (to confirm, keep an eye on the [MEM report](#mem) and [optimisations](#opt))
+The code might/might not fit in a 15C (to confirm, keep an eye on the [MEM report](#mem) and [optimisations](#opt)).
 
-## Run
-1. Select scenario B (see '[Labels](#labels)' below) to initialise data.
+The simulation has two phases: descent, and ascent.
+
+## Descent
+
+The task is to deorbit (from near-circular orbit), and steer the lander so that it touches down smoothly (negative altitude and both velocity vectors < 25km/h).
+
+Zero altitude displayed means success, flashing negative altitude reports the depth of the crater that will be named after you. Velocities, thrust, and *time* are zeroed (last horizontal/vertical V are still in the stack). Pitch is set to 0 (so this should allow a "jump" to another location...).
+
+## Abort
+
+Should it be necessary, the descent stage can be jettisoned by initiating the ascent phase.
+
+## Ascent
+
+This phase can occur after touchdown, or after abort.
+
+The ascent stage separates from the descent stage, and the task is to reach orbit.
+
+Note: to skip descent phase, call .4 after ascent init.
+
+# Using the app
+
+1. Select scenario (B or C, see '[Labels](#labels)' below) to initialise data.
 1. Throttle inputs:
    - STO 1: throttle value (0.0 ... 1.0)
    - STO 2: total burn time (s)
-   - STO 3: burn elevation (angle above horizon, deg)
+   - STO 3: pitch (angle from vertical, deg)
 1. Press 'A' to run the burn time. Calculator will run in predefined time segments (r14) 
 until burn time or remaining fuel has been consumed.
 1. Intermediate (PSE) output:
@@ -18,12 +39,14 @@ until burn time or remaining fuel has been consumed.
 
 Output:
 
-    T: hor speed (km/h)
-    Z: vertical speed (km/h)
+    T: hor V (km/h)
+    Z: vertical V (km/h)
     Y: range (km)
     X: altitude (m)
 
-## Apollo profile <a name="A11"></a>
+## Apollo profile <a name="apollo"></a>
+
+Note: these data are approximative.
 
 ### Descent 
 * From: 50kft (15.24km)
@@ -33,33 +56,35 @@ Output:
 * 4': 50%-25%
       
 ### Ascent
-* Target: alt: 60kft (18.24km) (~level) @range: 167NM (309km) (~7')
+* Target: alt: 60kft (18.24km) (~level = near-zero vertical vel) @range: 167NM (309km) (~7')
 * roughly circular, the real orbit was slightly elliptic
 
 See also [LM-1](LM-1).
 
 ## Tips
-* due to inaccuracies in the algorithm, you might need a firm (200deg) deorbit burn elevation
 * remember that weight changes over time, which means that acceleration due to thrust will increase
 * if not enough fuel left, burn time is reduced to match remaining fuel
 
 ## Notes
 
 Simple formulas used ("[Euler symplectic](https://en.wikipedia.org/wiki/Semi-implicit_Euler_method)"), don't expect stable orbits: as as simple example, just run idle in the initial orbit and observe the decay.
-      
+
 **MEM report** <A name="mem"></a>
+# Programming
+      
+## MEM reports
 
 This app was implemented on a Swiss Micros DM15_M1B_V16 (max memory variant=230 reg).
 
-    DM15_M1B   :  23 150 57-1
+    DM15_M1B :  23 153 54-0
 
 Note: these values might not have been updated with every commit or release. A "pure" HP15C variant is in the [TODO](#opt) list (as a variant branch).
 
 ## Labels <a name="labels"></a>
 
-     A main routine
-     B init lander descent (see A11 profile for details)
-     C - (RESERVED - ascent)
+     A main burn routine
+     B init lander descent phase (see Apollo profile for details)
+     C init ascent phase (separate from descent stage, pitch/0, thrust/100%)
      D -
      E -
      
@@ -79,8 +104,8 @@ Note: these values might not have been updated with every commit or release. A "
     .3 sub: setup circular orbit for given h (r4)
     .4 sub: crash analysis
     .5 section: main calc loop
-    .6 section: stop
-    .7 section: calc new pos, speed
+    .6 section: stop, generate output
+    .7 section: calc new pos, v
     .8 section: reduce fuel left
     .9 sub: calc eng + grav acc
 
@@ -131,10 +156,10 @@ Notes:
 ## About the files
 
 The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (modified, see  /vendor/swissmicros/master) [encoding/decoding scripts](/extern/swissmicros/decode RAM dump.htm).
-- [DM15_M1B.txt](DM15_M1B.txt): can be uploaded via the serial link (see also [firmware](extern/swissmicros/firmware.txt) and [instructions](extern/swissmicros/instructions.php.txt))
 - [code_dump.txt](code_dump.txt): decoded program, line per line; sometimes contains comments
 - [mnemonic.txt](mnemonic.txt): equivalent program in mnemonic form. note that this file /might/ be more recent than the DM file.
 - [HP.xml](HP.xml): simple Notepad++ syntax highlighter
+- [DM15_M1B.txt](DM15_M1B.txt): can be uploaded via the serial link (see also [firmware](extern/swissmicros/firmware.txt) and [instructions](extern/swissmicros/instructions.php.txt))
 
 # RELEASE HISTORY <a name="rh"></a>
 
@@ -156,7 +181,7 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
 - remove Earth stuff
 - add Apollo profile
 - lander routines
-- change speed output system (from v/elev to vert/hor)
+- change V output system (from v/elev to vert/hor)
 
 ## v0.2 (2014-09-27)
 - "bug in firmware" appears to be a bug in my head (ENTER/RCL issue, see UM P36)
@@ -164,20 +189,22 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
 ## v0.1 (2014-09-21)
 - test version for SwissMicro HTML decoder issue
 
-## Next
+## Upcoming
 
 ### DONE
 
 - change the pitch coordinates (0=up)
+- bug: descent stage did not take ascent stage weight into account
 
 ### BUSY
 - use [Velocity Verlet](https://en.wikipedia.org/wiki/Verlet_integration#Velocity_Verlet) to improve accuracy (a bit...)
 
+- ascent phase
+- check successful ascent
+- abort option
+
 ### TODO
 
-- interrupt flag
-- ascent phase
-- abort option
 - review units? (use US system?)
 - confirm thrust data
 - add total time counter
@@ -188,7 +215,6 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
 - add scoring
    - within X km of planned touchdown
    - with minimum fuel used
-
 - optimizations 
    - 15C memory issue (19 46 0-0 => 23 42 0-0) (variant?) <a name="opt"></a>
       - avoid two-byte steps
@@ -214,6 +240,7 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
       - RK4?
    - handling
       - renumber variables according to keyboard layout
+      - interrupt flag
 
 ## RPN notes
 1. BST in run mode should backstep repeatedly when held
@@ -237,7 +264,8 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
 1. http://www.klabs.org/history/apollo_11_alarms/eyles_2004/eyles_2004.htm
 1. http://spaceref.com/missions-and-programs/nasa/apollo/apollo-lunar-landing-mission-symposium/apollo-lunar-module-landing-strategy.html
 
-# Simulation
+## Another simulation (data only)
 Very interesting pages, might prove my implementation is a joke, anyway, here you are... I didn't compare the results (yet).
+
 1. http://www.braeunig.us/apollo/LM-descent.htm
 1. http://www.braeunig.us/apollo/LM-ascent.htm

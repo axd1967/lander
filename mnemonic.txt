@@ -151,8 +151,21 @@ TEST 8 (x<y)
 SF 9
 F? 9
 RTN
+RCL 9
+RCL 8
+->P
+RCL .6
+->R
+STO 8
+x<>y
+STO 9
 0
 STO 4
+STO .0
+STO .1
+STO 1
+STO 2
+STO 3
 RTN
 LBL .9
 RCL 9
@@ -245,7 +258,7 @@ LBL B
 GSB 9
 22
 STO I
-2763
+7248
 uSTO (i)
 23
 STO I
@@ -274,6 +287,7 @@ uSTO (i)
 STO I
 2356
 uSTO (i)
+STO 0
 21
 STO I
 15553
@@ -282,4 +296,8 @@ uSTO (i)
 STO I
 4.6283
 uSTO (i)
+1
+STO 1
+0
+STO 3
 RTN
