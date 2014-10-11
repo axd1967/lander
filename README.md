@@ -2,7 +2,7 @@ Lander is a simulation similar to the "classic" lander app for the HP-15C, but e
 
 The aim is to deorbit (from near-circular orbit), and steer the lander so that it touches down smoothly (negative altitude and both velocity vectors < 25km/h).
 
-The code might/might not fit in a 15C (23 regs + 42x7=294 steps?, to confirm, check the [release history](#rh))
+The code might/might not fit in a 15C (to confirm, keep an eye on the [MEM report](#mem) and [optimisations](#opt))
 
 ## Run
 1. Select scenario B (see '[Labels](#labels)' below) to initialise data.
@@ -48,15 +48,13 @@ See also [LM-1](LM-1).
 
 Simple formulas used ("[Euler symplectic](https://en.wikipedia.org/wiki/Semi-implicit_Euler_method)"), don't expect stable orbits: as as simple example, just run idle in the initial orbit and observe the decay.
       
-## MEM reports
+**MEM report** <A name="mem"></a>
 
 This app was implemented on a Swiss Micros DM15_M1B_V16 (max memory variant=230 reg).
 
-    DM15     : (19  46 00-0)
-    DM15_M80 : (19 110 00-0)
-    DM15_M1B :  23 155 52-3
-
-Note: these values might not have been updated with every commit or release. Check [code_dump.txt](code_dump.txt) if needed.
+    DM15_M1B   :  23 155 52-3
+    
+Note: these values might not have been updated with every commit or release. A "pure" HP15C variant is in the [TODO](#opt) list (as a variant branch).
 
 ## Labels <a name="labels"></a>
 
@@ -148,18 +146,14 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
 - change: crash criteria
 - solve: bug in crash analysis
 
-**Shouldn't fit in 15C (+23 steps)**
-
-Workaround: remove LBL C (38 steps)
-
 ## v0.4 (2014-10-09)
-**Shouldn't fit in 15C (+3 steps)**
+
 - add crash detection
 - show intermediate altitude
 - markdown (doc)
 
 ## v0.3 (2014-10-08)
-**Should fit in HP15C**
+
 - check routines in Earth orbit
 - range bug/velocity convert
 - remove Earth stuff
@@ -193,16 +187,26 @@ Workaround: remove LBL C (38 steps)
    - with minimum fuel used
 - compute output after init
 - investigate why there is no need for an 1/2 a sqr(t) term (section .7 uses symplectic, giving a.sqr(t) )
-- skip burn calcs on zero throttle
 - optimizations 
-   - 15C memory (19 46 0-0 = 322 steps; 23 44 0-0 = 308 steps)
+   - 15C memory issue (19 46 0-0 => 23 42 0-0) (variant?) <a name="opt"></a>
+      - avoid two-byte steps
+         - rename labels
       - better use of LST X?
       - reduce regs?
          - use stack for input
-      - variant branch?
-         - remove ascent feature?
-   - speed
-      - precomputed factors? (needs regs, but can reduce code)
+      - remove tests
+      - remove crash detection
+      - remove ascent feature
+      - remove PSE
+      - remove multistep (r19, r17)
+      - last ditch
+         - constant mass (remove weight variance due to depleting fuel)
+         - manual setup (user must initialise registers/flags)
+            - astro constants (should not change once initialised)
+            - vehicle data (every run)
+   - speed (variant?)
+      - skip burn calcs on zero throttle
+      - precomputed factors? (needs regs)
    - accuracy
       - [Verlet](https://en.wikipedia.org/wiki/Verlet_integration)
       - RK4?
@@ -220,6 +224,7 @@ Workaround: remove LBL C (38 steps)
    - [x^2] [ENT] [RCL] <r> 
       - expect:  T:3 Z:16 Y:16 X:[r] 
       - get:     T:2 Z:3  Y:16 X:[r] (Owner's Hb, Ed 2.4, p.36)
+1. Number of steps is not very helpful, because some steps actually use *two* bytes. (LBL ./GTO/(GSB?) ./flags/x></DSE/ISG/STO/RCL <op>/(i) - see UM p. 218)
 
 # Links
 
