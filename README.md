@@ -39,7 +39,7 @@ Output:
 See also [LM-1](LM-1).
 
 ## Tips
-* due to inaccuracies in the algorithm, you need a firm (200deg) deorbit burn elevation
+* due to inaccuracies in the algorithm, you might need a firm (200deg) deorbit burn elevation
 * remember that weight changes over time, which means that acceleration due to thrust will increase
 * if not enough fuel left, burn time is reduced to match remaining fuel
 
@@ -52,7 +52,7 @@ Simple formulas used ("[Euler symplectic](https://en.wikipedia.org/wiki/Semi-imp
 This app was implemented on a Swiss Micros DM15_M1B_V16 (max memory variant=230 reg).
 
     DM15_M1B   :  23 150 57-1
-    
+
 Note: these values might not have been updated with every commit or release. A "pure" HP15C variant is in the [TODO](#opt) list (as a variant branch).
 
 ## Labels <a name="labels"></a>
@@ -164,28 +164,30 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
 ## v0.1 (2014-09-21)
 - test version for SwissMicro HTML decoder issue
 
-## DONE
+## Next
 
-## BUSY
+### DONE
 
+### BUSY
 - use [Velocity Verlet](https://en.wikipedia.org/wiki/Verlet_integration#Velocity_Verlet) to improve accuracy (a bit...)
 
-## TODO
+### TODO
 
-- interrupt flag
-- add input checks
-- abort option
-- ascent phase
-- review units? (use US system?)
 - change the pitch coordinates (0=up)
+- interrupt flag
+- ascent phase
+- abort option
+- review units? (use US system?)
 - confirm thrust data
-- add some screenshots of the logic
 - add total time counter
+- add input checks
+- compute output after init
+- investigate the (missing) 1/2 a sqr(t) term (section .7 uses symplectic, giving a.sqr(t) )
+- add some screenshots of the logic
 - add scoring
    - within X km of planned touchdown
    - with minimum fuel used
-- compute output after init
-- investigate why there is no need for an 1/2 a sqr(t) term (section .7 uses symplectic, giving a.sqr(t) )
+
 - optimizations 
    - 15C memory issue (19 46 0-0 => 23 42 0-0) (variant?) <a name="opt"></a>
       - avoid two-byte steps
