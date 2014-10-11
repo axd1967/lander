@@ -92,7 +92,7 @@ Notes:
     0   mf - fuel left (kg)
     1 > th - throttle (%)
     2\> t - burn time (s)
-    3\> b - burn angle (elevation, +=up) (deg)
+    3\> b - pitch (0=vertical, negative=retrograde) (deg)
     4\  h - height (m) (int: R)
     5\  d - range (km) (int: delta)
     6\  vv - velocity/vertical (km/h)
@@ -168,12 +168,13 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
 
 ### DONE
 
+- change the pitch coordinates (0=up)
+
 ### BUSY
 - use [Velocity Verlet](https://en.wikipedia.org/wiki/Verlet_integration#Velocity_Verlet) to improve accuracy (a bit...)
 
 ### TODO
 
-- change the pitch coordinates (0=up)
 - interrupt flag
 - ascent phase
 - abort option
