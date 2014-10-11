@@ -41,7 +41,6 @@ Output:
 * due to inaccuracies in the algorithm, you need a firm (200deg) deorbit burn elevation
 * remember that weight changes over time, which means that acceleration due to thrust will increase
 * if not enough fuel left, burn time is reduced to match remaining fuel
-* there could exist issues with speed when using too small time steps
 
 ## Notes
 
@@ -53,7 +52,7 @@ This app was implemented on a Swiss Micros DM15_M1B_V16 (max memory variant=230 
 
     DM15     : (19  46 00-0)
     DM15_M80 : (19 110 00-0)
-    DM15_M1B :  23 160 47-0
+    DM15_M1B :  23 155 52-3
 
 Note: these values might not have been updated with every commit or release. Check [code_dump.txt](code_dump.txt) if needed.
 
