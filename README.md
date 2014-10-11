@@ -2,7 +2,7 @@ Lander is a simulation similar to the "classic" lander app for the HP-15C, but e
 
 The aim is to deorbit (from near-circular orbit), and steer the lander so that it touches down smoothly (negative altitude and both velocity vectors < 25km/h).
 
-The code might/might not fit in a 15C (to confirm, check the [release history](#releases))
+The code might/might not fit in a 15C (23 regs + 294 steps?, to confirm, check the [release history](#releases))
 
 ## Run
 1. Select scenario B (see '[Labels](#labels)' below) to initialise data.
@@ -142,6 +142,13 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
 - [HP.xml](HP.xml): simple Notepad++ syntax highlighter
 
 # RELEASE HISTORY <a name="releases"></a>
+
+## v0.4.1 (2014-10-11)
+- **new** add some [docs](LM-1)
+- change crash criteria
+- solve bug in crash analysis
+**Won't fit in 15C (+23 steps)**
+Workaround: remove LBL C (38 steps)
 
 ## v0.4 (2014-10-09)
 **Won't fit in 15C (+3 steps)**
