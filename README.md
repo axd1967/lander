@@ -37,6 +37,8 @@ Output:
 * Target: alt: 60kft (18.24km) (~level) @range: 167NM (309km) (~7')
 * roughly circular, the real orbit was slightly elliptic
 
+See also [LM-1](LM-1).
+
 ## Tips
 * due to inaccuracies in the algorithm, you need a firm (200deg) deorbit burn elevation
 * remember that weight changes over time, which means that acceleration due to thrust will increase
@@ -173,6 +175,7 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
 - abort option
 - ascent phase
 - review units? (use US system?)
+- change the pitch coordinates (0=up)
 - confirm thrust data
 - add some screenshots of the logic
 - add total time counter
@@ -180,6 +183,7 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
    - within X km of planned touchdown
    - with minimum fuel used
 - compute output after init
+- investigate why there is no need for an 1/2 a sqr(t) term (section .7).
 - skip burn calcs on zero throttle
 - optimizations 
    - 15C memory (19 46 0-0 = 322 steps; 23 44 0-0 = 308 steps)
@@ -215,3 +219,9 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
 1. http://stackoverflow.com/questions/4038554/2d-orbital-physics
 1. https://en.wikipedia.org/wiki/Apollo_Lunar_Module
 1. http://www.klabs.org/history/apollo_11_alarms/eyles_2004/eyles_2004.htm
+1. http://spaceref.com/missions-and-programs/nasa/apollo/apollo-lunar-landing-mission-symposium/apollo-lunar-module-landing-strategy.html
+
+# Simulation
+Very interesting pages, might prove my implementation is a joke, anyway, here you are... I didn't compare the results (yet).
+1. http://www.braeunig.us/apollo/LM-descent.htm
+1. http://www.braeunig.us/apollo/LM-ascent.htm
