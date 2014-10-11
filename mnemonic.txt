@@ -165,12 +165,12 @@ LBL .4
 RCL 6
 ABS
 25
-TEST 7 (x>y)
+TEST 8 (x<y)
 SF 9
 RCL 6
 ABS
 25
-TEST 7 (x>y)
+TEST 8 (x<y)
 SF 9
 F? 9
 RTN

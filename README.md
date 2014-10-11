@@ -144,9 +144,9 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
 # RELEASE HISTORY <a name="rh"></a>
 
 ## v0.4.1 (2014-10-11)
-- **new** add some [docs](LM-1)
-- change crash criteria
-- solve bug in crash analysis
+- **new**: add some [docs](LM-1)
+- change: crash criteria
+- solve: bug in crash analysis
 
 **Shouldn't fit in 15C (+23 steps)**
 
@@ -192,7 +192,7 @@ Workaround: remove LBL C (38 steps)
    - within X km of planned touchdown
    - with minimum fuel used
 - compute output after init
-- investigate why there is no need for an 1/2 a sqr(t) term (section .7).
+- investigate why there is no need for an 1/2 a sqr(t) term (section .7 uses symplectic, giving a.sqr(t) )
 - skip burn calcs on zero throttle
 - optimizations 
    - 15C memory (19 46 0-0 = 322 steps; 23 44 0-0 = 308 steps)
