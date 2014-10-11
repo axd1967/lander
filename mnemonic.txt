@@ -39,7 +39,6 @@ RCL .7
 *
 STO .8
 RCL 0
-PSE
 TEST 9 (x>=y)
 GTO .8
 RCL 0
@@ -64,6 +63,7 @@ STO I
 R_down
 RCL (i)
 RCL 0
+PSE
 +
 /
 ENTER
@@ -162,16 +162,21 @@ RCL 5
 RCL 4
 RTN
 LBL .4
+R/S
 RCL 6
 ABS
-8
-TEST 8 (x<y)
+25
+TEST 7 (x>y)
 SF 9
 RCL 6
 ABS
-8
-TEST 8 (x<y)
+25
+TEST 7 (x>y)
 SF 9
+F? 9
+RTN
+0
+STO 4
 RTN
 LBL .2
 CF 1

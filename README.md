@@ -1,17 +1,8 @@
-2D lander is a simulation of the "classic" lander app for the HP-15C, but extended to 2 dimensions.
+Lander is a simulation similar to the "classic" lander app for the HP-15C, but extended to 2 dimensions.
 
-**Notes**
+The aim is to deorbit (from near-circular orbit), and steer the lander so that it touches down smoothly (negative altitude and both velocity vectors < 25km/h).
 
-* PROTOTYPE
-* INCOMPLETE
-* not fully tested yet
-* might fit in a 15C (to confirm, check the [release history](#releases))
-
-Be patient.
-
-# Aim
-
-Deorbit from near-circular orbit, steer the lander so that it touches down smoothly (negative altitude and both velocity vectors < 8 m/s ~28.8km/h).
+The code might/might not fit in a 15C (to confirm, check the [release history](#releases))
 
 ## Run
 1. Select scenario B (see '[Labels](#labels)' below) to initialise data.
@@ -50,6 +41,7 @@ Output:
 * due to inaccuracies in the algorithm, you need a firm (200deg) deorbit burn elevation
 * remember that weight changes over time, which means that acceleration due to thrust will increase
 * if not enough fuel left, burn time is reduced to match remaining fuel
+* there could exist issues with speed when using too small time steps
 
 ## Notes
 
@@ -181,12 +173,13 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
 - add input checks
 - abort option
 - ascent phase
-- review units? (use US system)
+- review units? (use US system?)
 - confirm thrust data
 - add some screenshots of the logic
 - add total time counter
-- add criteria
+- add scoring
    - within X km of planned touchdown
+   - with minimum fuel used
 - compute output after init
 - skip burn calcs on zero throttle
 - optimizations 
@@ -206,7 +199,7 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
 
 ## RPN notes
 1. BST in run mode should backstep repeatedly when held
-1. RCL (i) should have a variant RCL (x); both should *consume* X (but I'm RPL minded... see also http://www.hpmuseum.org/cgi-sys/cgiwrap/hpmuseum/archv017.cgi?read=116747)
+1. RCL (i) should have a variant RCL (x); IMO latter should *consume* X.
 1. some sequences that bit me as an RPL user (and I wonder how novices dealt with it):
    - assuming the stack looks like this: T:1 Z:2 Y:3 X:4, then keying
    - 888 [X<>Y] 999 
