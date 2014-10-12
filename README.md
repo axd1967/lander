@@ -1,4 +1,4 @@
-Lander is a simulation similar to the "classic" lander app for the HP-15C, but extended to 2 dimensions. The code might/might not fit in a 15C (23 regs + 42x7=294 steps?, to confirm, check the [release history](#rh).)
+Lander is a 3D extension of the "classic" lander app for the HP-15C. The code might/might not fit in a 15C (23 regs + 42x7=294 steps?, to confirm, check the [release history](#rh).)
 
 # Phases
 
@@ -22,7 +22,11 @@ This phase can occur after touchdown, or after abort.
 
 The ascent stage separates from the descent stage, and the task is to reach orbit.
 
-Note: to skip descent phase, call .4 after ascent init.
+Note: to skip descent phase:
+
+1. GSB C
+1. 0 STO 6 STO 7
+1. GSB .4
 
 # Using the app
 
@@ -49,15 +53,15 @@ Output:
 Note: these data are approximative.
 
 ### Descent 
-* From: 50kft (15.24km)
+* From: 50kft (15.24km), 6014.64 km/h
 * Target: 260NM (480km) (~12')
 * 6': 100%
 * 2': 50%
 * 4': 50%-25%
       
 ### Ascent
-* Target: alt: 60kft (18.24km) (~level = near-zero vertical vel) @range: 167NM (309km) (~7')
-* roughly circular, the real orbit was slightly elliptic
+* Target: alt: 60kft (18.24km), 6009.4 km/h (~level) @range: 167NM (309km) (~7')
+* roughly circular, the real orbit was slightly elliptic (~ 16 x 90 km)
 
 See also [LM-1](LM-1).
 
@@ -205,6 +209,7 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
 
 ### TODO
 
+- bug: vc for any given r/d
 - review units? (use US system?)
 - confirm thrust data
 - add total time counter
