@@ -13,7 +13,6 @@ The code might/might not fit in a 15C (to confirm, keep an eye on the [MEM repor
 1. Press 'A' to run the burn time. Calculator will run in predefined time segments (r14) 
 until burn time or remaining fuel has been consumed.
 1. Intermediate (PSE) output:
-   - remaining fuel
    - altitude
    - remaining time
 
@@ -52,7 +51,7 @@ Simple formulas used ("[Euler symplectic](https://en.wikipedia.org/wiki/Semi-imp
 
 This app was implemented on a Swiss Micros DM15_M1B_V16 (max memory variant=230 reg).
 
-    DM15_M1B   :  23 155 52-3
+    DM15_M1B   :  23 150 57-1
     
 Note: these values might not have been updated with every commit or release. A "pure" HP15C variant is in the [TODO](#opt) list (as a variant branch).
 
@@ -75,22 +74,20 @@ Note: these values might not have been updated with every commit or release. A "
      8 -
      9 sub: init moon params
     .0 -
-    .1 -
+    .1 section: compute fuel used
     .2 sub: general init
     .3 sub: setup circular orbit for given h (r4)
     .4 sub: crash analysis
     .5 section: main calc loop
     .6 section: stop
     .7 section: calc new pos, speed
-    .8 section: calc gravity acc, overall acc
-    .9 section: calc fuel used, burn acc
+    .8 section: reduce fuel left
+    .9 sub: calc eng + grav acc
 
 ## Registers
 Notes:
 * '>' Lander registers user can manipulate
-* '\' statistics registers (may lose content when using stat functions)
-
-List:
+* '\' statistics registers
 
     0   mf - fuel left (kg)
     1 > th - throttle (%)
@@ -98,8 +95,8 @@ List:
     3\> b - burn angle (elevation, +=up) (deg)
     4\  h - height (m) (int: R)
     5\  d - range (km) (int: delta)
-    6\  v - velocity/vertical (km/h)
-    7\  a - velocity/horiz (km/h)
+    6\  vv - velocity/vertical (km/h)
+    7\  vh - velocity/horiz (km/h)
     8   px (m)
     9   py (m)
     .0  vx (m/s)
@@ -117,7 +114,7 @@ List:
     20 f - max fuel flow (kg/s)
     21 F - max thrust (N)
     22 m0 - vehicle mass, dry (kg)
-    23 mf0 - initial fuel mass (kg)
+    23 mf0 - initial fuel (kg)
 
 ## Flags
 
@@ -171,6 +168,8 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
 
 ## BUSY
 
+- use [Velocity Verlet](https://en.wikipedia.org/wiki/Verlet_integration#Velocity_Verlet) to improve accuracy (a bit...)
+
 ## TODO
 
 - interrupt flag
@@ -208,7 +207,7 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
       - skip burn calcs on zero throttle
       - precomputed factors? (needs regs)
    - accuracy
-      - [Verlet](https://en.wikipedia.org/wiki/Verlet_integration)
+      - Verlet: moment of fuel update (STO-0)
       - RK4?
    - handling
       - renumber variables according to keyboard layout

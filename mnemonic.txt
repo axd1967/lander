@@ -6,28 +6,10 @@ RCL .4
 STO .7
 RCL .9
 TEST 9 (x>=y)
-GTO .9
+GTO .1
 RCL .9
 STO .7
-LBL .9
-RCL 9
-STO .3
-RCL 8
-STO .2
-->P
-STO 4
-x<>y
-STO 5
-RCL .5
-RCL .6
-RCL 4
-/
-x^2
-*
-RCL 4
-/
-STO*.2
-STO*.3
+LBL .1
 F? 1
 GTO .7
 20
@@ -41,7 +23,6 @@ STO .8
 RCL 0
 TEST 9 (x>=y)
 GTO .8
-RCL 0
 STO .8
 RCL (i)
 /
@@ -52,51 +33,46 @@ SF 1
 LBL .8
 RCL .8
 STO-0
-RCL 1
-21
-STO I
-R_down
-RCL (i)
-*
-22
-STO I
-R_down
-RCL (i)
-RCL 0
-PSE
-+
-/
-ENTER
-ENTER
-RCL 5
-RCL 3
--
-COS
-*
-STO+.3
-R_down
-RCL 5
-RCL 3
--
-SIN
-CHS
-*
-STO+.2
 LBL .7
+GSB .9
 RCL .0
 RCL .7
 *
 STO+8
 RCL .1
-RCL .7
+LSTx
 *
 STO+9
 RCL .2
 RCL .7
+x^2
+2
+/
+*
+STO+8
+RCL .3
+LSTx
+*
+STO+9
+RCL .2
+RCL .7
+2
+/
 *
 STO+.0
 RCL .3
+LSTx
+*
+STO+.1
+GSB .9
+RCL .2
 RCL .7
+2
+/
+*
+STO+.0
+RCL .3
+LSTx
 *
 STO+.1
 RCL 9
@@ -105,11 +81,12 @@ RCL 8
 RCL .6
 -
 STO 4
+x<>y
+STO 5
+x<>y
 PSE
 TEST 2 (x<0)
 GTO .6
-x<>y
-STO 5
 RCL .7
 STO-.9
 RCL .9
@@ -176,6 +153,58 @@ F? 9
 RTN
 0
 STO 4
+RTN
+LBL .9
+RCL 9
+STO .3
+RCL 8
+STO .2
+->P
+STO 4
+x<>y
+STO 5
+RCL .5
+RCL .6
+RCL 4
+/
+x^2
+*
+RCL 4
+/
+STO*.2
+STO*.3
+RCL 1
+TEST 4 (x<=0)
+RTN
+F? 1
+RTN
+21
+STO I
+R_down
+RCL (i)
+*
+22
+STO I
+R_down
+RCL (i)
+RCL 0
++
+/
+ENTER
+ENTER
+RCL 5
+RCL 3
++
+COS
+*
+STO+.2
+R_down
+RCL 5
+RCL 3
++
+SIN
+*
+STO+.3
 RTN
 LBL .2
 CF 1
