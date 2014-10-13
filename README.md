@@ -199,6 +199,7 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
 
 - change the pitch coordinates (0=up)
 - bug: descent stage did not take ascent stage weight into account
+- update data
 
 ### BUSY
 - use [Velocity Verlet](https://en.wikipedia.org/wiki/Verlet_integration#Velocity_Verlet) to improve accuracy (a bit...)
@@ -211,7 +212,6 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
 
 - bug: vc for any given r/d
 - review units? (use US system?)
-- confirm thrust data
 - add total time counter
 - add input checks
 - compute output after init
@@ -242,6 +242,7 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
       - precomputed factors? (needs regs)
    - accuracy
       - Verlet: moment of fuel update (STO-0)
+      - take RCS mass change (~60kg) into account?
       - RK4?
    - handling
       - renumber variables according to keyboard layout
