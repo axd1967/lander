@@ -248,25 +248,28 @@ The dumps have been generated with [Swiss Micros](http://www.swissmicros.com/) (
    - within X params of CSM
    - with minimum fuel used
 - optimizations 
-   - 15C memory issue (19 46 0-0 => 26 39 0-0) (variant?) <a name="opt"></a>
-      - avoid two-byte steps
-         - rename labels
+   - fit in 15C memory (19 46 0-0 => 26 39 0-0 => -210B) <a name="opt"></a>
+      - remove multistep (r19, r17) ~6B
+      - remove PSE (2B)
+      - remove output stack (4B)
+      - remove fuel tests
+      - remove crash detection ()
+      - positive g, negative in formula (1B)
+      - remove conversions
+      - avoid two-byte steps (UM p.218)
+         - rename SUB/GTO . labels
+         - flags?
+         - memory ops (STO +-*/)
       - better use of LST X?
       - reduce regs?
          - use stack for input
-      - remove tests
-      - remove crash detection
-      - remove ascent feature
-      - remove PSE
-      - remove multistep (r19, r17)
-      - positive g, negative in formula
-      - remove r0/r1/r2 initialisation
-      - reduce range/distc
       - last ditch
          - constant mass (remove weight variance due to depleting fuel)
          - manual setup (user must initialise registers/flags)
             - astro constants (should not change once initialised)
             - vehicle data (every run)
+      - remove ascent feature
+         - sub C: 41B
    - speed (variant?)
       - skip burn calcs on zero throttle
       - precomputed factors? (needs regs)
