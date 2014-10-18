@@ -1,4 +1,4 @@
-Lander is a 3D extension of the "classic" lander app for the HP-15C. The code might/might not fit in a 15C (23 regs + 42x7=294 steps?, to confirm, check the [release history](#rh).)
+Lander is a 3D extension of the "classic" lander app for the HP-15C. The code might/might not fit in a 15C (26 regs + 39x7=273 bytes?, to confirm, check the [release history](#rh).)
 
 # Phases
 
@@ -12,6 +12,13 @@ The task is to deorbit (from near-circular orbit), and steer the lander so that 
 
 Zero altitude displayed means success, flashing negative altitude reports the depth of the crater that will be named after you. Velocities, thrust, and *time* are zeroed (last horizontal/vertical V are still in the stack). Pitch is set to 0 (so this should allow a "jump" to another location...).
 
+Output:
+
+    T: hor V (km/h)
+    Z: vertical V (km/h)
+    Y: range (km)
+    X: altitude (m)
+
 ## Abort
 
 Should it be necessary, the descent stage can be jettisoned by initiating the ascent phase.
@@ -20,9 +27,16 @@ Should it be necessary, the descent stage can be jettisoned by initiating the as
 
 This phase can occur after touchdown, or after abort.
 
-The ascent stage separates from the descent stage, and the task is to reach orbit.
+The ascent stage separates from the descent stage, and the task is to reach the CSM that has remained in orbit.
 
-Note: to skip descent phase:
+Output:
+
+    T: closing speed (km/h)
+    Z: vertical V (km/h)
+    Y: range to CSM (km)
+    X: altitude difference to CSM (m)
+
+Note: to skip descent phase and start from surface, execute following steps:
 
 1. GSB C
 1. 0 STO 6 STO 7
@@ -41,13 +55,6 @@ until burn time or remaining fuel has been consumed.
    - altitude
    - remaining time
 
-Output:
-
-    T: hor V (km/h)
-    Z: vertical V (km/h)
-    Y: range (km)
-    X: altitude (m)
-
 ## Apollo profile <a name="apollo"></a>
 
 Note: these data are approximative.
@@ -62,12 +69,14 @@ Note: these data are approximative.
 ### Ascent
 * Target: alt: 60kft (18.24km), 6009.4 km/h (~level) @range: 167NM (309km) (~7')
 * roughly circular, the real orbit was slightly elliptic (~ 16 x 90 km)
+* current implementation does not change initial CSM altitude
 
 See also [LM-1](LM-1).
 
 ## Tips
 * remember that weight changes over time, which means that acceleration due to thrust will increase
 * if not enough fuel left, burn time is reduced to match remaining fuel
+* CSM continues orbiting, this has an impact on *when* to initiate lift-off
 
 ## Notes
 
@@ -80,15 +89,15 @@ Simple formulas used ("[Euler symplectic](https://en.wikipedia.org/wiki/Semi-imp
 
 This app was implemented on a Swiss Micros DM15_M1B_V16 (max memory variant=230 reg).
 
-    DM15_M1B :  23 147 60-4
+    DM15_M1B :  26 135 69-3
 
 Note: these values might not have been updated with every commit or release. A "pure" HP15C variant is in the [TODO](#opt) list (as a variant branch).
 
 ## Labels <a name="labels"></a>
 
      A main burn routine
-     B init lander descent phase (see Apollo profile for details)
-     C init ascent phase (separate from descent stage, pitch/0, thrust/100%)
+     B init lander descent phase
+     C init ascent phase
      D -
      E -
      
@@ -98,14 +107,14 @@ Note: these values might not have been updated with every commit or release. A "
      3 -
      4 -
      5 -
-     6 -
-     7 -
-     8 -
+     6 sub: compute distance to CSM
+     7 sub: STO (x) (consumes X)
+     8 sub: RCL (x) (consumes X)
      9 sub: init moon params
-    .0 -
+    .0 sub: init CSM
     .1 section: compute fuel used
     .2 sub: general init
-    .3 sub: setup circular orbit for given h (r4)
+    .3 sub: return circular orbit v (X) for given h (X)
     .4 sub: crash analysis
     .5 section: main calc loop
     .6 section: stop, generate output
@@ -122,10 +131,10 @@ Notes:
     1 > th - throttle (%)
     2\> t - burn time (s)
     3\> b - pitch (0=vertical, negative=retrograde) (deg)
-    4\  h - height (m) (int: R)
-    5\  d - range (km) (int: delta)
+    4\  h - height (m) /ascent: altitude above CSM (int: R)
+    5\  d - ground range (km) /ascent: ground range before CSM (int: delta)
     6\  vv - velocity/vertical (km/h)
-    7\  vh - velocity/horiz (km/h)
+    7\  vh - velocity/horiz /ascent: hor. closing speed (km/h) 
     8   px (m)
     9   py (m)
     .0  vx (m/s)
@@ -135,7 +144,7 @@ Notes:
     .4  dt0 - delta t internal step (s)
     .5  g0 - gravity, surface (m/s2)
     .6  r0 - central body radius (m)
-    .7  dt - user delta t (s)
+    .7  dt - user delta t (fuel clipped if necessary) (s)
     .8  fu - fuel used for current burn segment (kg)
     .9  T - remaining time in calculation loop (s)
       
@@ -144,17 +153,21 @@ Notes:
     21 F - max thrust (N)
     22 m0 - vehicle mass, dry (kg)
     23 mf0 - initial fuel (kg)
+    24 CSM alt (circular orbit)
+    25 CSM vel (vc)
+    26 total time
 
 ## Flags
 
+    0 -
     1 fuel empty
-    2 - (RESERVED - interrupt)
+    2 ascent mode: if set, range, alt and vh refer to orbiting CSM
     3 -
     4 -
     5 -
     6 -
     7 -
-    8 -
+    8
     9 crashed
  
 ## About the files
@@ -200,27 +213,36 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
 - change the pitch coordinates (0=up)
 - bug: descent stage did not take ascent stage weight into account
 - update data
+- abort option
+- use [Velocity Verlet](https://en.wikipedia.org/wiki/Verlet_integration#Velocity_Verlet) to improve accuracy (a bit...)
+- ascent phase
+- bug: vc for any given r/d, should not touch px/py
+- adapt vc calc to return vc only
+- adapt B, C to store vc
+- refactor indirect register accesses
+   - cost: -2x7 = -14 bytes (subroutines)
+   - benefit: 
+      +5 (get rid of STO/RCL I; R_down; STO/RCL(i)) 
+      -2 (ENTER) per STO subroutine call
+      -1 per RCL subroutine call
+- add total time counter
+- add orbiting CSM
 
 ### BUSY
-- use [Velocity Verlet](https://en.wikipedia.org/wiki/Verlet_integration#Velocity_Verlet) to improve accuracy (a bit...)
-
-- ascent phase
-- check successful ascent
-- abort option
 
 ### TODO
 
-- bug: vc for any given r/d
 - review units? (use US system?)
-- add total time counter
+- raise CSM orbit for ascent
 - add input checks
 - compute output after init
 - add some screenshots of the logic
 - add scoring
    - within X km of planned touchdown
+   - within X params of CSM
    - with minimum fuel used
 - optimizations 
-   - 15C memory issue (19 46 0-0 => 23 42 0-0) (variant?) <a name="opt"></a>
+   - 15C memory issue (19 46 0-0 => 26 39 0-0) (variant?) <a name="opt"></a>
       - avoid two-byte steps
          - rename labels
       - better use of LST X?
@@ -231,6 +253,9 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
       - remove ascent feature
       - remove PSE
       - remove multistep (r19, r17)
+      - positive g, negative in formula
+      - remove r0/r1/r2 initialisation
+      - reduce range/distc
       - last ditch
          - constant mass (remove weight variance due to depleting fuel)
          - manual setup (user must initialise registers/flags)
@@ -239,6 +264,9 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
    - speed (variant?)
       - skip burn calcs on zero throttle
       - precomputed factors? (needs regs)
+      - r10-r19 need 6 steps for adressing: can they be swapped for normal (r0-r9) regs?
+      - verlet: refactor thrust (is constant across step)
+      - reorganise subroutine calls to avoid too much searching for the label
    - accuracy
       - Verlet: moment of fuel update (STO-0)
       - take RCS mass change (~60kg) into account?
@@ -259,6 +287,7 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
       - expect:  T:3 Z:16 Y:16 X:[r] 
       - get:     T:2 Z:3  Y:16 X:[r] (Owner's Hb, Ed 2.4, p.36)
 1. Number of steps is not very helpful, because some steps actually use *two* bytes. (LBL ./GTO/(GSB?) ./flags/x></DSE/ISG/STO/RCL <op>/(i) - see UM p. 218)
+1. USER mode has subtle differences when programming: u STO x (see p. 176)
 
 # Links
 
