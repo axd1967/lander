@@ -125,9 +125,13 @@ Note: these values might not have been updated with every commit or release. A "
     .9 sub: calc eng + grav acc
 
 ## Registers
+
 Notes:
+
 * '>' Lander registers user can manipulate
 * '\' statistics registers
+
+List:
 
     0   mf - fuel left (kg)
     1 > th - throttle (%)
@@ -174,7 +178,7 @@ Notes:
  
 ## About the files
 
-The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (modified, see  /vendor/swissmicros/master) [encoding/decoding scripts](/extern/swissmicros/decode RAM dump.htm).
+The dumps have been generated with [Swiss Micros](http://www.swissmicros.com/) (modified, see /vendor/swissmicros/master) [encoding/decoding scripts](/extern/swissmicros/decode RAM dump.htm).
 - [code_dump.txt](code_dump.txt): decoded program, line per line; sometimes contains comments
 - [mnemonic.txt](mnemonic.txt): equivalent program in mnemonic form. note that this file /might/ be more recent than the DM file.
 - [HP.xml](HP.xml): simple Notepad++ syntax highlighter
@@ -195,9 +199,9 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
 - refactor indirect register accesses
    - cost: -2x7 = -14 bytes (subroutines)
    - benefit: 
-      +5 (get rid of STO/RCL I; R_down; STO/RCL(i)) 
-      -2 (ENTER) per STO subroutine call
-      -1 per RCL subroutine call
+      - +5 (get rid of STO/RCL I; R_down; STO/RCL(i)) 
+      - -2 (ENTER) per STO subroutine call
+      - -1 per RCL subroutine call
 
 ## v0.4.1 (2014-10-11)
 - **new**: add some [docs](LM-1)
