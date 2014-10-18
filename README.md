@@ -1,8 +1,8 @@
-Lander is a 3D extension of the "classic" lander app for the HP-15C. The code might/might not fit in a 15C (26 regs + 39x7=273 bytes?, to confirm, check the [release history](#rh).)
+Lander is a 2D extension of the "classic" lander app for the HP-15C.
+
+The code might/might not fit in a 15C (26 regs + 39x7=273 bytes?, to confirm, keep an eye on the [MEM report](#mem) and [optimisations](#opt)).
 
 # Phases
-
-The code might/might not fit in a 15C (to confirm, keep an eye on the [MEM report](#mem) and [optimisations](#opt)).
 
 The simulation has two phases: descent, and ascent.
 
@@ -16,7 +16,7 @@ Output:
 
     T: hor V (km/h)
     Z: vertical V (km/h)
-    Y: range (km)
+    Y: range since release (km)
     X: altitude (m)
 
 ## Abort
@@ -27,14 +27,14 @@ Should it be necessary, the descent stage can be jettisoned by initiating the as
 
 This phase can occur after touchdown, or after abort.
 
-The ascent stage separates from the descent stage, and the task is to reach the CSM that has remained in orbit.
+The ascent stage separates from the descent stage, and the task is to reach the CSM that has remained in orbit. There is no check for success (yet).
 
 Output:
 
-    T: closing speed (km/h)
+    T: closing speed (km/h) (+= overtaking CSM)
     Z: vertical V (km/h)
-    Y: range to CSM (km)
-    X: altitude difference to CSM (m)
+    Y: ground range to CSM (km) (+=before)
+    X: altitude difference to CSM (m) (+=above)
 
 Note: to skip descent phase and start from surface, execute following steps:
 
@@ -47,8 +47,8 @@ Note: to skip descent phase and start from surface, execute following steps:
 1. Select scenario (B or C, see '[Labels](#labels)' below) to initialise data.
 1. Throttle inputs:
    - STO 1: throttle value (0.0 ... 1.0)
-   - STO 2: total burn time (s)
-   - STO 3: pitch (angle from vertical, pos=prograde, deg)
+   - STO 2: total burn time (s) (suggested: 10s!)
+   - STO 3: pitch (angle from vertical, +=prograde, deg)
 1. Press 'A' to run the burn time. Calculator will run in predefined time segments (r14) 
 until burn time or remaining fuel has been consumed.
 1. Intermediate (PSE) output:
@@ -57,7 +57,7 @@ until burn time or remaining fuel has been consumed.
 
 ## Apollo profile <a name="apollo"></a>
 
-Note: these data are approximative.
+Note: these data are informative.
 
 ### Descent 
 * From: 50kft (15.24km), 6014.64 km/h
@@ -69,6 +69,9 @@ Note: these data are approximative.
 ### Ascent
 * Target: alt: 60kft (18.24km), 6009.4 km/h (~level) @range: 167NM (309km) (~7')
 * roughly circular, the real orbit was slightly elliptic (~ 16 x 90 km)
+* 10": 0
+* 5': 50-70
+* 2': 70-90
 * current implementation does not change initial CSM altitude
 
 See also [LM-1](LM-1).
@@ -80,23 +83,22 @@ See also [LM-1](LM-1).
 
 ## Notes
 
-Simple formulas used ("[Euler symplectic](https://en.wikipedia.org/wiki/Semi-implicit_Euler_method)"), don't expect stable orbits: as as simple example, just run idle in the initial orbit and observe the decay.
+Simple formulas used ("[Euler symplectic](https://en.wikipedia.org/wiki/Semi-implicit_Euler_method)"), don't expect stable orbits: as as simple example, just run idle in the initial orbit and observe the decay. This is more a game than a realistic simulation; deviations get worse with larger time steps (r2). It might be interesting to have an idea of the lower bound for the time step before other effects start to appear.
 
-**MEM report** <A name="mem"></a>
 # Programming
       
-## MEM reports
+**MEM report** <A name="mem"></a>
 
-This app was implemented on a Swiss Micros DM15_M1B_V16 (max memory variant=230 reg).
+This app was implemented on a Swiss Micros firmware DM15_M1B_V16 (max memory variant=230 reg).
 
     DM15_M1B :  26 135 69-3
 
-Note: these values might not have been updated with every commit or release. A "pure" HP15C variant is in the [TODO](#opt) list (as a variant branch).
+Note: these values might not have been updated with every commit or release. A "pure" HP15C variant is in the [TODO](#opt) list.
 
 ## Labels <a name="labels"></a>
 
      A main burn routine
-     B init lander descent phase
+     B init descent phase
      C init ascent phase
      D -
      E -
@@ -111,10 +113,10 @@ Note: these values might not have been updated with every commit or release. A "
      7 sub: STO (x) (consumes X)
      8 sub: RCL (x) (consumes X)
      9 sub: init moon params
-    .0 sub: init CSM
+    .0 -
     .1 section: compute fuel used
     .2 sub: general init
-    .3 sub: return circular orbit v (X) for given h (X)
+    .3 sub: return circular orbit vc for given h (above sfce)
     .4 sub: crash analysis
     .5 section: main calc loop
     .6 section: stop, generate output
@@ -130,7 +132,7 @@ Notes:
     0   mf - fuel left (kg)
     1 > th - throttle (%)
     2\> t - burn time (s)
-    3\> b - pitch (0=vertical, negative=retrograde) (deg)
+    3\> b - pitch (0=vertical, +=prograde) (deg)
     4\  h - height (m) /ascent: altitude above CSM (int: R)
     5\  d - ground range (km) /ascent: ground range before CSM (int: delta)
     6\  vv - velocity/vertical (km/h)
@@ -161,7 +163,7 @@ Notes:
 
     0 -
     1 fuel empty
-    2 ascent mode: if set, range, alt and vh refer to orbiting CSM
+    2 ascent mode: if set, output (range, alt and vh) refer to orbiting CSM
     3 -
     4 -
     5 -
@@ -179,6 +181,23 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
 - [DM15_M1B.txt](DM15_M1B.txt): can be uploaded via the serial link (see also [firmware](extern/swissmicros/firmware.txt) and [instructions](extern/swissmicros/instructions.php.txt))
 
 # RELEASE HISTORY <a name="rh"></a>
+
+## V1.0 (2014-10-18)
+
+- **new** add orbiting CSM (constant circular orbit, r24)
+   - ascent phase
+   - abort option
+- **new** total time counter (r26)
+- **changed** pitch coordinates (0=up)
+- **changed** use [Velocity Verlet](https://en.wikipedia.org/wiki/Verlet_integration#Velocity_Verlet) to improve accuracy (a bit...)
+- bug: descent stage did not take ascent stage weight into account
+- update data
+- refactor indirect register accesses
+   - cost: -2x7 = -14 bytes (subroutines)
+   - benefit: 
+      +5 (get rid of STO/RCL I; R_down; STO/RCL(i)) 
+      -2 (ENTER) per STO subroutine call
+      -1 per RCL subroutine call
 
 ## v0.4.1 (2014-10-11)
 - **new**: add some [docs](LM-1)
@@ -210,24 +229,6 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
 
 ### DONE
 
-- change the pitch coordinates (0=up)
-- bug: descent stage did not take ascent stage weight into account
-- update data
-- abort option
-- use [Velocity Verlet](https://en.wikipedia.org/wiki/Verlet_integration#Velocity_Verlet) to improve accuracy (a bit...)
-- ascent phase
-- bug: vc for any given r/d, should not touch px/py
-- adapt vc calc to return vc only
-- adapt B, C to store vc
-- refactor indirect register accesses
-   - cost: -2x7 = -14 bytes (subroutines)
-   - benefit: 
-      +5 (get rid of STO/RCL I; R_down; STO/RCL(i)) 
-      -2 (ENTER) per STO subroutine call
-      -1 per RCL subroutine call
-- add total time counter
-- add orbiting CSM
-
 ### BUSY
 
 ### TODO
@@ -237,6 +238,7 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
 - add input checks
 - compute output after init
 - add some screenshots of the logic
+- add CSM rejoin check
 - add scoring
    - within X km of planned touchdown
    - within X params of CSM
