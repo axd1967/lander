@@ -34,7 +34,7 @@ Note: to skip descent phase:
 1. Throttle inputs:
    - STO 1: throttle value (0.0 ... 1.0)
    - STO 2: total burn time (s)
-   - STO 3: pitch (angle from vertical, deg)
+   - STO 3: pitch (angle from vertical, pos=prograde, deg)
 1. Press 'A' to run the burn time. Calculator will run in predefined time segments (r14) 
 until burn time or remaining fuel has been consumed.
 1. Intermediate (PSE) output:
@@ -215,7 +215,6 @@ The dumps have been generated with [SwissMicro](http://www.swissmicros.com/) (mo
 - add total time counter
 - add input checks
 - compute output after init
-- investigate the (missing) 1/2 a sqr(t) term (section .7 uses symplectic, giving a.sqr(t) )
 - add some screenshots of the logic
 - add scoring
    - within X km of planned touchdown
