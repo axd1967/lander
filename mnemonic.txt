@@ -231,18 +231,13 @@ LBL .3
 RCL .6
 RCL 4
 +
-STO 8
-0
-STO 9
-STO .0
 RCL .5
 CHS
-RCL 8
+x<>y
 /
 sqrt
 RCL .6
 *
-STO .1
 RTN
 LBL 9
 GSB .2
@@ -276,6 +271,14 @@ uSTO (i)
 15240
 STO 4
 GSB .3
+STO .1
+0
+STO .0
+STO 9
+RCL 4
+RCL .6
++
+STO 8
 RTN
 LBL C
 GSB 9
