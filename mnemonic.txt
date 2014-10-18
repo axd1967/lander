@@ -13,8 +13,7 @@ LBL .1
 F? 1
 GTO .7
 20
-STO I
-RCL (i)
+GSB 8
 RCL 1
 *
 RCL .7
@@ -192,14 +191,10 @@ RTN
 F? 1
 RTN
 21
-STO I
-R_down
-RCL (i)
+GSB 8
 *
 22
-STO I
-R_down
-RCL (i)
+GSB 8
 RCL 0
 +
 /
@@ -218,6 +213,16 @@ RCL 3
 SIN
 *
 STO+.3
+RTN
+LBL 7
+STO I
+R_down
+STO (i)
+RTN
+LBL 8
+STO I
+R_down
+RCL (i)
 RTN
 LBL .2
 CF 1
@@ -251,23 +256,23 @@ STO .6
 RTN
 LBL B
 GSB 9
-22
-STO I
 7257
-uSTO (i)
-23
-STO I
+ENTER
+22
+GSB 7
 8845
-uSTO (i)
+ENTER
+23
+GSB 7
 STO 0
-21
-STO I
 44052
-uSTO (i)
-20
-STO I
+ENTER
+21
+GSB 7
 9.7198
-uSTO (i)
+ENTER
+20
+GSB 7
 15240
 STO 4
 GSB .3
@@ -282,23 +287,23 @@ STO 8
 RTN
 LBL C
 GSB 9
-22
-STO I
 2132
-uSTO (i)
-23
-STO I
+ENTER
+22
+GSB 7
 2359
-uSTO (i)
+ENTER
+23
+GSB 7
 STO 0
-21
-STO I
 15574
-uSTO (i)
-20
-STO I
+ENTER
+21
+GSB 7
 5.1276
-uSTO (i)
+ENTER
+20
+GSB 7
 1
 STO 1
 0
