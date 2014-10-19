@@ -1,22 +1,11 @@
 LBL A
-RCL 2
-STO .9
-LBL .5
-RCL .4
-STO .7
-RCL .9
-TEST 9 (x>=y)
-GTO .1
-RCL .9
-STO .7
-LBL .1
 F? 1
 GTO .7
 20
 GSB 8
 RCL 1
 *
-RCL .7
+RCL 2
 *
 STO .8
 RCL 0
@@ -27,7 +16,7 @@ RCL (i)
 /
 RCL 1
 /
-STO .7
+STO 2
 SF 1
 LBL .8
 RCL .8
@@ -35,7 +24,7 @@ STO-0
 LBL .7
 GSB .9
 RCL .0
-RCL .7
+RCL 2
 *
 STO+8
 RCL .1
@@ -43,7 +32,7 @@ LSTx
 *
 STO+9
 RCL .2
-RCL .7
+RCL 2
 x^2
 2
 /
@@ -54,7 +43,7 @@ LSTx
 *
 STO+9
 RCL .2
-RCL .7
+RCL 2
 2
 /
 *
@@ -65,7 +54,7 @@ LSTx
 STO+.1
 GSB .9
 RCL .2
-RCL .7
+RCL 2
 2
 /
 *
@@ -82,21 +71,11 @@ RCL .6
 STO 4
 x<>y
 STO 5
-x<>y
-PSE
-TEST 2 (x<0)
-GTO .6
-RCL .7
-STO-.9
+RCL 2
 26
 STO I
 R_down
 STO+(i)
-RCL .9
-PSE
-TEST 1 (x>0)
-GTO .5
-LBL .6
 PI
 180
 /

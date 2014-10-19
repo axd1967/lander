@@ -147,12 +147,12 @@ List:
     .1  vy (m/s)
     .2  ax (m/s2)
     .3  ay (m/s2)
-    .4  dt0 - delta t internal step (s)
+    .4  -
     .5  g0 - gravity, surface (m/s2)
     .6  r0 - central body radius (m)
-    .7  dt - user delta t (fuel clipped if necessary) (s)
+    .7  -
     .8  fu - fuel used for current burn segment (kg)
-    .9  T - remaining time in calculation loop (s)
+    .9  -
       
     (indirect:)
     20 f - max fuel flow (kg/s)
@@ -249,7 +249,7 @@ The dumps have been generated with [Swiss Micros](http://www.swissmicros.com/) (
    - with minimum fuel used
 - optimizations 
    - fit in 15C memory (19 46 0-0 => 26 39 0-0 => -210B) <a name="opt"></a>
-      - remove multistep (r19, r17) ~6B
+      > remove multistep (r19, r17, r14), use r2 ~23B + 3r
       - remove PSE (2B)
       - remove output stack (4B)
       - remove fuel tests
