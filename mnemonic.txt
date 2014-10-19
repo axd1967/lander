@@ -1,27 +1,11 @@
 LBL A
-F? 1
-GTO .7
 20
 GSB 8
 RCL 1
 *
 RCL 2
 *
-STO .8
-RCL 0
-TEST 9 (x>=y)
-GTO .8
-STO .8
-RCL (i)
-/
-RCL 1
-/
-STO 2
-SF 1
-LBL .8
-RCL .8
 STO-0
-LBL .7
 GSB .9
 RCL .0
 RCL 2
@@ -206,8 +190,6 @@ STO*.3
 RCL 1
 TEST 4 (x<=0)
 RTN
-F? 1
-RTN
 21
 GSB 8
 *
@@ -243,7 +225,6 @@ R_down
 RCL (i)
 RTN
 LBL .2
-CF 1
 CF 2
 CF 9
 10

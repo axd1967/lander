@@ -91,7 +91,7 @@ Simple formulas used ("[Euler symplectic](https://en.wikipedia.org/wiki/Semi-imp
 
 This app was implemented on a Swiss Micros DM15C firmware DM15_M1B_V16 (max memory variant=230 reg).
 
-    DM15_M1B :  23 145 62-2
+    DM15_M1B :  23 143 64-2
 
 Note: these values might not have been updated with every commit or release. A "pure" HP15C variant is in the [TODO](#opt) list.
 
@@ -151,7 +151,7 @@ List:
     .5  g0 - gravity, surface (m/s2)
     .6  r0 - central body radius (m)
     .7  CSM alt (circular orbit)
-    .8  fu - fuel used for current burn segment (kg)
+    .8  
     .9  CSM vel (vc)
       
     (indirect:)
@@ -166,7 +166,7 @@ List:
 ## Flags
 
     0 -
-    1 fuel empty
+    1 
     2 ascent mode: if set, output (range, alt and vh) refer to orbiting CSM
     3 -
     4 -
@@ -179,11 +179,11 @@ List:
 ## About the files
 
 The dumps have been generated with [Swiss Micros](http://www.swissmicros.com/) (modified, see /vendor/swissmicros/master) [encoding/decoding scripts](/extern/swissmicros/decode RAM dump.htm).
-- [code_dump.txt](code_dump.txt): decoded program, line per line; sometimes contains comments
-- [mnemonic.txt](mnemonic.txt): equivalent program in mnemonic form. note that this file /might/ be more recent than the DM file.
-- [HP.xml](HP.xml): simple Notepad++ syntax highlighter
+- [mnemonic.txt](mnemonic.txt): equivalent program in mnemonic form. note that this file /might/ be more recent than the DM file. This is the most recent version of the code.
+- [code_dump.txt](code_dump.txt): decoded program, line per line; sometimes contains comments. Informative, can be different from the mnemonic file.
 - [DM15_M1B.txt](DM15_M1B.txt): can be uploaded via the serial link (see also [firmware](extern/swissmicros/firmware.txt) and [instructions](extern/swissmicros/instructions.php.txt))
-NOTE: this is a buggy tool.
+
+NOTE: the HTML encoder is a buggy tool: the "dump from calc" is not always usable when it has been generated from the mnemonic form.
 
 # RELEASE HISTORY <a name="rh"></a>
 
@@ -253,9 +253,9 @@ NOTE: this is a buggy tool.
       * remove multistep (r19, r17, r14), use r2 ~23B + 3r
       * remove PSE (2B)
       * positive g, negative in formula (1B)
+      - remove crash detection (related to ascent init)
       - remove output stack (4B)
-      - remove fuel tests
-      - remove crash detection ()
+      * remove fuel tests
       - remove conversions
       - avoid two-byte steps (UM p.218)
          - rename SUB/GTO . labels
