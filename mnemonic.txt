@@ -193,6 +193,7 @@ STO 4
 x<>y
 STO 5
 RCL .5
+CHS
 RCL .6
 RCL 4
 /
@@ -255,7 +256,6 @@ RCL .6
 RCL 4
 +
 RCL .5
-CHS
 x<>y
 /
 sqrt
@@ -265,7 +265,6 @@ RTN
 LBL 9
 GSB .2
 1.622
-CHS
 STO .5
 1736
 EEX

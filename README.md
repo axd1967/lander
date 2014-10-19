@@ -251,11 +251,11 @@ NOTE: this is a buggy tool.
 - optimizations 
    - fit in 15C memory (19 46 0-0 => 23 42 0-0 => -210B) <a name="opt"></a>
       * remove multistep (r19, r17, r14), use r2 ~23B + 3r
-      - remove PSE (2B)
+      * remove PSE (2B)
+      * positive g, negative in formula (1B)
       - remove output stack (4B)
       - remove fuel tests
       - remove crash detection ()
-      - positive g, negative in formula (1B)
       - remove conversions
       - avoid two-byte steps (UM p.218)
          - rename SUB/GTO . labels
