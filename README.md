@@ -89,9 +89,9 @@ Simple formulas used ("[Euler symplectic](https://en.wikipedia.org/wiki/Semi-imp
       
 **MEM report** <A name="mem"></a>
 
-This app was implemented on a Swiss Micros firmware DM15_M1B_V16 (max memory variant=230 reg).
+This app was implemented on a Swiss Micros DM15C firmware DM15_M1B_V16 (max memory variant=230 reg).
 
-    DM15_M1B :  26 135 69-3
+    DM15_M1B :  23 145 62-2
 
 Note: these values might not have been updated with every commit or release. A "pure" HP15C variant is in the [TODO](#opt) list.
 
@@ -183,6 +183,7 @@ The dumps have been generated with [Swiss Micros](http://www.swissmicros.com/) (
 - [mnemonic.txt](mnemonic.txt): equivalent program in mnemonic form. note that this file /might/ be more recent than the DM file.
 - [HP.xml](HP.xml): simple Notepad++ syntax highlighter
 - [DM15_M1B.txt](DM15_M1B.txt): can be uploaded via the serial link (see also [firmware](extern/swissmicros/firmware.txt) and [instructions](extern/swissmicros/instructions.php.txt))
+NOTE: this is a buggy tool.
 
 # RELEASE HISTORY <a name="rh"></a>
 
@@ -248,8 +249,8 @@ The dumps have been generated with [Swiss Micros](http://www.swissmicros.com/) (
    - within X params of CSM
    - with minimum fuel used
 - optimizations 
-   - fit in 15C memory (19 46 0-0 => 26 39 0-0 => -210B) <a name="opt"></a>
-      > remove multistep (r19, r17, r14), use r2 ~23B + 3r
+   - fit in 15C memory (19 46 0-0 => 23 42 0-0 => -210B) <a name="opt"></a>
+      * remove multistep (r19, r17, r14), use r2 ~23B + 3r
       - remove PSE (2B)
       - remove output stack (4B)
       - remove fuel tests
