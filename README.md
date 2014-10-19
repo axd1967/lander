@@ -147,21 +147,21 @@ List:
     .1  vy (m/s)
     .2  ax (m/s2)
     .3  ay (m/s2)
-    .4  -
+    .4  total time 
     .5  g0 - gravity, surface (m/s2)
     .6  r0 - central body radius (m)
-    .7  -
+    .7  CSM alt (circular orbit)
     .8  fu - fuel used for current burn segment (kg)
-    .9  -
+    .9  CSM vel (vc)
       
     (indirect:)
     20 f - max fuel flow (kg/s)
     21 F - max thrust (N)
     22 m0 - vehicle mass, dry (kg)
     23 mf0 - initial fuel (kg)
-    24 CSM alt (circular orbit)
-    25 CSM vel (vc)
-    26 total time
+    24
+    25
+    26
 
 ## Flags
 

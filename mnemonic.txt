@@ -72,10 +72,7 @@ STO 4
 x<>y
 STO 5
 RCL 2
-26
-STO I
-R_down
-STO+(i)
+STO+.4
 PI
 180
 /
@@ -159,17 +156,14 @@ RCL .6
 RCL 4
 +
 *
-25
-GSB 8
+RCL .9
 /
-26
-GSB 8
+RCL .4
 /
 FRAC
 LSTx
 *
-25
-GSB 8
+RCL .9
 *
 RCL .6
 *
@@ -182,11 +176,9 @@ EEX
 3
 /
 STO-5
-24
-GSB 8
+RCL .7
 STO-4
-25
-GSB 8
+RCL .9
 3.6
 *
 STO-7
@@ -256,8 +248,7 @@ CF 9
 10
 STO .4
 0
-26
-GSB 7
+STO .4
 RTN
 LBL .3
 RCL .6
@@ -302,12 +293,10 @@ ENTER
 GSB 7
 15240
 STO 4
-24
-GSB 7
+STO .7
 GSB .3
 STO .1
-25
-GSB 7
+STO .9
 0
 STO .0
 STO 9
