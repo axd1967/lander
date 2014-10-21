@@ -149,7 +149,7 @@ ABS
 25
 TEST 8 (x<y)
 SF 9
-RCL 6
+RCL 7
 ABS
 25
 TEST 8 (x<y)
