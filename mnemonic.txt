@@ -227,10 +227,6 @@ RTN
 LBL .2
 CF 2
 CF 9
-10
-STO .4
-0
-STO .4
 RTN
 LBL .3
 RCL .6
