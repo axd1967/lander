@@ -2,7 +2,6 @@ Lander is a 2D extension of the "classic" lander app for the HP-15C.
 
 This code is a slimmed down version of the DM-15C code, fit for HP-15C memory: following differences exist:
 
-- call E (init moon data) once
 - no multistep mode
 - no intermediate (PSE) displays (altitude, fuel)
 - fuel is decremented but not checked - which means
@@ -107,7 +106,7 @@ Note: these values might not have been updated with every commit or release.
      B init descent phase
      C init ascent phase
      D -
-     E init moon data
+     E (init moon data)
      
      0 -
      1 -

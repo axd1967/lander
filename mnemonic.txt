@@ -142,11 +142,12 @@ RCL 4
 *
 RCL .9
 /
+ENTER
+ENTER
 RCL .4
 x<>y
 /
 FRAC
-LSTx
 *
 RCL .9
 *
@@ -242,6 +243,8 @@ STO .5
 EEX
 3
 STO .6
+0
+STO .4
 RTN
 LBL B
 CF 2
@@ -282,4 +285,5 @@ GSB 7
 R_down
 21
 GSB 7
+GSB E
 RTN
