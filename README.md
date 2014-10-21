@@ -186,6 +186,10 @@ The dumps have been generated with [Swiss Micros](http://www.swissmicros.com/) (
 
 # RELEASE HISTORY <a name="rh"></a>
 
+## V1.1 (2014-10-21)
+
+- bug: CSM distance wrong in output (Y)
+
 ## V1.0 (2014-10-18)
 
 - **new** add orbiting CSM (constant circular orbit, r24)
