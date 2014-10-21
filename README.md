@@ -1,6 +1,14 @@
 Lander is a 2D extension of the "classic" lander app for the HP-15C.
 
-The code might/might not fit in a 15C (26 regs + 39x7=273 bytes?, to confirm, keep an eye on the [MEM report](#mem) and [optimisations](#opt)).
+This code is a slimmed down version of the DM-15C code, fit for HP-15C memory: following differences exist:
+
+- no multistep mode
+- no intermediate (PSE) displays (altitude, fuel)
+- fuel is decremented but not checked - which means
+   - you can consume more fuel than you have (this will give negative fuell mass, so the resulting acceleration will further increase because the overall mass further decreases...)
+   - if you land on the surface with negative fuel, consider it a failure. So check the fuel gauge once landed so you know you're not dreaming...
+
+This is *work in progress*.
 
 # Phases
 
@@ -49,11 +57,7 @@ Note: to skip descent phase and start from surface, execute following steps:
    - STO 1: throttle value (0.0 ... 1.0)
    - STO 2: total burn time (s) (suggested: 10s!)
    - STO 3: pitch (angle from vertical, +=prograde, deg)
-1. Press 'A' to run the burn time. Calculator will run in predefined time segments (r14) 
-until burn time or remaining fuel has been consumed.
-1. Intermediate (PSE) output:
-   - altitude
-   - remaining time
+1. Press 'A' to run the burn time
 
 ## Apollo profile <a name="apollo"></a>
 
@@ -78,7 +82,6 @@ See also [LM-1](LM-1).
 
 ## Tips
 * remember that weight changes over time, which means that acceleration due to thrust will increase
-* if not enough fuel left, burn time is reduced to match remaining fuel
 * CSM continues orbiting, this has an impact on *when* to initiate lift-off
 
 ## Notes
@@ -92,8 +95,9 @@ Simple formulas used ("[Euler symplectic](https://en.wikipedia.org/wiki/Semi-imp
 This app was implemented on a Swiss Micros DM15C firmware DM15_M1B_V16 (max memory variant=230 reg).
 
     DM15_M1B :  23 143 64-2
+    HP-15C   :  23  49 0-0 (TO CONFIRM)
 
-Note: these values might not have been updated with every commit or release. A "pure" HP15C variant is in the [TODO](#opt) list.
+Note: these values might not have been updated with every commit or release.
 
 ## Labels <a name="labels"></a>
 
@@ -114,14 +118,14 @@ Note: these values might not have been updated with every commit or release. A "
      8 sub: RCL (x) (consumes X)
      9 sub: init moon params
     .0 -
-    .1 section: compute fuel used
+    .1 
     .2 sub: general init
     .3 sub: return circular orbit vc for given h (above sfce)
     .4 sub: crash analysis
     .5 section: main calc loop
     .6 section: stop, generate output
     .7 section: calc new pos, v
-    .8 section: reduce fuel left
+    .8 -
     .9 sub: calc eng + grav acc
 
 ## Registers
@@ -151,7 +155,7 @@ List:
     .5  g0 - gravity, surface (m/s2)
     .6  r0 - central body radius (m)
     .7  CSM alt (circular orbit)
-    .8  
+    .8
     .9  CSM vel (vc)
       
     (indirect:)
@@ -258,6 +262,7 @@ NOTE: the HTML encoder is a buggy tool: the "dump from calc" is not always usabl
       - remove crash detection (related to ascent init) (~20B?)
       - remove output stack (4B)
       * remove fuel tests
+      - add final fuel test?
       - remove conversions
       - avoid two-byte steps (UM p.218)
          - rename SUB/GTO . labels
