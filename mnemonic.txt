@@ -183,12 +183,13 @@ RCL 4
 25
 GSB 8
 /
+ENTER
+ENTER
 26
 GSB 8
 x<>y
 /
 FRAC
-LSTx
 *
 25
 GSB 8
