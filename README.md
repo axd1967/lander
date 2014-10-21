@@ -112,7 +112,7 @@ Note: these values might not have been updated with every commit or release.
      2 -
      3 -
      4 -
-     5 -
+     5 sub: vehicle init
      6 sub: compute distance to CSM
      7 sub: STO (x) (consumes X)
      8 sub: RCL (x) (consumes X)
@@ -258,6 +258,7 @@ NOTE: the HTML encoder is a buggy tool: the "dump from calc" is not always usabl
       * remove PSE (2B)
       * positive g, negative in formula (1B)
       * remove r18, use r0, move r22-> r18
+      * init vehicle via stk/sub
       - remove crash detection (related to ascent init) (~20B?)
       - remove output stack (4B)
       * remove fuel tests
@@ -265,6 +266,7 @@ NOTE: the HTML encoder is a buggy tool: the "dump from calc" is not always usabl
       - remove conversions
       - avoid two-byte steps (UM p.218)
          - rename SUB/GTO . labels
+         - LBL 9 -> user (global, unique init)
          - flags?
          - memory ops (STO +-*/)
       - better use of LST X?
