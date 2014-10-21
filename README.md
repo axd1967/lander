@@ -83,7 +83,7 @@ See also [LM-1](LM-1).
 
 ## Notes
 
-Simple formulas used ("[Euler symplectic](https://en.wikipedia.org/wiki/Semi-implicit_Euler_method)"), don't expect stable orbits: as as simple example, just run idle in the initial orbit and observe the decay. This is more a game than a realistic simulation; deviations get worse with larger time steps (r2). It might be interesting to have an idea of the lower bound for the time step before other effects start to appear.
+Simple formulas used ("[Euler symplectic](https://en.wikipedia.org/wiki/Semi-implicit_Euler_method)"), don't expect stable orbits: as as simple example, just run idle in the initial orbit and observe the decay. Another - rather demotivating - indication of shortcomings of this model is to perform a short prograde burn and observe that speed AND altitude are increasing... This is more a game than a realistic simulation; deviations get worse with larger time steps (r2). It might be interesting to have an idea of the lower bound for the time step before other effects start to appear.
 
 # Programming
       
@@ -183,7 +183,7 @@ The dumps have been generated with [Swiss Micros](http://www.swissmicros.com/) (
 - [code_dump.txt](code_dump.txt): decoded program, line per line; sometimes contains comments. Informative, can be different from the mnemonic file.
 - [DM15_M1B.txt](DM15_M1B.txt): can be uploaded via the serial link (see also [firmware](extern/swissmicros/firmware.txt) and [instructions](extern/swissmicros/instructions.php.txt))
 
-NOTE: the HTML encoder is a buggy tool: the "dump from calc" is not always usable when it has been generated from the mnemonic form.
+NOTE: the HTML encoder is a buggy tool: the "dump from calc" is not always usable when it has been generated from the mnemonic form. Possible workaround (to confirm) is to add trailing '0' in mnemonic file.
 
 # RELEASE HISTORY <a name="rh"></a>
 
