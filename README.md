@@ -155,14 +155,14 @@ List:
     .5  g0 - gravity, surface (m/s2)
     .6  r0 - central body radius (m)
     .7  CSM alt (circular orbit)
-    .8
+    .8  
     .9  CSM vel (vc)
       
     (indirect:)
     20 f - max fuel flow (kg/s)
     21 F - max thrust (N)
     22 m0 - vehicle mass, dry (kg)
-    23 mf0 - initial fuel (kg)
+    23
     24
     25
     26
@@ -242,8 +242,6 @@ NOTE: the HTML encoder is a buggy tool: the "dump from calc" is not always usabl
 
 ### TODO
 
-- remove r18
-
 - review units? (use US system?)
 - raise CSM orbit for ascent
 - add input checks
@@ -259,6 +257,7 @@ NOTE: the HTML encoder is a buggy tool: the "dump from calc" is not always usabl
       * remove multistep (r19, r17, r14), use r2 ~23B + 3r
       * remove PSE (2B)
       * positive g, negative in formula (1B)
+      * remove r18, use r0, move r22-> r18
       - remove crash detection (related to ascent init) (~20B?)
       - remove output stack (4B)
       * remove fuel tests
