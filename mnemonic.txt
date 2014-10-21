@@ -143,6 +143,7 @@ RCL 4
 RCL .9
 /
 RCL .4
+x<>y
 /
 FRAC
 LSTx
