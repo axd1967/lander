@@ -155,13 +155,13 @@ List:
     .5  g0 - gravity, surface (m/s2)
     .6  r0 - central body radius (m)
     .7  CSM alt (circular orbit)
-    .8  
+    .8  m0 - vehicle mass, dry (kg) 
     .9  CSM vel (vc)
       
     (indirect:)
     20 f - max fuel flow (kg/s)
     21 F - max thrust (N)
-    22 m0 - vehicle mass, dry (kg)
+    22 
     23
     24
     25
