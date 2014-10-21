@@ -238,6 +238,8 @@ NOTE: the HTML encoder is a buggy tool: the "dump from calc" is not always usabl
 
 ### TODO
 
+- remove r18
+
 - review units? (use US system?)
 - raise CSM orbit for ascent
 - add input checks
@@ -253,7 +255,7 @@ NOTE: the HTML encoder is a buggy tool: the "dump from calc" is not always usabl
       * remove multistep (r19, r17, r14), use r2 ~23B + 3r
       * remove PSE (2B)
       * positive g, negative in formula (1B)
-      - remove crash detection (related to ascent init)
+      - remove crash detection (related to ascent init) (~20B?)
       - remove output stack (4B)
       * remove fuel tests
       - remove conversions
@@ -269,8 +271,10 @@ NOTE: the HTML encoder is a buggy tool: the "dump from calc" is not always usabl
          - manual setup (user must initialise registers/flags)
             - astro constants (should not change once initialised)
             - vehicle data (every run)
-      - remove ascent feature
-         - sub C: 41B
+            - remove vc sub (11B)
+      - remove ascent feature ~40B?
+         - sub C: 42B
+         - tests
    - speed (variant?)
       - skip burn calcs on zero throttle
       - precomputed factors? (needs regs)
