@@ -274,6 +274,8 @@ LBL .2
 CF 1
 CF 2
 CF 9
+10
+STO .4
 0
 26
 GSB 7
