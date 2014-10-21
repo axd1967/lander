@@ -91,7 +91,7 @@ Simple formulas used ("[Euler symplectic](https://en.wikipedia.org/wiki/Semi-imp
 
 This app was implemented on a Swiss Micros firmware DM15_M1B_V16 (max memory variant=230 reg).
 
-    DM15_M1B :  26 135 69-3
+    DM15_M1B :  26 134 70-6
 
 Note: these values might not have been updated with every commit or release. A "pure" HP15C variant is in the [TODO](#opt) list.
 
@@ -189,6 +189,7 @@ The dumps have been generated with [Swiss Micros](http://www.swissmicros.com/) (
 ## V1.1 (2014-10-21)
 
 - bug: CSM distance wrong in output (Y)
+- bug: crash test did not take r7 (vh) into account
 
 ## V1.0 (2014-10-18)
 
