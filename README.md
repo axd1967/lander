@@ -2,6 +2,7 @@ Lander is a 2D extension of the "classic" lander app for the HP-15C.
 
 This code is a slimmed down version of the DM-15C code, fit for HP-15C memory: following differences exist:
 
+- call E (init moon data) once
 - no multistep mode
 - no intermediate (PSE) displays (altitude, fuel)
 - fuel is decremented but not checked - which means
@@ -52,7 +53,8 @@ Note: to skip descent phase and start from surface, execute following steps:
 
 # Using the app
 
-1. Select scenario (B or C, see '[Labels](#labels)' below) to initialise data.
+1. Initialise once with 'E'. This does not need to be repeated for the phases.
+1. Select scenario (B or C, see '[Labels](#labels)' below) to initialise vehicle data.
 1. Throttle inputs:
    - STO 1: throttle value (0.0 ... 1.0)
    - STO 2: total burn time (s) (suggested: 10s!)
@@ -94,8 +96,8 @@ Simple formulas used ("[Euler symplectic](https://en.wikipedia.org/wiki/Semi-imp
 
 This app was implemented on a Swiss Micros DM15C firmware DM15_M1B_V16 (max memory variant=230 reg).
 
-    DM15_M1B :  23 143 64-2
-    HP-15C   :  23  49 0-0 (TO CONFIRM)
+    DM15_M1B :  21 155 54-5
+    HP-15C   :  21  44 00-0 (TARGET, TO CONFIRM)
 
 Note: these values might not have been updated with every commit or release.
 
@@ -105,7 +107,7 @@ Note: these values might not have been updated with every commit or release.
      B init descent phase
      C init ascent phase
      D -
-     E -
+     E init moon data
      
      0 -
      1 -
@@ -118,8 +120,8 @@ Note: these values might not have been updated with every commit or release.
      8 sub: RCL (x) (consumes X)
      9 sub: init moon params
     .0 -
-    .1 
-    .2 sub: general init
+    .1 -
+    .2 -
     .3 sub: return circular orbit vc for given h (above sfce)
     .4 sub: crash analysis
     .5 section: main calc loop
@@ -253,7 +255,7 @@ NOTE: the HTML encoder is a buggy tool: the "dump from calc" is not always usabl
    - within X params of CSM
    - with minimum fuel used
 - optimizations 
-   - fit in 15C memory (19 46 0-0 => 23 42 0-0 => -210B) <a name="opt"></a>
+   - fit in 15C memory (19 46 0-0) <a name="opt"></a>
       * remove multistep (r19, r17, r14), use r2 ~23B + 3r
       * remove PSE (2B)
       * positive g, negative in formula (1B)

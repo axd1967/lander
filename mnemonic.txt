@@ -224,10 +224,6 @@ STO I
 R_down
 RCL (i)
 RTN
-LBL .2
-CF 2
-CF 9
-RTN
 LBL .3
 RCL .6
 RCL 4
@@ -239,8 +235,7 @@ sqrt
 RCL .6
 *
 RTN
-LBL 9
-GSB .2
+LBL E
 1.622
 STO .5
 1736
@@ -249,6 +244,7 @@ EEX
 STO .6
 RTN
 LBL B
+CF 2
 7257
 STO .8
 8845
@@ -286,5 +282,4 @@ GSB 7
 R_down
 21
 GSB 7
-GSB 9
 RTN
