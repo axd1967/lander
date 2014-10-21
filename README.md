@@ -95,7 +95,7 @@ Simple formulas used ("[Euler symplectic](https://en.wikipedia.org/wiki/Semi-imp
 
 This app was implemented on a Swiss Micros DM15C firmware DM15_M1B_V16 (max memory variant=230 reg).
 
-    DM15_M1B :  21 155 54-5
+    DM15_M1B :  21 155 54-1
     HP-15C   :  21  44 00-0 (TARGET, TO CONFIRM)
 
 Note: these values might not have been updated with every commit or release.
