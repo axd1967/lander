@@ -27,7 +27,9 @@ Should it be necessary, the descent stage can be jettisoned by initiating the as
 
 This phase can occur after touchdown, or after abort.
 
-The ascent stage separates from the descent stage, and the task is to reach the CSM that has remained in orbit. There is no check for success (yet).
+The ascent stage separates from the descent stage, and the task is to reach the CSM that has remained in orbit.
+
+There is no check for success (yet). Try to close in within 1km, vh<10, vv<10.
 
 The ascent phase init requires to specify a (possibly negative) time advance, to reposition the CSM. To make an abort more realistic, specify '0' for the time advance, as the CSM is still nearby.
 
@@ -40,9 +42,9 @@ Output:
 
 Note: to skip descent phase and start from surface, execute following steps:
 
-1. 0 GSB C
-1. 0 STO 6 STO 7
-1. GSB .4
+1. 0 GSB C (initialise ascent phase; choose a time to advance, here '0')
+1. 0 STO 6 STO 7 (zeroes velocities)
+1. GSB .4 (keep current range, zoom to surface)
 
 # Using the app
 
@@ -74,18 +76,18 @@ Note: these data are informative.
 * 10": 0
 * 5': 50-70
 * 2': 70-90
-* current implementation does not change initial CSM altitude
+* current implementation does not change initial CSM altitude (15.24km / 6586s)
 
 See also [LM-1](LM-1).
 
 ## Tips
 * remember that weight changes over time, which means that acceleration due to thrust will increase
 * if not enough fuel left, burn time is reduced to match remaining fuel
-* CSM continues orbiting, this has an impact on *when* to initiate lift-off
+* CSM continues orbiting, this has an impact on *when* to initiate lift-off.
 
 ## Notes
 
-Simple formulas used ("[Euler symplectic](https://en.wikipedia.org/wiki/Semi-implicit_Euler_method)"), don't expect stable orbits: as as simple example, just run idle in the initial orbit and observe the decay. This is more a game than a realistic simulation; deviations get worse with larger time steps (r2). It might be interesting to have an idea of the lower bound for the time step before other effects start to appear.
+Simple formulas used ("[Euler symplectic](https://en.wikipedia.org/wiki/Semi-implicit_Euler_method)"), don't expect stable orbits: as as simple example, just run idle in the initial orbit and observe the decay. You might also notice a lag between acceleration and velocity response, and vv that increases while idle and ascending... This is more a game than a realistic simulation; deviations get also worse with larger time steps (r2). It might be interesting to have an idea of the lower bound for the time step before other effects start to appear.
 
 # Programming
       
