@@ -238,7 +238,11 @@ The dumps have been generated with [Swiss Micros](http://www.swissmicros.com/) (
 
 ### DONE
 
+- bug: CSM distance
+
 ### BUSY
+
+- impr: CSM phase
 
 ### TODO
 
@@ -275,6 +279,7 @@ The dumps have been generated with [Swiss Micros](http://www.swissmicros.com/) (
    - speed (variant?)
       - skip burn calcs on zero throttle
       - precomputed factors? (needs regs)
+         - LBL 6: CSM period is constant
       - r10-r19 need 6 steps for adressing: can they be swapped for normal (r0-r9) regs?
       - verlet: refactor thrust (is constant across step)
       - reorganise subroutine calls to avoid too much searching for the label
