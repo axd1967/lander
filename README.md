@@ -243,8 +243,12 @@ NOTE: the HTML encoder is a buggy tool: the "dump from calc" is not always usabl
 
 ### TODO
 
+* CSM phase
+
+### Backlog
+
 - review units? (use US system?)
-- raise CSM orbit for ascent
+- raise CSM orbit for ascent?
 - add input checks
 - compute output after init
 - add some screenshots of the logic
