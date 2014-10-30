@@ -246,6 +246,8 @@ The dumps have been generated with [Swiss Micros](http://www.swissmicros.com/) (
 
 ### TODO
 
+- fast forward while on surface?
+- use same variables in all versions
 - review units? (use US system?)
 - raise CSM orbit for ascent
 - add input checks
