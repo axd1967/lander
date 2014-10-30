@@ -29,6 +29,8 @@ This phase can occur after touchdown, or after abort.
 
 The ascent stage separates from the descent stage, and the task is to reach the CSM that has remained in orbit. There is no check for success (yet).
 
+The ascent phase init requires to specify a (possibly negative) time advance, to reposition the CSM. To make an abort more realistic, specify '0' for the time advance, as the CSM is still nearby.
+
 Output:
 
     T: closing speed (km/h) (+= overtaking CSM)
@@ -38,7 +40,7 @@ Output:
 
 Note: to skip descent phase and start from surface, execute following steps:
 
-1. GSB C
+1. 0 GSB C
 1. 0 STO 6 STO 7
 1. GSB .4
 
@@ -91,7 +93,7 @@ Simple formulas used ("[Euler symplectic](https://en.wikipedia.org/wiki/Semi-imp
 
 This app was implemented on a Swiss Micros firmware DM15_M1B_V16 (max memory variant=230 reg).
 
-    DM15_M1B :  26 134 70-6
+    DM15_M1B :  26 133 71-2
 
 Note: these values might not have been updated with every commit or release. A "pure" HP15C variant is in the [TODO](#opt) list.
 
@@ -99,7 +101,7 @@ Note: these values might not have been updated with every commit or release. A "
 
      A main burn routine
      B init descent phase
-     C init ascent phase
+     C init ascent phase, position CSM. needs X: advance CSM time in orbit (s)
      D -
      E -
      
@@ -113,7 +115,7 @@ Note: these values might not have been updated with every commit or release. A "
      7 sub: STO (x) (consumes X)
      8 sub: RCL (x) (consumes X)
      9 sub: init moon params
-    .0 -
+    .0 section: output
     .1 section: compute fuel used
     .2 sub: general init
     .3 sub: return circular orbit vc for given h (above sfce)
@@ -134,7 +136,7 @@ Notes:
 List:
 
     0   mf - fuel left (kg)
-    1 > th - throttle (%)
+    1 > th - throttle (.%)
     2\> t - burn time (s)
     3\> b - pitch (0=vertical, +=prograde) (deg)
     4\  h - height (m) /ascent: altitude above CSM (int: R)
@@ -239,14 +241,15 @@ The dumps have been generated with [Swiss Micros](http://www.swissmicros.com/) (
 ### DONE
 
 - bug: CSM distance
+- impr: CSM phase
+- fast forward while on surface?
+- time reset only in 'B'
+- bug: wrong repositioning when preparing ascent
 
 ### BUSY
 
-- impr: CSM phase
-
 ### TODO
 
-- fast forward while on surface?
 - use same variables in all versions
 - review units? (use US system?)
 - raise CSM orbit for ascent

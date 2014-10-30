@@ -138,6 +138,7 @@ TEST 2 (x<0)
 GSB .4
 F? 2
 GSB 6
+LBL .0
 RCL 7
 RCL 6
 RCL 5
@@ -159,6 +160,7 @@ RTN
 RCL 9
 RCL 8
 ->P
+R_down
 RCL .6
 ->R
 STO 8
@@ -278,9 +280,6 @@ CF 2
 CF 9
 10
 STO .4
-0
-26
-GSB 7
 RTN
 LBL .3
 RCL .6
@@ -334,12 +333,19 @@ GSB 7
 0
 STO .0
 STO 9
+26
+GSB 7
 RCL 4
 RCL .6
 +
 STO 8
 RTN
 LBL C
+26
+STO I
+R_down
+STO+(i)
+GSB 6
 GSB 9
 SF 2
 2132
@@ -359,4 +365,4 @@ GSB 7
 ENTER
 20
 GSB 7
-RTN
+GTO .0
