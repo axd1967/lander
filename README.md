@@ -188,6 +188,12 @@ The dumps have been generated with [Swiss Micros](http://www.swissmicros.com/) (
 
 # RELEASE HISTORY <a name="rh"></a>
 
+## V1.2 (2014-10-30)
+
+- **changed**: ascent init requires time advance (repositions CSM)
+- bug: CSM distance
+- bug: time was reset in 'C', now only in 'B'
+
 ## V1.1 (2014-10-21)
 
 - bug: CSM distance wrong in output (Y)
@@ -239,12 +245,6 @@ The dumps have been generated with [Swiss Micros](http://www.swissmicros.com/) (
 ## Upcoming
 
 ### DONE
-
-- bug: CSM distance
-- impr: CSM phase
-- fast forward while on surface?
-- time reset only in 'B'
-- bug: wrong repositioning when preparing ascent
 
 ### BUSY
 
