@@ -243,7 +243,8 @@ NOTE: the HTML encoder is a buggy tool: the "dump from calc" is not always usabl
 
 ### TODO
 
-* CSM phase
+- CSM phase
+- merge master changes
 
 ### Backlog
 
