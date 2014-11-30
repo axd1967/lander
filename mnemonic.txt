@@ -175,33 +175,33 @@ STO 2
 STO 3
 RTN
 LBL 6
+25
+GSB 8
+26
+GSB 8
+*
 2
+/
+PI
+/
+24
+GSB 8
+RCL .6
++
+/
+9
++
+0.5
+-
+FRAC
+0.5
+-
+2
+*
 PI
 *
 RCL .6
-RCL 4
-+
 *
-25
-GSB 8
-/
-ENTER
-ENTER
-26
-GSB 8
-x<>y
-/
-FRAC
-*
-25
-GSB 8
-*
-RCL .6
-*
-RCL .6
-RCL 4
-+
-/
 1
 EEX
 3

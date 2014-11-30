@@ -31,20 +31,21 @@ The ascent stage separates from the descent stage, and the task is to reach the 
 
 There is no check for success (yet). Try to close in within 1km, vh<10, vv<10.
 
-The ascent phase init requires to specify a (possibly negative) time advance, to reposition the CSM. To make an abort more realistic, specify '0' for the time advance, as the CSM is still nearby.
+Prior to initiating the ascent, and unless an abort is performed during descent, the CSM should move forward (or back) in its orbit to be repositioned correctly. This is achieved by specifying a (maybe negative) time increment as input to routine 'C'.
 
 Output:
 
-    T: closing speed (km/h) (+= overtaking CSM)
+    T: closing *ground* speed (km/h) (+= overtaking CSM)
     Z: vertical V (km/h)
-    Y: ground range to CSM (km) (+=before)
+    Y: *ground* range to CSM (km) (+=before)
     X: altitude difference to CSM (m) (+=above)
 
 Note: to skip descent phase and start from surface, execute following steps:
 
-1. 0 GSB C (initialise ascent phase; choose a time to advance, here '0')
-1. 0 STO 6 STO 7 (zeroes velocities)
-1. GSB .4 (keep current range, zoom to surface)
+1. (GSB E)
+1. 0 GSB C (initialise ascent mode without time offset)
+1. 0 STO 6 STO 7 (zero current velocity)
+1. GSB .4 (initialise to surface, takeoff values)
 
 # Using the app
 
@@ -93,9 +94,9 @@ Simple formulas used ("[Euler symplectic](https://en.wikipedia.org/wiki/Semi-imp
       
 **MEM report** <A name="mem"></a>
 
-This app was implemented on a Swiss Micros firmware DM15_M1B_V16 (max memory variant=230 reg).
+This app was implemented on a Swiss Micros DM15C firmware DM15_M1B_V16 (max memory variant=230 reg).
 
-    DM15_M1B :  26 133 71-2
+    DM15_M1B :  26 133 71-0
 
 Note: these values might not have been updated with every commit or release. A "pure" HP15C variant is in the [TODO](#opt) list.
 
@@ -103,7 +104,7 @@ Note: these values might not have been updated with every commit or release. A "
 
      A main burn routine
      B init descent phase
-     C init ascent phase, position CSM. needs X: advance CSM time in orbit (s)
+     C init ascent phase. repositions CSM first by fast forwarding time (X: advance CSM time in orbit, seconds)
      D -
      E -
      
@@ -121,7 +122,7 @@ Note: these values might not have been updated with every commit or release. A "
     .1 section: compute fuel used
     .2 sub: general init
     .3 sub: return circular orbit vc for given h (above sfce)
-    .4 sub: crash analysis
+    .4 sub: crash analysis, followed by landing configuration (zero speed, height, thrust)
     .5 section: main calc loop
     .6 section: stop, generate output
     .7 section: calc new pos, v
@@ -142,9 +143,9 @@ List:
     2\> t - burn time (s)
     3\> b - pitch (0=vertical, +=prograde) (deg)
     4\  h - height (m) /ascent: altitude above CSM (int: R)
-    5\  d - ground range (km) /ascent: ground range before CSM (int: delta)
+    5\  d - ground range covered since descent initiation /ascent: ground range before CSM (intermediate: delta) (km)
     6\  vv - velocity/vertical (km/h)
-    7\  vh - velocity/horiz /ascent: hor. closing speed (km/h) 
+    7\  vh - velocity/horiz /ascent: hor. closing *ground* speed (km/h)
     8   px (m)
     9   py (m)
     .0  vx (m/s)
@@ -248,7 +249,10 @@ The dumps have been generated with [Swiss Micros](http://www.swissmicros.com/) (
 
 ### DONE
 
+- CSM phase issue
+
 ### BUSY
+
 
 ### TODO
 
@@ -264,25 +268,6 @@ The dumps have been generated with [Swiss Micros](http://www.swissmicros.com/) (
    - within X params of CSM
    - with minimum fuel used
 - optimizations 
-   - 15C memory issue (19 46 0-0 => 26 39 0-0) (variant?) <a name="opt"></a>
-      - avoid two-byte steps
-         - rename labels
-      - better use of LST X?
-      - reduce regs?
-         - use stack for input
-      - remove tests
-      - remove crash detection
-      - remove ascent feature
-      - remove PSE
-      - remove multistep (r19, r17)
-      - positive g, negative in formula
-      - remove r0/r1/r2 initialisation
-      - reduce range/distc
-      - last ditch
-         - constant mass (remove weight variance due to depleting fuel)
-         - manual setup (user must initialise registers/flags)
-            - astro constants (should not change once initialised)
-            - vehicle data (every run)
    - speed (variant?)
       - skip burn calcs on zero throttle
       - precomputed factors? (needs regs)
