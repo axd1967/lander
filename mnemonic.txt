@@ -119,6 +119,7 @@ RTN
 RCL 9
 RCL 8
 ->P
+R_down
 RCL .6
 ->R
 STO 8
@@ -243,8 +244,6 @@ STO .5
 EEX
 3
 STO .6
-0
-STO .4
 RTN
 LBL B
 CF 2
@@ -265,12 +264,15 @@ STO .9
 0
 STO .0
 STO 9
+STO .4
 RCL 4
 RCL .6
 +
 STO 8
 RTN
 LBL C
+STO+.4
+GSB 6
 SF 2
 2132
 STO .8

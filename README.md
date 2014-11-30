@@ -35,7 +35,13 @@ Should it be necessary, the descent stage can be jettisoned by initiating the as
 
 This phase can occur after touchdown, or after abort.
 
-The ascent stage separates from the descent stage, and the task is to reach the CSM that has remained in orbit. There is no check for success (yet).
+The ascent stage separates from the descent stage, and the task is to reach the CSM that has remained in orbit.
+
+There is no check for success (yet). Try to close in within 1km, vh<10, vv<10.
+
+Prior to initiating the ascent, and unless an abort is performed during descent, the CSM should move forward in its orbit to be repositioned correctly. This is achieved by specifying a time increment as input to routine 'C'.
+
+Note: currently there is an issue with correctly displaying CSM distance when past half-way orbit; e.g. when CSM has done 90% of its orbit (wrt ascent stage position), it should show a distance of -10% from ascent stage rather than +90%.
 
 Output:
 
@@ -104,7 +110,7 @@ Note: these values might not have been updated with every commit or release.
 
      A main burn routine
      B init descent phase
-     C init ascent phase
+     C init ascent phase. repositions CSM first by fast forwarding time (X: advance CSM time in orbit, seconds)
      D -
      E (init moon data)
      
@@ -184,9 +190,9 @@ List:
 ## About the files
 
 The dumps have been generated with [Swiss Micros](http://www.swissmicros.com/) (modified, see /vendor/swissmicros/master) [encoding/decoding scripts](/extern/swissmicros/decode RAM dump.htm).
-- [mnemonic.txt](mnemonic.txt): equivalent program in mnemonic form. note that this file /might/ be more recent than the DM file. This is the most recent version of the code.
 - [code_dump.txt](code_dump.txt): decoded program, line per line; sometimes contains comments. Informative, can be different from the mnemonic file.
-- [DM15_M1B.txt](DM15_M1B.txt): can be uploaded via the serial link (see also [firmware](extern/swissmicros/firmware.txt) and [instructions](extern/swissmicros/instructions.php.txt))
+- [mnemonic.txt](mnemonic.txt): equivalent program in mnemonic form. note that this file /might/ be more recent than the DM file. This is the most recent version of the code.
+- [HP.xml](HP.xml): simple Notepad++ syntax highlighter- [DM15_M1B.txt](DM15_M1B.txt): can be uploaded via the serial link (see also [firmware](extern/swissmicros/firmware.txt) and [instructions](extern/swissmicros/instructions.php.txt))
 
 NOTE: the HTML encoder is a buggy tool: the "dump from calc" is not always usable when it has been generated from the mnemonic form. Possible workaround (to confirm) is to add trailing '0' in mnemonic file.
 
@@ -239,12 +245,14 @@ NOTE: the HTML encoder is a buggy tool: the "dump from calc" is not always usabl
 
 ### DONE
 
+- merge master changes
+
 ### BUSY
+
 
 ### TODO
 
-- CSM phase
-- merge master changes
+- CSM phase issue
 
 ### Backlog
 
