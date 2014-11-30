@@ -41,20 +41,19 @@ There is no check for success (yet). Try to close in within 1km, vh<10, vv<10.
 
 Prior to initiating the ascent, and unless an abort is performed during descent, the CSM should move forward in its orbit to be repositioned correctly. This is achieved by specifying a time increment as input to routine 'C'.
 
-Note: currently there is an issue with correctly displaying CSM distance when past half-way orbit; e.g. when CSM has done 90% of its orbit (wrt ascent stage position), it should show a distance of -10% from ascent stage rather than +90%.
-
 Output:
 
-    T: closing speed (km/h) (+= overtaking CSM)
+    T: closing *ground* speed (km/h) (+= overtaking CSM)
     Z: vertical V (km/h)
-    Y: ground range to CSM (km) (+=before)
+    Y: *ground* range to CSM (km) (+=before)
     X: altitude difference to CSM (m) (+=above)
 
 Note: to skip descent phase and start from surface, execute following steps:
 
-1. GSB C
-1. 0 STO 6 STO 7
-1. GSB .4
+1. (GSB E)
+1. 0 GSB C (initialise ascent mode without time offset)
+1. 0 STO 6 STO 7 (zero current velocity)
+1. GSB .4 (initialise to surface, takeoff values)
 
 # Using the app
 
@@ -101,7 +100,7 @@ Simple formulas used ("[Euler symplectic](https://en.wikipedia.org/wiki/Semi-imp
 
 This app was implemented on a Swiss Micros DM15C firmware DM15_M1B_V16 (max memory variant=230 reg).
 
-    DM15_M1B :  21 155 54-1
+    DM15_M1B :  21 154 55-4
     HP-15C   :  21  44 00-0 (TARGET, TO CONFIRM)
 
 Note: these values might not have been updated with every commit or release.
@@ -128,7 +127,7 @@ Note: these values might not have been updated with every commit or release.
     .1 -
     .2 -
     .3 sub: return circular orbit vc for given h (above sfce)
-    .4 sub: crash analysis
+    .4 sub: crash analysis, followed by landing configuration (zero speed, height, thrust)
     .5 section: main calc loop
     .6 section: stop, generate output
     .7 section: calc new pos, v
@@ -149,9 +148,9 @@ List:
     2\> t - burn time (s)
     3\> b - pitch (0=vertical, +=prograde) (deg)
     4\  h - height (m) /ascent: altitude above CSM (int: R)
-    5\  d - ground range (km) /ascent: ground range before CSM (int: delta)
+    5\  d - ground range covered since descent initiation /ascent: ground range before CSM (intermediate: delta) (km)
     6\  vv - velocity/vertical (km/h)
-    7\  vh - velocity/horiz /ascent: hor. closing speed (km/h) 
+    7\  vh - velocity/horiz /ascent: hor. closing *ground* speed (km/h)
     8   px (m)
     9   py (m)
     .0  vx (m/s)
@@ -163,7 +162,7 @@ List:
     .6  r0 - central body radius (m)
     .7  CSM alt (circular orbit)
     .8  m0 - vehicle mass, dry (kg) 
-    .9  CSM vel (vc)
+    .9  CSM absolute vel (vc)
       
     (indirect:)
     20 f - max fuel flow (kg/s)
@@ -246,13 +245,13 @@ NOTE: the HTML encoder is a buggy tool: the "dump from calc" is not always usabl
 ### DONE
 
 - merge master changes
+- CSM phase issue
 
 ### BUSY
 
 
 ### TODO
 
-- CSM phase issue
 
 ### Backlog
 

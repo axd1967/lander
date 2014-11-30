@@ -134,30 +134,30 @@ STO 2
 STO 3
 RTN
 LBL 6
+RCL .9
+RCL .4
+*
 2
+/
+PI
+/
+RCL .7
+RCL .6
++
+/
+9
++
+0.5
+-
+FRAC
+0.5
+-
+2
+*
 PI
 *
 RCL .6
-RCL 4
-+
 *
-RCL .9
-/
-ENTER
-ENTER
-RCL .4
-x<>y
-/
-FRAC
-*
-RCL .9
-*
-RCL .6
-*
-RCL .6
-RCL 4
-+
-/
 1
 EEX
 3
