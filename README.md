@@ -302,6 +302,7 @@ The dumps have been generated with [Swiss Micros](http://www.swissmicros.com/) (
 1. https://delicious.com/axd/moonlanding,HP15C
 1. https://www.physicsforums.com/threads/improving-the-accuracy-of-a-java-simulation-of-n-orbital-bodies.380098/
 1. http://stackoverflow.com/questions/4038554/2d-orbital-physics
+1. http://space.stackexchange.com/questions/8911/determining-future-orbital-position
 1. https://en.wikipedia.org/wiki/Apollo_Lunar_Module
 1. http://www.klabs.org/history/apollo_11_alarms/eyles_2004/eyles_2004.htm
 1. http://spaceref.com/missions-and-programs/nasa/apollo/apollo-lunar-landing-mission-symposium/apollo-lunar-module-landing-strategy.html
