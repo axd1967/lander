@@ -88,7 +88,7 @@ See also [LM-1](LM-1).
 
 ## Notes
 
-Simple formulas used ("[Euler symplectic](https://en.wikipedia.org/wiki/Semi-implicit_Euler_method)"), don't expect stable orbits: as as simple example, just run idle in the initial orbit and observe the decay. You might also notice a lag between acceleration and velocity response, and vv that increases while idle and ascending... This is more a game than a realistic simulation; deviations get also worse with larger time steps (r2). It might be interesting to have an idea of the lower bound for the time step before other effects start to appear.
+Simple formulas used ("[Euler symplectic](https://en.wikipedia.org/wiki/Semi-implicit_Euler_method)"), don't expect [stable orbits](https://en.wikipedia.org/wiki/Lunar_orbit#Perturbation_effects): as as simple example, just run idle in the initial orbit and observe the decay. You might also notice a lag between acceleration and velocity response, and - rather unacceptable - vv that increases while engine off and *ascending*... This is more a game than a realistic simulation; deviations get also worse with larger time steps (r2). It might be interesting to have an idea of the lower bound for the time step before other effects start to appear.
 
 # Programming
       
