@@ -324,16 +324,14 @@ NOTE: the HTML encoder is a buggy tool: the "dump from calc" is not always usabl
 
 # Links
 
-1. https://delicious.com/axd/moonlanding,HP15C
 1. https://www.physicsforums.com/threads/improving-the-accuracy-of-a-java-simulation-of-n-orbital-bodies.380098/
 1. http://stackoverflow.com/questions/4038554/2d-orbital-physics
 1. https://en.wikipedia.org/wiki/Apollo_Lunar_Module
 1. http://www.klabs.org/history/apollo_11_alarms/eyles_2004/eyles_2004.htm
-1. http://spaceref.com/missions-and-programs/nasa/apollo/apollo-lunar-landing-mission-symposium/apollo-lunar-module-landing-strategy.html
 1. https://xkcd.com/1356/
 
 ## Another simulation (data only)
 Very interesting pages, might prove my implementation is a joke, anyway, here you are... I didn't compare the results (yet).
 
-1. http://www.braeunig.us/apollo/LM-descent.htm
-1. http://www.braeunig.us/apollo/LM-ascent.htm
+1. https://web.archive.org/web/20160225142414/http://www.braeunig.us:80/apollo/LM-descent.htm (from wayback http://www.braeunig.us/apollo/LM-descent.htm)
+1. https://web.archive.org/web/20171105081056/http://www.braeunig.us:80/apollo/LM-ascent.htm (wayback from http://www.braeunig.us/apollo/LM-ascent.htm)
